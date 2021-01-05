@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fantasy_content xml:lang="en-US" yahoo:uri="http://fantasysports.yahooapis.com/fantasy/v2/league/49.l.341361/scoreboard;week=2" time="17.404794692993ms" copyright="Data provided by Yahoo! and STATS, LLC" refresh_rate="60" xmlns:yahoo="http://www.yahooapis.com/v1/base.rng" xmlns="http://fantasysports.yahooapis.com/fantasy/v2/base.rng">
+ <league>
+  <league_key>49.l.341361</league_key>
+  <league_id>341361</league_id>
+  <name>Erindale</name>
+  <url>/2002/f1/341361</url>
+  <logo_url></logo_url>
+  <draft_status>postdraft</draft_status>
+  <num_teams>10</num_teams>
+  <edit_key>16</edit_key>
+  <weekly_deadline/>
+  <league_update_timestamp>1041328907</league_update_timestamp>
+  <scoring_type>head</scoring_type>
+  <league_type>private</league_type>
+  <renew/>
+  <renewed/>
+  <iris_group_chat_id/>
+  <allow_add_to_dl_extra_pos>0</allow_add_to_dl_extra_pos>
+  <is_pro_league>0</is_pro_league>
+  <is_cash_league>0</is_cash_league>
+  <current_week>16</current_week>
+  <start_week>3</start_week>
+  <start_date>2002-09-17</start_date>
+  <end_week>16</end_week>
+  <end_date>2002-12-23</end_date>
+  <is_finished>1</is_finished>
+  <game_code>nfl</game_code>
+  <season>2002</season>
+  <exceptions>
+   <exception>
+    <key>scoreboard</key>
+    <message>There is no scoreboard available for week 2.</message>
+   </exception>
+  </exceptions>
+ </league>
+</fantasy_content>
+<!-- fantasy-sports-api- -public-production-bf1-5984fbf5f6-r5kbr Mon Dec 28 22:15:37 UTC 2020 -->

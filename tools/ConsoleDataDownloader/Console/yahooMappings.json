@@ -1,0 +1,99 @@
+{
+    "seasons": [
+        {
+            "year": 2020,
+            "yahooGameId": 399,
+            "yahooLeagueId": 107335
+        },
+        {
+            "year": 2019,
+            "yahooGameKey": 390,
+            "yahooLeagueKey": 227997
+        },
+        {
+            "year": 2018,
+            "yahooGameKey": 380,
+            "yahooLeagueKey": 1096730
+        },
+        {
+            "year": 2017,
+            "yahooGameKey": 371,
+            "yahooLeagueKey": 496129
+        },
+        {
+            "year": 2016,
+            "yahooGameKey": 359,
+            "yahooLeagueKey": 312736
+        },
+        {
+            "year": 2015,
+            "yahooGameKey": 348,
+            "yahooLeagueKey": 352867
+        },
+        {
+            "year": 2014,
+            "yahooGameKey": 331,
+            "yahooLeagueKey": 335750
+        },
+        {
+            "year": 2013,
+            "yahooGameKey": 314,
+            "yahooLeagueKey": 126858
+        },
+        {
+            "year": 2012,
+            "yahooGameKey": 273,
+            "yahooLeagueKey": 375907
+        },
+        {
+            "year": 2011,
+            "yahooGameKey": 257,
+            "yahooLeagueKey": 413541
+        },
+        {
+            "year": 2010,
+            "yahooGameKey": 242,
+            "yahooLeagueKey": 304938
+        },
+        {
+            "year": 2009,
+            "yahooGameKey": 222,
+            "yahooLeagueKey": 199925
+        },
+        {
+            "year": 2008,
+            "yahooGameKey": 199,
+            "yahooLeagueKey": 209749
+        },
+        {
+            "year": 2007,
+            "yahooGameKey": 175,
+            "yahooLeagueKey": 346390
+        },
+        {
+            "year": 2006,
+            "yahooGameKey": 153,
+            "yahooLeagueKey": 172344
+        },
+        {
+            "year": 2005,
+            "yahooGameKey": 124,
+            "yahooLeagueKey": 196954
+        },
+        {
+            "year": 2004,
+            "yahooGameKey": 101,
+            "yahooLeagueKey": 106351
+        },
+        {
+            "year": 2003,
+            "yahooGameKey": 79,
+            "yahooLeagueKey": 41643
+        },
+        {
+            "year": 2002,
+            "yahooGameKey": 49,
+            "yahooLeagueKey": 341361
+        }
+    ]
+}
