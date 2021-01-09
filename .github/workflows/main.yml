@@ -33,6 +33,6 @@ jobs:
             registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
-            environment-variables: CONNECTIONSTRINGS__GIBSONSLEAGUEDB="${{secrets.AZURECONNECTIONSTRING}}"  
+            secure-environment-variables: CONNECTIONSTRINGS__GIBSONSLEAGUEDB="${{secrets.AZURECONNECTIONSTRING}}"  
             name: gibsonsleague
             location: 'Canada Central'
