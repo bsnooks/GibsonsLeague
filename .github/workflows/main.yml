@@ -21,7 +21,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
+            docker build src/. -f src/GibsonsLeague.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
 
         - name: 'Deploy to Azure Container Instances'
