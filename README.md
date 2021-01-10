@@ -1,4 +1,6 @@
 # Gibsons League Fantasy Archive
+![ApiContainerLinux](https://github.com/bsnooks/GibsonsLeague/workflows/ApiContainerLinux/badge.svg)
+
 Archive of the Gibsons League fantasy football franchises since the leagues inception in 2002. Includes all time team records as well as the transaction history for all players.
 
 ## Technologies Used
