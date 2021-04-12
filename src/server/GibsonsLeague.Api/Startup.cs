@@ -28,10 +28,10 @@ namespace GibsonsLeague.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<GLAContext>(options =>
-                options.UseSqlServer(_config["ConnectionStrings:GibsonsLeagueDb"]));
+                options.UseSqlServer(_config.GetConnectionString("GibsonsLeagueDb")));
 
             var optionsBuilder = new DbContextOptionsBuilder<GLAContext>();
-            optionsBuilder.UseSqlServer(_config["ConnectionStrings:GibsonsLeagueDb"]);
+            optionsBuilder.UseSqlServer(_config.GetConnectionString("GibsonsLeagueDb"));
 
             services.AddSingleton(s => new Func<GLAContext>(() => new GLAContext(optionsBuilder.Options)));
 
