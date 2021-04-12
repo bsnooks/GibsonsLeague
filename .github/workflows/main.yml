@@ -1,4 +1,4 @@
-on: [push]
+on: [push, workflow_dispatch]
 name: ApiContainerLinux
 
 jobs:
@@ -21,7 +21,7 @@ jobs:
             username: ${{ secrets.REGISTRY_USERNAME }}
             password: ${{ secrets.REGISTRY_PASSWORD }}
         - run: |
-            docker build src/. -f src/GibsonsLeague.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
+            docker build src/. -f src/GibsonsLeague.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:latest
             docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
 
         - name: 'Deploy to Azure Container Instances'
@@ -29,7 +29,7 @@ jobs:
           with:
             resource-group: ${{ secrets.RESOURCE_GROUP }}
             dns-name-label: gibsonsleagueapi
-            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
+            image: ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:latest
             registry-login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
             registry-username: ${{ secrets.REGISTRY_USERNAME }}
             registry-password: ${{ secrets.REGISTRY_PASSWORD }}
