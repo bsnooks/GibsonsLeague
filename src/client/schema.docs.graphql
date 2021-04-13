@@ -1,0 +1,79 @@
+schema {
+  query: GibsonsLeagueQuery
+}
+
+type GibsonsLeagueQuery {
+  franchise(id: Guid, name: String): Franchise
+  franchises: [Franchise]
+  league(id: Guid, name: String = "Gibsons League"): League
+  leagues: [League]
+  player(id: Int, name: String): Player
+}
+
+type League {
+  draft(year: Int!): Draft
+  drafts: [Draft]
+  franchises: [Franchise]
+  leagueId: ID!
+  name: String!
+  startYear: Int
+}
+
+type Franchise {
+  franchiseId: ID!
+  mainName: String!
+  picks(year: Int, round: Int, pick: Int): [DraftPick]
+  transactions(type: TransactionType, year: Int): [PlayerTransaction]
+}
+
+type DraftPick {
+  draftId: ID!
+  pick: Int!
+  playerName: String!
+  round: Int!
+  year: Int!
+}
+
+type PlayerTransaction {
+  date: DateTime!
+  description: String!
+  franchiseName: String!
+  name: String!
+  playerId: Int!
+  related: [PlayerTransaction]
+  type: String
+}
+
+# The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar DateTime
+
+enum TransactionType {
+  DRAFT_PICKED
+  KEPT
+  ADDED
+  DROPPED
+  TRADED
+  VETOED_TRADE
+}
+
+type Draft {
+  date: Date
+  draftId: ID!
+  picks(round: Int, pick: Int): [DraftPick]
+  rounds: Int!
+  snake: Boolean!
+  year: Int!
+}
+
+# The `Date` scalar type represents a year, month and day in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar Date
+
+scalar Guid
+
+type Player {
+  name: String!
+  playerId: Int!
+  position: String!
+  transactions(type: TransactionType): [PlayerTransaction]
+  yahooPlayerId: Int
+}
