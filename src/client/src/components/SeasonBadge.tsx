@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Badge, Image } from 'react-bootstrap';
+import { Button, Badge } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

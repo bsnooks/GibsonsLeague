@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import franchise1 from '../assets/images/2feaf03e-fb22-498e-ac8f-e596b6ba7810.png';
 import franchise2 from '../assets/images/8e9f18ff-62c3-40e8-bb10-32f74cf4ee33.png';
