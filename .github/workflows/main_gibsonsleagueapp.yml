@@ -12,6 +12,8 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    env:
+      working-directory: ./src/client
 
     steps:
     - uses: actions/checkout@v2
