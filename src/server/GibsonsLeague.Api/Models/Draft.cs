@@ -15,11 +15,16 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Rounds);
             Field<ListGraphType<DraftPick>>("picks",
                 arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "offset" },
+                    new QueryArgument<IntGraphType> { Name = "limit" },
                     new QueryArgument<IntGraphType> { Name = "round" },
                     new QueryArgument<IntGraphType> { Name = "pick" }),
                 resolve: context =>
                 {
-                    return draftPickRepository.GetDraft(context.Source.DraftId,
+                    return draftPickRepository.GetDraft(
+                        offset: context.GetArgument<int>("offset", 0),
+                        limit: context.GetArgument<int>("limit", 20),
+                        id: context.Source.DraftId,
                         round: context.GetArgument<int?>("round"),
                         pick: context.GetArgument<int?>("pick"));
                 });

@@ -16,7 +16,7 @@ namespace GibsonsLeague.Data.Repositories
             this.dbFunc = dbFunc;
         }
 
-        public async Task<IEnumerable<Transaction>> GetTransactions(Guid? franchiseId = null, int? playerId = null, TransactionType? type = null, int? year = null)
+        public async Task<IEnumerable<Transaction>> GetTransactions(int limit, int offset, Guid? franchiseId = null, int? playerId = null, TransactionType? type = null, int? year = null)
         {
             using (var dbContext = dbFunc())
             {
@@ -28,6 +28,8 @@ namespace GibsonsLeague.Data.Repositories
                     .Include(x => x.Team.Franchise)
                     .Include(x => x.Player)
                     .OrderByDescending(x => x.Date)
+                    .Skip(offset)
+                    .Take(limit)
                     .ToListAsync();
             }
         }

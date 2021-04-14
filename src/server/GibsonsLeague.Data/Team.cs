@@ -23,6 +23,13 @@ namespace GibsonsLeague.Data
         public int Year { get; set; }
         public string Name { get; set; }
         public int? YahooTeamId { get; set; }
+        public int Wins { get; set; }
+        public int Loses { get; set; }
+        public int Ties { get; set; }
+        public int Standing { get; set; }
+        public double Points { get; set; }
+        public bool Champion { get; set; }
+        public bool SecondPlace { get; set; }
 
         public virtual Franchise Franchise { get; set; }
         public virtual League League { get; set; }

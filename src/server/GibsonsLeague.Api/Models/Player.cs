@@ -15,8 +15,18 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.YahooPlayerId, nullable: true, type: typeof(IntGraphType));
 
             Field<ListGraphType<PlayerTransaction>>("transactions",
-                arguments: new QueryArguments(new QueryArgument<TransactionTypeEnum> { Name = "type" }),
-                resolve: context => transactionRepository.GetTransactions(playerId: context.Source.PlayerId, type: context.GetArgument<TransactionType?>("type")));
+                arguments: new QueryArguments(
+                    new QueryArgument<TransactionTypeEnum> { Name = "type" },
+                    new QueryArgument<IntGraphType> { Name = "offset" },
+                    new QueryArgument<IntGraphType> { Name = "limit" }),
+                resolve: context =>
+                {
+                    return transactionRepository.GetTransactions(
+                        offset: context.GetArgument<int>("offset", 0),
+                        limit: context.GetArgument<int>("limit", 20),
+                        playerId: context.Source.PlayerId,
+                        type: context.GetArgument<TransactionType?>("type"));
+                });
         }
     }
 }

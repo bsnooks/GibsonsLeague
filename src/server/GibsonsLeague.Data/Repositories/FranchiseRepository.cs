@@ -17,19 +17,23 @@ namespace GibsonsLeague.Data.Repositories
 
         public async Task<IEnumerable<Franchise>> GetAll()
         {
-            return await dbContext.Franchises.ToListAsync();
+            return await dbContext.Franchises
+                .Include(x => x.Teams)
+                .ToListAsync();
         }
 
 
         public async Task<Franchise> GetOne(Guid id)
         {
             return await dbContext.Franchises
+                .Include(x => x.Teams)
                 .SingleOrDefaultAsync(x => x.FranchiseId== id);
         }
 
         public async Task<Franchise> GetOneByName(string name)
         {
             return await dbContext.Franchises
+                .Include(x => x.Teams)
                 .SingleOrDefaultAsync(x => x.MainName == name);
         }
     }

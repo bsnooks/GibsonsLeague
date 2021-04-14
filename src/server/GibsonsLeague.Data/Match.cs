@@ -13,7 +13,7 @@ namespace GibsonsLeague.Data
         public int Week { get; set; }
         public Guid WinningTeamId { get; set; }
         public Guid LosingTeamId { get; set; }
-        public int MatchTypeId { get; set; }
+        public MatchType MatchTypeId { get; set; }
         public bool Tied { get; set; }
 
         public virtual League League { get; set; }

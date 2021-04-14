@@ -16,7 +16,7 @@ namespace GibsonsLeague.Data.Repositories
             this.dbFunc = dbFunc;
         }
 
-        public async Task<IEnumerable<DraftPick>> GetDraft(Guid id, int? round = null, int? pick = null)
+        public async Task<IEnumerable<DraftPick>> GetDraft(int limit, int offset, Guid id, int? round = null, int? pick = null)
         {
             using (var dbContext = dbFunc())
             {
@@ -25,24 +25,28 @@ namespace GibsonsLeague.Data.Repositories
                     .Include(x => x.Player)
                     .OrderBy(x => x.Draft.Year)
                     .ThenBy(x => x.Pick)
+                    .Skip(offset)
+                    .Take(limit)
                     .ToListAsync();
             }
         }
 
-        public async Task<IEnumerable<DraftPick>> GetPicks(Guid? franchiseId = null, int? year = null, int? round = null, int? pick = null)
+        public async Task<IEnumerable<DraftPick>> GetPicks(int limit, int offset, Guid? franchiseId = null, int? year = null, int? round = null, int? pick = null)
         {
             using (var dbContext = dbFunc())
             {
                 return await dbContext.DraftPicks
-                .Where(x => (!franchiseId.HasValue || x.Team.FranchiseId == franchiseId)
-                    && (!year.HasValue || x.Draft.Year == year)
-                    && (!round.HasValue || x.Round == round)
-                    && (!pick.HasValue || x.Pick == pick))
-                .Include(x => x.Draft)
-                .Include(x => x.Player)
-                .OrderBy(x => x.Draft.Year)
-                .ThenBy(x => x.Pick)
-                .ToListAsync();
+                    .Where(x => (!franchiseId.HasValue || x.Team.FranchiseId == franchiseId)
+                        && (!year.HasValue || x.Draft.Year == year)
+                        && (!round.HasValue || x.Round == round)
+                        && (!pick.HasValue || x.Pick == pick))
+                    .Include(x => x.Draft)
+                    .Include(x => x.Player)
+                    .OrderBy(x => x.Draft.Year)
+                    .ThenBy(x => x.Pick)
+                    .Skip(offset)
+                    .Take(limit)
+                    .ToListAsync();
             }
         }
     }

@@ -42,6 +42,8 @@ namespace GibsonsLeague.Api
             services.AddScoped<DraftPickRepository>();
             services.AddScoped<PlayerRepository>();
             services.AddScoped<TransactionRepository>();
+            services.AddScoped<MatchRepository>();
+            services.AddScoped<TeamRepository>();
 
             services.AddScoped<GibsonsLeagueSchema>();
 

@@ -6,13 +6,13 @@ namespace GibsonsLeague.Api.Models
 {
     public class League : ObjectGraphType<GibsonsLeague.Data.League>
     {
-        public League(DraftRepository draftRepository)
+        public League(DraftRepository draftRepository, FranchiseRepository franchiseRepository)
         {
             Field(l => l.LeagueId);
             Field(l => l.Name);
             Field(l => l.StartYear, nullable: true, type: typeof(IntGraphType));
 
-            Field<ListGraphType<Franchise>>("franchises", resolve: context => context.Source.Franchises);
+            Field<ListGraphType<Franchise>>("franchises", resolve: context => franchiseRepository.GetAll());
             Field<ListGraphType<Draft>>("drafts", resolve: context => draftRepository.GetAll());
             Field<Draft>("draft",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "year" }),

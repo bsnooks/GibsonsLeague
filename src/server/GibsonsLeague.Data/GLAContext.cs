@@ -250,6 +250,20 @@ namespace GibsonsLeague.Data
 
                 entity.Property(e => e.YahooTeamId).HasColumnName("YahooTeamID");
 
+                entity.Property(e => e.Wins).HasColumnName("Wins");
+
+                entity.Property(e => e.Loses).HasColumnName("Loses");
+
+                entity.Property(e => e.Ties).HasColumnName("Ties");
+
+                entity.Property(e => e.Standing).HasColumnName("Standing");
+
+                entity.Property(e => e.Points).HasColumnName("Points");
+
+                entity.Property(e => e.Champion).HasColumnName("Champion");
+
+                entity.Property(e => e.SecondPlace).HasColumnName("SecondPlace");
+
                 entity.HasOne(d => d.Franchise)
                     .WithMany(p => p.Teams)
                     .HasForeignKey(d => d.FranchiseId)
