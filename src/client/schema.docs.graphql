@@ -20,10 +20,57 @@ type League {
 }
 
 type Franchise {
+  championships: Int
   franchiseId: ID!
+  loses: Int
   mainName: String!
-  picks(year: Int, round: Int, pick: Int): [DraftPick]
-  transactions(type: TransactionType, year: Int): [PlayerTransaction]
+  matches(
+    offset: Int
+    limit: Int
+    type: MatchType
+    year: Int
+    week: Int
+  ): [Match]
+  picks(offset: Int, limit: Int, year: Int, round: Int, pick: Int): [DraftPick]
+  runnerUps: Int
+  teams(year: Int): [Team]
+  ties: Int
+  transactions(
+    offset: Int
+    limit: Int
+    type: TransactionType
+    year: Int
+  ): [PlayerTransaction]
+  wins: Int
+}
+
+type Team {
+  champion: Boolean!
+  franchiseName: String!
+  loses: Int!
+  matches(type: MatchType, week: Int): [Match]
+  name: String!
+  secondPlace: Boolean!
+  standing: Int!
+  ties: Int!
+  wins: Int!
+  year: Int!
+}
+
+type Match {
+  losingFranchise: String!
+  tied: Boolean!
+  type: String
+  week: Int!
+  winningFranchise: String!
+  year: Int!
+}
+
+enum MatchType {
+  REGULAR
+  PLAYOFF
+  CONSOLATION
+  CHAMPIONSHIP
 }
 
 type DraftPick {
@@ -59,7 +106,7 @@ enum TransactionType {
 type Draft {
   date: Date
   draftId: ID!
-  picks(round: Int, pick: Int): [DraftPick]
+  picks(offset: Int, limit: Int, round: Int, pick: Int): [DraftPick]
   rounds: Int!
   snake: Boolean!
   year: Int!
@@ -74,6 +121,10 @@ type Player {
   name: String!
   playerId: Int!
   position: String!
-  transactions(type: TransactionType): [PlayerTransaction]
+  transactions(
+    type: TransactionType
+    offset: Int
+    limit: Int
+  ): [PlayerTransaction]
   yahooPlayerId: Int
 }

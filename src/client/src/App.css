@@ -37,6 +37,13 @@
   }
 }
 
+.gold {
+  color: #ffd700;
+}
+.silver {
+  color: #c0c0c0;
+}
+
 .place-1 {
   background-color: #33ff00;
 }

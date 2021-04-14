@@ -1,9 +1,11 @@
 import * as React from "react"
+import { Spinner } from "react-bootstrap";
 
 const GlobalLoading: React.FC = () => {
     return (
-        <div id="ThrobberBox" className="throbber show">
-        </div>
+        <Spinner animation="border" role="status" variant="success">
+            <span className="sr-only">Loading...</span>
+        </Spinner>
     );
 }
 

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button, Card, Col, Container, Row } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery } from '../generated/graphql';
-import { LinkContainer } from 'react-router-bootstrap';
+import FranchiseCard from '../components/FranchiseCard';
 
 export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {
@@ -31,16 +31,9 @@ const Franchises: React.FC<FranchisesProps> = () => {
             <section className="card-columns">
                 {
                     data.franchises?.map((franchise: any) => (
-                        <Card style={{ width: '18rem' }} key={franchise.franchiseId}>
-                            <Card.Body>
-                                <Card.Title>{franchise.mainName}</Card.Title>
-                                <Card.Text>
-                                </Card.Text>
-                                <LinkContainer to={`/franchise/${franchise.franchiseId}`} key={franchise.franchiseId}>
-                                    <Button variant="primary">View</Button>
-                                </LinkContainer>
-                            </Card.Body>
-                        </Card>
+                        <FranchiseCard key={franchise.franchiseId}
+                            franchiseId={franchise.franchiseId} 
+                            mainName={franchise.mainName}   />
                     ))
                 }
             </section>

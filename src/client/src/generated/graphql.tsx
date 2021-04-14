@@ -29,6 +29,8 @@ export type Draft = {
 
 
 export type DraftPicksArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   round?: Maybe<Scalars['Int']>;
   pick?: Maybe<Scalars['Int']>;
 };
@@ -44,21 +46,46 @@ export type DraftPick = {
 
 export type Franchise = {
   __typename?: 'Franchise';
+  championships?: Maybe<Scalars['Int']>;
   franchiseId: Scalars['ID'];
+  loses?: Maybe<Scalars['Int']>;
   mainName: Scalars['String'];
+  matches?: Maybe<Array<Maybe<Match>>>;
   picks?: Maybe<Array<Maybe<DraftPick>>>;
+  runnerUps?: Maybe<Scalars['Int']>;
+  teams?: Maybe<Array<Maybe<Team>>>;
+  ties?: Maybe<Scalars['Int']>;
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
+  wins?: Maybe<Scalars['Int']>;
+};
+
+
+export type FranchiseMatchesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  type?: Maybe<MatchType>;
+  year?: Maybe<Scalars['Int']>;
+  week?: Maybe<Scalars['Int']>;
 };
 
 
 export type FranchisePicksArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   year?: Maybe<Scalars['Int']>;
   round?: Maybe<Scalars['Int']>;
   pick?: Maybe<Scalars['Int']>;
 };
 
 
+export type FranchiseTeamsArgs = {
+  year?: Maybe<Scalars['Int']>;
+};
+
+
 export type FranchiseTransactionsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
   type?: Maybe<TransactionType>;
   year?: Maybe<Scalars['Int']>;
 };
@@ -106,6 +133,23 @@ export type LeagueDraftArgs = {
   year: Scalars['Int'];
 };
 
+export type Match = {
+  __typename?: 'Match';
+  losingFranchise: Scalars['String'];
+  tied: Scalars['Boolean'];
+  type?: Maybe<Scalars['String']>;
+  week: Scalars['Int'];
+  winningFranchise: Scalars['String'];
+  year: Scalars['Int'];
+};
+
+export enum MatchType {
+  Regular = 'REGULAR',
+  Playoff = 'PLAYOFF',
+  Consolation = 'CONSOLATION',
+  Championship = 'CHAMPIONSHIP'
+}
+
 export type Player = {
   __typename?: 'Player';
   name: Scalars['String'];
@@ -118,6 +162,8 @@ export type Player = {
 
 export type PlayerTransactionsArgs = {
   type?: Maybe<TransactionType>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
 };
 
 export type PlayerTransaction = {
@@ -129,6 +175,26 @@ export type PlayerTransaction = {
   playerId: Scalars['Int'];
   related?: Maybe<Array<Maybe<PlayerTransaction>>>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type Team = {
+  __typename?: 'Team';
+  champion: Scalars['Boolean'];
+  franchiseName: Scalars['String'];
+  loses: Scalars['Int'];
+  matches?: Maybe<Array<Maybe<Match>>>;
+  name: Scalars['String'];
+  secondPlace: Scalars['Boolean'];
+  standing: Scalars['Int'];
+  ties: Scalars['Int'];
+  wins: Scalars['Int'];
+  year: Scalars['Int'];
+};
+
+
+export type TeamMatchesArgs = {
+  type?: Maybe<MatchType>;
+  week?: Maybe<Scalars['Int']>;
 };
 
 export enum TransactionType {

@@ -27,7 +27,7 @@ export const typeDefs = gql`
 // this can be local or a remote endpoint
 const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
-  uri: 'https://localhost:49163/graphql',
+  uri: 'https://gibsonsleague.azurewebsites.net/graphql',
   headers: {
     'client-name': 'GibsonsLeagueHistoryApp',
     'client-version': '1.0.0',
