@@ -46,15 +46,19 @@ export type DraftPick = {
 
 export type Franchise = {
   __typename?: 'Franchise';
+  adds?: Maybe<Scalars['Int']>;
   championships?: Maybe<Scalars['Int']>;
+  drops?: Maybe<Scalars['Int']>;
   franchiseId: Scalars['ID'];
   loses?: Maybe<Scalars['Int']>;
   mainName: Scalars['String'];
   matches?: Maybe<Array<Maybe<Match>>>;
   picks?: Maybe<Array<Maybe<DraftPick>>>;
+  points?: Maybe<Scalars['Float']>;
   runnerUps?: Maybe<Scalars['Int']>;
   teams?: Maybe<Array<Maybe<Team>>>;
   ties?: Maybe<Scalars['Int']>;
+  trades?: Maybe<Scalars['Int']>;
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
   wins?: Maybe<Scalars['Int']>;
 };
@@ -125,12 +129,34 @@ export type League = {
   franchises?: Maybe<Array<Maybe<Franchise>>>;
   leagueId: Scalars['ID'];
   name: Scalars['String'];
+  records?: Maybe<Array<Maybe<LeagueRecords>>>;
   startYear?: Maybe<Scalars['Int']>;
 };
 
 
 export type LeagueDraftArgs = {
   year: Scalars['Int'];
+};
+
+
+export type LeagueRecordsArgs = {
+  number?: Scalars['Int'];
+};
+
+export type LeagueRecord = {
+  __typename?: 'LeagueRecord';
+  franchiseId: Scalars['ID'];
+  franchiseName: Scalars['String'];
+  rank: Scalars['Int'];
+  recordValue: Scalars['String'];
+  week?: Maybe<Scalars['Int']>;
+  year?: Maybe<Scalars['Int']>;
+};
+
+export type LeagueRecords = {
+  __typename?: 'LeagueRecords';
+  recordTitle: Scalars['String'];
+  top?: Maybe<Array<Maybe<LeagueRecord>>>;
 };
 
 export type Match = {

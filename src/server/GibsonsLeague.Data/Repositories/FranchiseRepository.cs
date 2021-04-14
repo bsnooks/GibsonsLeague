@@ -19,6 +19,7 @@ namespace GibsonsLeague.Data.Repositories
         {
             return await dbContext.Franchises
                 .Include(x => x.Teams)
+                .ThenInclude(x => x.Transactions)
                 .ToListAsync();
         }
 
@@ -27,6 +28,7 @@ namespace GibsonsLeague.Data.Repositories
         {
             return await dbContext.Franchises
                 .Include(x => x.Teams)
+                .ThenInclude(x => x.Transactions)
                 .SingleOrDefaultAsync(x => x.FranchiseId== id);
         }
 
@@ -34,6 +36,7 @@ namespace GibsonsLeague.Data.Repositories
         {
             return await dbContext.Franchises
                 .Include(x => x.Teams)
+                .ThenInclude(x => x.Transactions)
                 .SingleOrDefaultAsync(x => x.MainName == name);
         }
     }

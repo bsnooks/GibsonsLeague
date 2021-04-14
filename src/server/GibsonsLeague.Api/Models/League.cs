@@ -6,7 +6,7 @@ namespace GibsonsLeague.Api.Models
 {
     public class League : ObjectGraphType<GibsonsLeague.Data.League>
     {
-        public League(DraftRepository draftRepository, FranchiseRepository franchiseRepository)
+        public League(DraftRepository draftRepository, FranchiseRepository franchiseRepository, RecordRepository recordRepository)
         {
             Field(l => l.LeagueId);
             Field(l => l.Name);
@@ -17,6 +17,13 @@ namespace GibsonsLeague.Api.Models
             Field<Draft>("draft",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "year" }),
                 resolve: context => draftRepository.GetOneByYear(context.Source.LeagueId, context.GetArgument<int>("year")));
+
+            Field<ListGraphType<LeagueRecords>>("records",
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "number", DefaultValue = 1 }),
+                resolve: context =>
+                {
+                    return recordRepository.GetLeagueRecords(context.Source.LeagueId, context.GetArgument<int>("number"));
+                });
         }
     }
 }

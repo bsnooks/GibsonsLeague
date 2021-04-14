@@ -23,11 +23,25 @@ namespace GibsonsLeague.Data.Repositories
                 return await dbContext.Teams
                     .Where(x => (!franchiseId.HasValue || x.FranchiseId == franchiseId || x.FranchiseId == franchiseId)
                         && (!year.HasValue || x.Year == year))
+                    .Include(x => x.Transactions)
                     .OrderByDescending(x => x.Year)
                     .ThenBy(x => x.Champion)
                     .ThenBy(x => x.SecondPlace)
                     .ThenBy(x => x.Standing)
                     .ToListAsync();
+            }
+        }
+
+        public async Task<Team> GetTeam(Guid? franchiseId = null, Guid? teamId = null, int? year = null)
+        {
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.Teams
+                    .Where(x => (!franchiseId.HasValue || x.FranchiseId == franchiseId)
+                        && (!teamId.HasValue || x.TeamId == teamId)
+                        && (!year.HasValue || x.Year == year))
+                    .Include(x=> x.Transactions)
+                    .SingleOrDefaultAsync();
             }
         }
     }

@@ -31,6 +31,7 @@ export const GET_FRANCHISE = gql`
       ties
       championships
       runnerUps
+      points
       teams
       {
         year
@@ -94,9 +95,6 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
         <Col>Record: {franchise.wins}-{franchise.loses}-{franchise.ties}</Col>
         <Col>Championships: {franchise.championships}</Col>
         <Col>Runner Ups: {franchise.runnerUps}</Col>
-        <Col>Trades: 13</Col>
-        <Col>Adds: 31413</Col>
-        <Col>Drops: 31413</Col>
       </Row>
 
     </Container>

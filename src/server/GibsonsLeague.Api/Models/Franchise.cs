@@ -20,6 +20,10 @@ namespace GibsonsLeague.Api.Models
             Field<IntGraphType>("Ties", resolve: context => context.Source.Teams.Sum(x => x.Ties));
             Field<IntGraphType>("Championships", resolve: context => context.Source.Teams.Count(x => x.Champion));
             Field<IntGraphType>("RunnerUps", resolve: context => context.Source.Teams.Count(x => x.SecondPlace));
+            Field<FloatGraphType>("Points", resolve: context => context.Source.Teams.Sum(x => x.Points));
+            Field<IntGraphType>("Trades", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Where(t => t.TransactionType == TransactionType.Traded).GroupBy(t => t.TransactionGroupId).Count()));
+            Field<IntGraphType>("Adds", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Count(t => t.TransactionType == TransactionType.Added)));
+            Field<IntGraphType>("Drops", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Count(t => t.TransactionType == TransactionType.Dropped)));
 
             Field<ListGraphType<Team>>("teams",
                 arguments: new QueryArguments(
