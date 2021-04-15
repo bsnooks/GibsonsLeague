@@ -2,8 +2,8 @@ name: Gibsons League App
 
 on:
   push:
-#    paths:
-#      - src/client/**
+    paths:
+      - src/client/**
     branches:
       - main
   workflow_dispatch:

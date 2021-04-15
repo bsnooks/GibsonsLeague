@@ -9,25 +9,25 @@ on:
   workflow_dispatch:
 
 jobs:
-    build-and-deploy:
-        runs-on: ubuntu-latest
-        steps:
-        # checkout the repo
-        - name: 'Checkout GitHub Action'
-          uses: actions/checkout@main
-          
-        - name: 'Login via Azure CLI'
-          uses: azure/login@v1
-          with:
-            creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
-        - name: 'Build and push image'
-          uses: azure/docker-login@v1
-          with:
-            login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-            username: ${{ secrets.REGISTRY_USERNAME }}
-            password: ${{ secrets.REGISTRY_PASSWORD }}
-        - run: |
-            docker build src/server/. -f src/server/GibsonsLeague.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:latest
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
-            docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:latest
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    # checkout the repo
+    - name: 'Checkout GitHub Action'
+      uses: actions/checkout@main
+      
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: 'Build and push image'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build src/server/. -f src/server/GibsonsLeague.Api/Dockerfile -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }} -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:latest
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gibsonsleague:latest
