@@ -369,6 +369,8 @@ namespace GibsonsLeague.Data
                 entity.Property(e => e.TransactionGroupId)
                     .ValueGeneratedNever()
                     .HasColumnName("TransactionGroupID");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

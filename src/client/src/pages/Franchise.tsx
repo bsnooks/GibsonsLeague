@@ -14,6 +14,7 @@ import franchise7 from '../assets/images/b2220d1a-ff75-4622-9757-09978901110f.pn
 import franchise8 from '../assets/images/bbe2d0ad-54cf-4c22-be82-b2a5f262a157.png';
 import franchise9 from '../assets/images/f483ecf1-cd17-4991-854b-e52dfc957b45.png';
 import franchise10 from '../assets/images/f5908944-6efd-40eb-af54-6c53004e0e2f.png';
+import TradeCard from '../components/TradeCard';
 
 const avatars = [franchise1, franchise2, franchise3, franchise4, franchise5, franchise6, franchise7, franchise8, franchise9, franchise10];
 
@@ -32,12 +33,32 @@ export const GET_FRANCHISE = gql`
       championships
       runnerUps
       points
+      tradeCount
       teams
       {
         year
         standing
         champion
         secondPlace
+      }
+      trades(limit:20)
+      {
+        tradeId
+        date
+        franchiseId
+        franchiseName
+        tradedWithFranchiseId
+        tradedWithFranchiseName
+        tradedfor
+        {
+          playerId
+          name
+        }
+        tradedaway
+        {
+          playerId
+          name
+        }
       }
     }
   }
@@ -78,24 +99,40 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
             <Col>
               <h1>{franchise.mainName}</h1>
               {
-                  franchise.teams?.map((team: any) => (
-                    <SeasonBadge key={team.year}
-                      year={team.year}
-                      place={team.standing}
-                      champion={team.champion}
-                      runnerUp={team.secondPlace}
-                      franchiseId={props.match.params.id} />
-                  ))
+                franchise.teams?.map((team: any) => (
+                  <SeasonBadge key={team.year}
+                    year={team.year}
+                    place={team.standing}
+                    champion={team.champion}
+                    runnerUp={team.secondPlace}
+                    franchiseId={props.match.params.id} />
+                ))
               }
+              <Row>
+                <Col>Record: {franchise.wins}-{franchise.loses}-{franchise.ties}</Col>
+                <Col>Championships: {franchise.championships}</Col>
+                <Col>Runner Ups: {franchise.runnerUps}</Col>
+              </Row>
+              <Row>
+                <Col>Points: {Number(franchise.points ?? 0).toLocaleString('en-US', {minimumFractionDigits: 2})}</Col>
+                <Col>Trades: {franchise.tradeCount}</Col>
+                <Col></Col>
+              </Row>
             </Col>
           </Row>
         </Container>
       </Jumbotron>
-      <Row>
-        <Col>Record: {franchise.wins}-{franchise.loses}-{franchise.ties}</Col>
-        <Col>Championships: {franchise.championships}</Col>
-        <Col>Runner Ups: {franchise.runnerUps}</Col>
-      </Row>
+      <section>
+        <h1>Trades</h1>
+        <div className="d-flex flex-wrap justify-content-center">
+
+        {
+          franchise.trades?.map((trade: any) => (
+            <TradeCard trade={trade} key={trade.tradeId} />
+          ))
+        }
+        </div>
+      </section>
 
     </Container>
   );

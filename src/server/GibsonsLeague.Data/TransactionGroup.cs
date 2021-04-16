@@ -13,6 +13,7 @@ namespace GibsonsLeague.Data
         }
 
         public Guid TransactionGroupId { get; set; }
+        public DateTime Date { get; set; }
 
         public virtual ICollection<Transaction> Transactions { get; set; }
     }

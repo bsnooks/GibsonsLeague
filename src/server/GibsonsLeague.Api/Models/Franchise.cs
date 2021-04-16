@@ -11,7 +11,8 @@ namespace GibsonsLeague.Api.Models
         public Franchise(TeamRepository teamRepository,
             DraftPickRepository draftPickRepository,
             TransactionRepository transactionRepository,
-            MatchRepository matchRepository)
+            MatchRepository matchRepository,
+            FranchiseTradeRepository franchiseTradeRepository)
         {
             Field(f => f.FranchiseId);
             Field(f => f.MainName);
@@ -21,9 +22,9 @@ namespace GibsonsLeague.Api.Models
             Field<IntGraphType>("Championships", resolve: context => context.Source.Teams.Count(x => x.Champion));
             Field<IntGraphType>("RunnerUps", resolve: context => context.Source.Teams.Count(x => x.SecondPlace));
             Field<FloatGraphType>("Points", resolve: context => context.Source.Teams.Sum(x => x.Points));
-            Field<IntGraphType>("Trades", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Where(t => t.TransactionType == TransactionType.Traded).GroupBy(t => t.TransactionGroupId).Count()));
-            Field<IntGraphType>("Adds", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Count(t => t.TransactionType == TransactionType.Added)));
-            Field<IntGraphType>("Drops", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Count(t => t.TransactionType == TransactionType.Dropped)));
+            Field<IntGraphType>("TradeCount", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Where(t => t.TransactionType == TransactionType.Traded).GroupBy(t => t.TransactionGroupId).Count()));
+            Field<IntGraphType>("AddCount", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Count(t => t.TransactionType == TransactionType.Added)));
+            Field<IntGraphType>("DropCount", resolve: context => context.Source.Teams.Sum(x => x.Transactions.Count(t => t.TransactionType == TransactionType.Dropped)));
 
             Field<ListGraphType<Team>>("teams",
                 arguments: new QueryArguments(
@@ -53,18 +54,14 @@ namespace GibsonsLeague.Api.Models
                         pick: context.GetArgument<int?>("pick"));
                 });
 
-            Field<ListGraphType<PlayerTransaction>>("transactions",
+            Field<ListGraphType<FranchiseTrade>>("trades",
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "offset" },
-                    new QueryArgument<IntGraphType> { Name = "limit" },
-                    new QueryArgument<TransactionTypeEnum> { Name = "type" },
-                    new QueryArgument<IntGraphType> { Name = "year" }),
-                resolve: context => transactionRepository.GetTransactions(
+                    new QueryArgument<IntGraphType> { Name = "limit" }),
+                resolve: context => franchiseTradeRepository.GetFranchiseTrades(
                     offset: context.GetArgument<int>("offset", 0),
                     limit: context.GetArgument<int>("limit", 20),
-                    franchiseId: context.Source.FranchiseId,
-                    type: context.GetArgument<TransactionType?>("type"),
-                    year: context.GetArgument<int?>("year")));
+                    franchiseId: context.Source.FranchiseId));
 
             Field<ListGraphType<Match>>("matches",
                 arguments: new QueryArguments(

@@ -19,10 +19,14 @@ namespace GibsonsLeague.Api.Models
                 resolve: context => draftRepository.GetOneByYear(context.Source.LeagueId, context.GetArgument<int>("year")));
 
             Field<ListGraphType<LeagueRecords>>("records",
-                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "number", DefaultValue = 1 }),
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "number", DefaultValue = 1 },
+                    new QueryArgument<BooleanGraphType> { Name = "positivity" }),
                 resolve: context =>
                 {
-                    return recordRepository.GetLeagueRecords(context.Source.LeagueId, context.GetArgument<int>("number"));
+                    return recordRepository.GetLeagueRecords(context.Source.LeagueId,
+                        context.GetArgument<int>("number"),
+                        recordPositivity: context.GetArgument<bool?>("positivity"));
                 });
         }
     }

@@ -39,9 +39,9 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
     }
 
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card style={{ width: '25rem' }}>
             <Card.Body>
-                <Image src={avatar} roundedCircle fluid />
+                <Image src={avatar} roundedCircle fluid style={{ width: '12rem', height: '12rem' }} />
                 <Card.Title>{props.leagueRecord.recordTitle}</Card.Title>                
                 {
                     props.leagueRecord.top.map((leagueRecord: any) => (

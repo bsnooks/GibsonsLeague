@@ -30,13 +30,11 @@ const FranchiseCard: React.FC<FranchiseCardProps> = ({ ...props }) => {
     const avatar = props.image || pickAvatarByFranchiseId(props.franchiseId);
 
     return (
-        <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src={avatar} />
+        <Card style={{ width: '10rem' }}>
+            <Card.Img variant="top" src={avatar} style={{ height: '10rem' }}/>
             <Card.Body>
-                <Card.Title>{props.mainName}</Card.Title>
-                <Card.Text>{props.desciption}</Card.Text>
                 <LinkContainer to={`/franchise/${props.franchiseId}`}>
-                    <Button variant="primary">View</Button>
+                    <Button variant="dark">{props.mainName}</Button>
                 </LinkContainer>
             </Card.Body>
         </Card>

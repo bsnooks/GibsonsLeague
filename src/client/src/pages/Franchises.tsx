@@ -27,8 +27,8 @@ const Franchises: React.FC<FranchisesProps> = () => {
     if (error || !data) return <p>ERROR</p>;
 
     return (
-        <Container>
-            <section className="card-columns">
+        <Container fluid>
+            <section className="d-flex flex-wrap justify-content-center">
                 {
                     data.franchises?.map((franchise: any) => (
                         <FranchiseCard key={franchise.franchiseId}

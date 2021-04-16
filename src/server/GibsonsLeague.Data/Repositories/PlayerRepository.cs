@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,16 @@ namespace GibsonsLeague.Data.Repositories
         {
             return await dbContext.Players
                 .SingleOrDefaultAsync(p => p.Name.Contains(name));
+        }
+
+        public async Task<IEnumerable<Player>> LookupPlayer(string name, int offset, int limit)
+        {
+            return await dbContext.Players
+                .Where(p => p.Name.Contains(name))
+                .OrderBy(p => p.Name)
+                .Skip(offset)
+                .Take(limit)
+                .ToListAsync();
         }
     }
 }

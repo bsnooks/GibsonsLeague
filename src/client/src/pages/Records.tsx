@@ -12,6 +12,8 @@ export const GET_FRANCHISES = gql`
       records(number:5)
       {
         recordTitle
+        positiveRecord
+        type
         top
         {
           rank
@@ -39,16 +41,30 @@ const Records: React.FC<RecordsProps> = () => {
     if (error || !data) return <p>ERROR</p>;
 
     return (
-        <Container>
-            <section className="card-columns">
-                {
-                    data.league?.records?.map((leagueRecord: any) => (
-                        <RecordCard key={leagueRecord.recordTitle}
-                            leagueRecord={leagueRecord} />
-                    ))
-                }
-            </section>
-        </Container>
+        <>
+            <Container fluid>
+                <h1>Hall of Fame</h1>
+                <section className="d-flex flex-wrap justify-content-center">
+                    {
+                        data.league?.records?.filter(r => r?.positiveRecord).map((leagueRecord: any) => (
+                            <RecordCard key={leagueRecord.recordTitle}
+                                leagueRecord={leagueRecord} />
+                        ))
+                    }
+                </section>
+            </Container>
+            <Container fluid>
+                <h1>Hall of Shame</h1>
+                <section className="d-flex flex-wrap justify-content-center">
+                    {
+                        data.league?.records?.filter(r => !r?.positiveRecord).map((leagueRecord: any) => (
+                            <RecordCard key={leagueRecord.recordTitle}
+                                leagueRecord={leagueRecord} />
+                        ))
+                    }
+                </section>
+            </Container>
+        </>
     );
 }
 

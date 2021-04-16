@@ -62,6 +62,23 @@ namespace GibsonsLeague.Api.Models
                     var name = context.GetArgument<string>("name");
                     return id.HasValue ? playerRepository.GetOne(id.Value) : playerRepository.GetOneByName(name);
                 });
+
+            Field<ListGraphType<Player>>(
+                "players",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "offset" },
+                    new QueryArgument<IntGraphType> { Name = "limit" },
+                    new QueryArgument<StringGraphType> { Name = "query" }
+                ),
+                resolve: context =>
+                {
+                    var id = context.GetArgument<int?>("id");
+                    var name = context.GetArgument<string>("name");
+                    return playerRepository.LookupPlayer(
+                        offset: context.GetArgument<int>("offset", 0),
+                        limit: context.GetArgument<int>("limit", 20),
+                        name: context.GetArgument<string>("query"));
+                });
         }
     }
 }

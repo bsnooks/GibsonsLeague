@@ -10,6 +10,9 @@ namespace GibsonsLeague.Api.Models
         public LeagueRecords()
         {
             Field(x => x.RecordTitle);
+            Field(x => x.PositiveRecord);
+            Field<StringGraphType>("type",
+                resolve: context => context.Source.RecordType.ToString());
 
             Field<ListGraphType<LeagueRecord>>("top",
                 resolve: context =>

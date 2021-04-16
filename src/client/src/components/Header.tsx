@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Nav, Navbar, NavDropdown, Form, FormControl } from 'react-bootstrap';
+import { Button, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
+import PlayerSearch from './PlayerSearch';
 
 export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {
@@ -38,7 +39,7 @@ const Header: React.FC<HeaderProps> = () => {
     const years = Array.from({length:difference},(v,k)=>currentYear-k-1);
 
     return (
-        <Navbar bg="light" expand="lg">
+        <Navbar bg="success" variant="dark" expand="lg" sticky="top">
             <LinkContainer to="/">
                 <Navbar.Brand>{data.league.name} History</Navbar.Brand>
             </LinkContainer>
@@ -47,6 +48,9 @@ const Header: React.FC<HeaderProps> = () => {
                 <Nav className="mr-auto">
                     <LinkContainer to="/">
                         <Nav.Link>Home</Nav.Link>
+                    </LinkContainer>
+                    <LinkContainer to="/records">
+                        <Nav.Link>Records</Nav.Link>
                     </LinkContainer>
                     <NavDropdown title="Franchises" id="basic-nav-dropdown">
                         {
@@ -68,8 +72,8 @@ const Header: React.FC<HeaderProps> = () => {
                     </NavDropdown>
                 </Nav>
                 <Form inline>
-                    <FormControl type="text" placeholder="player search" className="mr-sm-2" />
-                    <Button variant="outline-success">Search</Button>
+                    <PlayerSearch />
+                    <Button variant="outline-light">Search</Button>
                 </Form>
             </Navbar.Collapse>
         </Navbar>

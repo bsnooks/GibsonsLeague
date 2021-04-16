@@ -8,6 +8,7 @@ type GibsonsLeagueQuery {
   league(id: Guid, name: String = "Gibsons League"): League
   leagues: [League]
   player(id: Int, name: String): Player
+  players(offset: Int, limit: Int, query: String): [Player]
 }
 
 type League {
@@ -16,14 +17,14 @@ type League {
   franchises: [Franchise]
   leagueId: ID!
   name: String!
-  records(number: Int! = 1): [LeagueRecords]
+  records(number: Int! = 1, positivity: Boolean): [LeagueRecords]
   startYear: Int
 }
 
 type Franchise {
-  adds: Int
+  addCount: Int
   championships: Int
-  drops: Int
+  dropCount: Int
   franchiseId: ID!
   loses: Int
   mainName: String!
@@ -39,13 +40,8 @@ type Franchise {
   runnerUps: Int
   teams(year: Int): [Team]
   ties: Int
-  trades: Int
-  transactions(
-    offset: Int
-    limit: Int
-    type: TransactionType
-    year: Int
-  ): [PlayerTransaction]
+  tradeCount: Int
+  trades(offset: Int, limit: Int): [FranchiseTrade]
   wins: Int
 }
 
@@ -86,26 +82,29 @@ type DraftPick {
   year: Int!
 }
 
+type FranchiseTrade {
+  date: DateTime!
+  franchiseId: ID!
+  franchiseName: String!
+  tradedaway: [PlayerTransaction]
+  tradedfor: [PlayerTransaction]
+  tradedWithFranchiseId: ID!
+  tradedWithFranchiseName: String!
+  tradeId: ID!
+}
+
+# The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar DateTime
+
 type PlayerTransaction {
   date: DateTime!
   description: String!
   franchiseName: String!
   name: String!
   playerId: Int!
+  position: String!
   related: [PlayerTransaction]
   type: String
-}
-
-# The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
-scalar DateTime
-
-enum TransactionType {
-  DRAFT_PICKED
-  KEPT
-  ADDED
-  DROPPED
-  TRADED
-  VETOED_TRADE
 }
 
 type Draft {
@@ -121,8 +120,10 @@ type Draft {
 scalar Date
 
 type LeagueRecords {
+  positiveRecord: Boolean!
   recordTitle: String!
   top: [LeagueRecord]
+  type: String
 }
 
 type LeagueRecord {
@@ -146,4 +147,13 @@ type Player {
     limit: Int
   ): [PlayerTransaction]
   yahooPlayerId: Int
+}
+
+enum TransactionType {
+  DRAFT_PICKED
+  KEPT
+  ADDED
+  DROPPED
+  TRADED
+  VETOED_TRADE
 }
