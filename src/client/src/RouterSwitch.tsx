@@ -15,7 +15,7 @@ const RouterSwitch: React.FC = () => {
     return (
         <React.Suspense fallback={<GlobalLoading />}>
             <Switch>
-                <Route exact path="/" component={RouteComponents.Home} />
+                <Route exact path="/" component={RouteComponents.Franchises} />
                 <Route exact path="/records" component={RouteComponents.Records} />
                 <Route path="/franchise/:id" component={RouteComponents.Franchise} />
                 <Route path="/player/:id" component={RouteComponents.Player} />
