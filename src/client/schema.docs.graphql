@@ -104,8 +104,12 @@ type PlayerTransaction {
   playerId: Int!
   position: String!
   related: [PlayerTransaction]
+  transactionGroupId: Guid
+  transactionId: ID!
   type: String
 }
+
+scalar Guid
 
 type Draft {
   date: Date
@@ -134,8 +138,6 @@ type LeagueRecord {
   week: Int
   year: Int
 }
-
-scalar Guid
 
 type Player {
   name: String!

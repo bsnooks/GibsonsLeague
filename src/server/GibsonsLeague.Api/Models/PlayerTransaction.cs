@@ -9,6 +9,8 @@ namespace GibsonsLeague.Api.Models
     {
         public PlayerTransaction(TransactionRepository transactionRepository)
         {
+            Field(x => x.TransactionId);
+            Field(x => x.TransactionGroupId, nullable: true, type: typeof(GuidGraphType));
             Field(x => x.PlayerId);
             Field(x => x.Player.Name);
             Field(x => x.Player.Position);

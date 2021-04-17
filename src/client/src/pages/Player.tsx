@@ -3,6 +3,7 @@ import { Container, Jumbotron, Row, Col } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs } from '../generated/graphql';
+import { Link } from 'react-router-dom';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Int) {
@@ -11,6 +12,7 @@ export const GET_FRANCHISE = gql`
       position
       transactions
       {
+        transactionId
         date
         description
         type
@@ -43,6 +45,59 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
 
   const player = data.player;
 
+  let previousYear = 1900;
+  const transactions = player.transactions?.map((transaction) =>
+  {
+    if (!transaction)
+    {
+      return null;
+    }
+    const year = new Date(transaction.date).getFullYear();
+    const transactionRow =
+      transaction.type === "Traded" ?
+        (
+          <Row key={transaction.date}>
+            <Col>
+              <Link to={`/trade/${transaction?.transactionId}`}>
+                {transaction.description} on {(new Date(transaction.date).toLocaleDateString())}
+              </Link>
+            </Col>
+          </Row>
+        )
+        :
+        transaction.type === "DraftPicked" ?
+        (
+          <Row key={transaction.date}>
+           <Col>
+            <Link to={`/draft/${year}`}>
+              {transaction.description} on {(new Date(transaction.date).toLocaleDateString())}
+            </Link>
+            </Col>
+          </Row>
+        )
+        :
+        (
+          <Row key={transaction.date}>
+            <Col>
+              {transaction.description} on {(new Date(transaction.date).toLocaleDateString())}
+            </Col>
+          </Row>
+        );
+
+    if (year !== previousYear)
+    {
+      previousYear = new Date(transaction.date).getFullYear();
+      return (<>
+        <Row style={{backgroundColor: "#CCC"}}>
+          <Col><b>{previousYear}</b></Col>
+        </Row>
+        {transactionRow}
+      </>)
+    }
+    
+    return transactionRow;
+  });
+
   return (
     <Container>
       <Jumbotron fluid>
@@ -52,11 +107,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
         <h1>Transactions</h1>
         <div className="d-flex flex-wrap justify-content-center">
             <Container>
-                {
-                    player.transactions?.map((transaction: any) => (
-                        <Row key={transaction.date}><Col>{transaction.franchiseName} - {transaction.description} {(new Date(transaction.date).toLocaleDateString())}</Col></Row>
-                    ))
-                }
+                {transactions}
             </Container>
         </div>
       </section>    

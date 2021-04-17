@@ -51,9 +51,11 @@ const TradeCard: React.FC<TradeCardProps> = ({ ...props }) => {
                         }
                     </Col>
                     <Col md="auto">
-                        <Button title="Trade Tree">
-                            <FontAwesomeIcon icon={faCodeBranch} />
-                        </Button>
+                        <Link to={`/trade/${trade?.tradeId}`}>
+                            <Button title="Trade Tree">
+                                <FontAwesomeIcon icon={faCodeBranch} />
+                            </Button>
+                        </Link>
                     </Col>
                     <Col>
                         <Image src={avatarTradedWith} roundedCircle fluid style={{ width: '5rem', height: '5rem' }} />

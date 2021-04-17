@@ -222,6 +222,8 @@ export type PlayerTransaction = {
   playerId: Scalars['Int'];
   position: Scalars['String'];
   related?: Maybe<Array<Maybe<PlayerTransaction>>>;
+  transactionGroupId?: Maybe<Scalars['Guid']>;
+  transactionId: Scalars['ID'];
   type?: Maybe<Scalars['String']>;
 };
 
