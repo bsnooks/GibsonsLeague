@@ -41,7 +41,7 @@ export const GET_FRANCHISE = gql`
         champion
         secondPlace
       }
-      trades(limit:20)
+      trades(limit:100)
       {
         tradeId
         date
