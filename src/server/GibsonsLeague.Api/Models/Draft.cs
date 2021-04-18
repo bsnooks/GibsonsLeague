@@ -23,7 +23,7 @@ namespace GibsonsLeague.Api.Models
                 {
                     return draftPickRepository.GetDraft(
                         offset: context.GetArgument<int>("offset", 0),
-                        limit: context.GetArgument<int>("limit", 20),
+                        limit: context.GetArgument<int>("limit", 500),
                         id: context.Source.DraftId,
                         round: context.GetArgument<int?>("round"),
                         pick: context.GetArgument<int?>("pick"));

@@ -38,8 +38,12 @@ export type DraftPicksArgs = {
 export type DraftPick = {
   __typename?: 'DraftPick';
   draftId: Scalars['ID'];
+  franchiseId: Scalars['ID'];
+  franchiseName: Scalars['String'];
   pick: Scalars['Int'];
+  playerId: Scalars['Int'];
   playerName: Scalars['String'];
+  playerPosition: Scalars['String'];
   round: Scalars['Int'];
   year: Scalars['Int'];
 };
@@ -106,12 +110,19 @@ export type FranchiseTrade = {
 
 export type GibsonsLeagueQuery = {
   __typename?: 'GibsonsLeagueQuery';
+  draft?: Maybe<Draft>;
   franchise?: Maybe<Franchise>;
   franchises?: Maybe<Array<Maybe<Franchise>>>;
   league?: Maybe<League>;
   leagues?: Maybe<Array<Maybe<League>>>;
   player?: Maybe<Player>;
   players?: Maybe<Array<Maybe<Player>>>;
+  trade?: Maybe<FranchiseTrade>;
+};
+
+
+export type GibsonsLeagueQueryDraftArgs = {
+  year?: Maybe<Scalars['Int']>;
 };
 
 
@@ -137,6 +148,11 @@ export type GibsonsLeagueQueryPlayersArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   query?: Maybe<Scalars['String']>;
+};
+
+
+export type GibsonsLeagueQueryTradeArgs = {
+  id?: Maybe<Scalars['Guid']>;
 };
 
 

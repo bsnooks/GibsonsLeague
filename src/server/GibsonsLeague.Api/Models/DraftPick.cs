@@ -10,7 +10,12 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Draft.Year).Name("year");
             Field(x => x.Round);
             Field(x => x.Pick);
+
+            Field(x => x.PlayerId);
             Field(x => x.Player.Name).Name("playerName");
+            Field(x => x.Player.Position).Name("playerPosition");
+            Field(x => x.Team.FranchiseId).Name("franchiseId");
+            Field(x => x.Team.Franchise.MainName).Name("franchiseName");
         }
     }
 }

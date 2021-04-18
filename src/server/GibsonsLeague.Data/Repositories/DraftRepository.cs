@@ -29,10 +29,10 @@ namespace GibsonsLeague.Data.Repositories
                 .SingleOrDefaultAsync(x => x.DraftId == id);
         }
 
-        public async Task<Draft> GetOneByYear(Guid leagueId, int year)
+        public async Task<Draft> GetOneByYear(int year)
         {
             return await dbContext.Drafts
-                .SingleOrDefaultAsync(x => x.LeagueId == leagueId && x.Year == year);
+                .SingleOrDefaultAsync(x => x.Year == year);
         }
     }
 }

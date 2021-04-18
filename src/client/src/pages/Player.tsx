@@ -10,7 +10,7 @@ export const GET_FRANCHISE = gql`
     player(id: $id) {
       name
       position
-      transactions
+      transactions(limit: 50)
       {
         transactionId
         date
@@ -39,7 +39,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
     { variables: { id: props.match.params.id } }
   );
 
-  if (loading) return <GlobalLoading />;
+  if (loading) return <GlobalLoading mode="page" />;
   if (error || !data) return <p>ERROR</p>;
   if (!data.player) return <p>Not Found</p>;
 
@@ -87,12 +87,12 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
     if (year !== previousYear)
     {
       previousYear = new Date(transaction.date).getFullYear();
-      return (<>
+      return (<React.Fragment key={transaction.date}>
         <Row style={{backgroundColor: "#CCC"}}>
           <Col><b>{previousYear}</b></Col>
         </Row>
         {transactionRow}
-      </>)
+      </React.Fragment>)
     }
     
     return transactionRow;
@@ -101,7 +101,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
   return (
     <Container>
       <Jumbotron fluid>
-          <h1>{player.name}</h1>
+          <h1>{player.name} ({player.position})</h1>
       </Jumbotron>  
       <section>
         <h1>Transactions</h1>

@@ -23,7 +23,7 @@ const Franchises: React.FC<FranchisesProps> = () => {
         error
     } = useQuery<GibsonsLeagueQuery>(GET_FRANCHISES);
 
-    if (loading) return <GlobalLoading />;
+    if (loading) return <GlobalLoading mode="page" />;
     if (error || !data) return <p>ERROR</p>;
 
     return (

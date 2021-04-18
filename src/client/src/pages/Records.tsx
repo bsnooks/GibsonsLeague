@@ -9,7 +9,7 @@ export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {
     league
     {
-      records(number:5)
+      records(number:3)
       {
         recordTitle
         positiveRecord
@@ -37,7 +37,7 @@ const Records: React.FC<RecordsProps> = () => {
         error
     } = useQuery<GibsonsLeagueQuery>(GET_FRANCHISES);
 
-    if (loading) return <GlobalLoading />;
+    if (loading) return <GlobalLoading mode="page" />;
     if (error || !data) return <p>ERROR</p>;
 
     return (

@@ -3,12 +3,14 @@ schema {
 }
 
 type GibsonsLeagueQuery {
+  draft(year: Int): Draft
   franchise(id: Guid, name: String): Franchise
   franchises: [Franchise]
   league(id: Guid, name: String = "Gibsons League"): League
   leagues: [League]
   player(id: Int, name: String): Player
   players(offset: Int, limit: Int, query: String): [Player]
+  trade(id: Guid): FranchiseTrade
 }
 
 type League {
@@ -76,8 +78,12 @@ enum MatchType {
 
 type DraftPick {
   draftId: ID!
+  franchiseId: ID!
+  franchiseName: String!
   pick: Int!
+  playerId: Int!
   playerName: String!
+  playerPosition: String!
   round: Int!
   year: Int!
 }

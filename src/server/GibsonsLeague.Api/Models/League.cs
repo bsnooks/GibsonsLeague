@@ -16,7 +16,7 @@ namespace GibsonsLeague.Api.Models
             Field<ListGraphType<Draft>>("drafts", resolve: context => draftRepository.GetAll());
             Field<Draft>("draft",
                 arguments: new QueryArguments(new QueryArgument<NonNullGraphType<IntGraphType>> { Name = "year" }),
-                resolve: context => draftRepository.GetOneByYear(context.Source.LeagueId, context.GetArgument<int>("year")));
+                resolve: context => draftRepository.GetOneByYear(context.GetArgument<int>("year")));
 
             Field<ListGraphType<LeagueRecords>>("records",
                 arguments: new QueryArguments(

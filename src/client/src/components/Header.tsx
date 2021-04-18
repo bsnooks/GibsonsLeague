@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Nav, Navbar, NavDropdown, Form } from 'react-bootstrap';
+import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
@@ -30,18 +30,52 @@ const Header: React.FC<HeaderProps> = () => {
         error
     } = useQuery<GibsonsLeagueQuery>(GET_FRANCHISES);
 
-    if (loading) return null;
-    if (error || !data) return null;
-    if (!data.league || !data.league.franchises) return null;
+    const fanchiseNav = () => {
+        if (!loading && !error && data && data.league && data.league.franchises)
+        {
+            const links =  (data.league.franchises.map((franchise: any) => (
+                <LinkContainer to={`/franchise/${franchise.franchiseId}`} key={franchise.franchiseId}>
+                    <NavDropdown.Item>{franchise.mainName}</NavDropdown.Item>
+                </LinkContainer>
+            )));
 
-    const currentYear = new Date().getFullYear() + 1
-    const difference = currentYear - (data.league.startYear ?? currentYear);
-    const years = Array.from({length:difference},(v,k)=>currentYear-k-1);
+            return (
+                <NavDropdown title="Franchises" id="basic-nav-dropdown">
+                    {links}
+                </NavDropdown>
+            );
+        }
+
+        return null;
+    }
+    
+    const seasonNav = () => {
+        if (!loading && !error && data && data.league && data.league.franchises)
+        {
+            const currentYear = new Date().getFullYear() + 1
+            const difference = currentYear - (data.league.startYear ?? currentYear);
+            const years = Array.from({length:difference},(v,k)=>currentYear-k-1);
+
+            const links = (years.map(year => (
+                <LinkContainer to={`/season/${year}`} key={year}>
+                    <NavDropdown.Item>{year}</NavDropdown.Item>
+                </LinkContainer>
+            )));
+
+            return (
+                <NavDropdown title="Seasons" id="basic-nav-dropdown">
+                    {links}
+                </NavDropdown>
+            );
+        }
+
+        return null;
+    }
 
     return (
         <Navbar bg="success" variant="dark" expand="lg" sticky="top">
             <LinkContainer to="/">
-                <Navbar.Brand>{data.league.name} History</Navbar.Brand>
+                <Navbar.Brand>{data?.league?.name ?? "Gibsons League"} History</Navbar.Brand>
             </LinkContainer>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
@@ -52,29 +86,10 @@ const Header: React.FC<HeaderProps> = () => {
                     <LinkContainer to="/records">
                         <Nav.Link>Records</Nav.Link>
                     </LinkContainer>
-                    <NavDropdown title="Franchises" id="basic-nav-dropdown">
-                        {
-                            data.league.franchises.map((franchise: any) => (
-                                <LinkContainer to={`/franchise/${franchise.franchiseId}`} key={franchise.franchiseId}>
-                                    <NavDropdown.Item>{franchise.mainName}</NavDropdown.Item>
-                                </LinkContainer>
-                            ))
-                        }
-                    </NavDropdown>
-                    <NavDropdown title="Seasons" id="basic-nav-dropdown">
-                        {
-                            years.map(year => (
-                                <LinkContainer to={`/season/${year}`} key={year}>
-                                    <NavDropdown.Item>{year}</NavDropdown.Item>
-                                </LinkContainer>
-                            ))
-                        }
-                    </NavDropdown>
+                    {fanchiseNav()}
+                    {seasonNav()}
                 </Nav>
-                <Form inline>
-                    <PlayerSearch />
-                    <Button variant="outline-light">Search</Button>
-                </Form>
+                <PlayerSearch />
             </Navbar.Collapse>
         </Navbar>
     );

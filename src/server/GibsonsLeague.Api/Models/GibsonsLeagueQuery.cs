@@ -10,7 +10,9 @@ namespace GibsonsLeague.Api.Models
         public GibsonsLeagueQuery(
             LeagueRepository leagueRepository,
             FranchiseRepository franchiseRepository,
-            PlayerRepository playerRepository)
+            PlayerRepository playerRepository,
+            FranchiseTradeRepository franchiseTradeRepository,
+            DraftRepository draftRepository)
         {
             Field<ListGraphType<League>>(
                 "leagues",
@@ -78,6 +80,26 @@ namespace GibsonsLeague.Api.Models
                         offset: context.GetArgument<int>("offset", 0),
                         limit: context.GetArgument<int>("limit", 20),
                         name: context.GetArgument<string>("query"));
+                });
+
+            Field<FranchiseTrade>(
+                "trade",
+                arguments: new QueryArguments(
+                    new QueryArgument<GuidGraphType> { Name = "id" }
+                ),
+                resolve: context =>
+                {
+                    return franchiseTradeRepository.GetFranchiseTrade(context.GetArgument<Guid>("id"));
+                });
+
+            Field<Draft>(
+                "draft",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "year" }
+                ),
+                resolve: context =>
+                {
+                    return draftRepository.GetOneByYear(context.GetArgument<int>("year"));
                 });
         }
     }
