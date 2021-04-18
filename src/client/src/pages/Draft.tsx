@@ -3,7 +3,7 @@ import { Container, Jumbotron } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import GlobalError from '../components/GlobalError';
-import { DraftPick, GibsonsLeagueQuery, GibsonsLeagueQueryDraftArgs } from '../generated/graphql';
+import { GibsonsLeagueQuery, GibsonsLeagueQueryDraftArgs } from '../generated/graphql';
 import { groupBy } from 'lodash';
 import DraftRoundCard from '../components/DraftRoundCard';
 
