@@ -4,6 +4,7 @@ import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs } from '../generated/graphql';
 import { Link } from 'react-router-dom';
+import GlobalError from '../components/GlobalError';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Int) {
@@ -40,7 +41,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
   );
 
   if (loading) return <GlobalLoading mode="page" />;
-  if (error || !data) return <p>ERROR</p>;
+  if (error || !data) return <GlobalError mode="page" apolloError={error} />;
   if (!data.player) return <p>Not Found</p>;
 
   const player = data.player;

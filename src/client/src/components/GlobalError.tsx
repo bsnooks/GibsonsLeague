@@ -9,7 +9,7 @@ interface GlobalErrorProps {
 }
 
 const GlobalError: React.FC<GlobalErrorProps> = ({ ...props }) => {
-    const errorMessage: string = props.errorMessage ?? "Sorry Something went wrong, please try again later";
+    const errorMessage: string = props.errorMessage ?? "Sorry, something went wrong. Please try again later.";
     const moreInfo = props.apolloError ? props.apolloError.message : null;
 
     switch (props.mode) {
@@ -24,7 +24,7 @@ const GlobalError: React.FC<GlobalErrorProps> = ({ ...props }) => {
                         <iframe title="oops" src="https://giphy.com/embed/fsnzYr1pgvAQM" width="480" height="320" frameBorder="0" className="giphy-embed" allowFullScreen>
                         </iframe>
                         <div>
-                            <p className="font-italic">{moreInfo}</p>
+                            <p className="font-italic text-danger">{moreInfo}</p>
                         </div>
                     </div>
                 </Container>

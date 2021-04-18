@@ -9,7 +9,7 @@ const GlobalLoading: React.FC<GlobalLoadingProps> = ({ ...props }) => {
     const [loadingMessage, setLoadingMessage] = React.useState("");
 
     const shuffle = React.useCallback(() => {
-        const loadingMessages = ["Turning on the database...", "Loading data...", "Hang in there..."];
+        const loadingMessages = ["Turning on the database...", "Loading data...", "Hang in there...", "Eli is a hall of famer...", "Performance is what you pay for..."];
         const index = Math.floor(Math.random() * loadingMessages.length);
         setLoadingMessage(loadingMessages[index]);
     }, []);
