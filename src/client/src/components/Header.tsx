@@ -3,7 +3,7 @@ import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
-import PlayerSearch from './PlayerSearch';
+import PlayerSearch from './controls/PlayerSearch';
 
 export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {

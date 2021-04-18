@@ -4,7 +4,7 @@ import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import GlobalError from '../components/GlobalError';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryTradeArgs } from '../generated/graphql';
-import TradeCard from '../components/TradeCard';
+import TradeCard from '../components/cards/TradeCard';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Guid) {

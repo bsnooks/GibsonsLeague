@@ -3,7 +3,7 @@ import { Container } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery } from '../generated/graphql';
-import RecordCard from '../components/RecordCard';
+import RecordCard from '../components/cards/RecordCard';
 import GlobalError from '../components/GlobalError';
 
 export const GET_FRANCHISES = gql`

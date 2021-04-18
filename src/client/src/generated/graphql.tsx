@@ -111,6 +111,7 @@ export type FranchiseTrade = {
 export type GibsonsLeagueQuery = {
   __typename?: 'GibsonsLeagueQuery';
   draft?: Maybe<Draft>;
+  draftpicks?: Maybe<Array<Maybe<DraftPick>>>;
   franchise?: Maybe<Franchise>;
   franchises?: Maybe<Array<Maybe<Franchise>>>;
   league?: Maybe<League>;
@@ -118,11 +119,21 @@ export type GibsonsLeagueQuery = {
   player?: Maybe<Player>;
   players?: Maybe<Array<Maybe<Player>>>;
   trade?: Maybe<FranchiseTrade>;
+  trades?: Maybe<Array<Maybe<FranchiseTrade>>>;
+  transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
 };
 
 
 export type GibsonsLeagueQueryDraftArgs = {
   year?: Maybe<Scalars['Int']>;
+};
+
+
+export type GibsonsLeagueQueryDraftpicksArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  year?: Maybe<Scalars['Int']>;
+  franchiseId?: Maybe<Scalars['Guid']>;
 };
 
 
@@ -153,6 +164,22 @@ export type GibsonsLeagueQueryPlayersArgs = {
 
 export type GibsonsLeagueQueryTradeArgs = {
   id?: Maybe<Scalars['Guid']>;
+};
+
+
+export type GibsonsLeagueQueryTradesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  franchiseId?: Maybe<Scalars['Guid']>;
+};
+
+
+export type GibsonsLeagueQueryTransactionsArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  type?: Maybe<TransactionType>;
+  year?: Maybe<Scalars['Int']>;
+  franchiseId?: Maybe<Scalars['Guid']>;
 };
 
 
@@ -241,6 +268,7 @@ export type PlayerTransaction = {
   transactionGroupId?: Maybe<Scalars['Guid']>;
   transactionId: Scalars['ID'];
   type?: Maybe<Scalars['String']>;
+  year: Scalars['Int'];
 };
 
 export type Team = {

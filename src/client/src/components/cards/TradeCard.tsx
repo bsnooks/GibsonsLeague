@@ -1,10 +1,10 @@
 import React from 'react';
 import { Image, Card, Row, Col, Button } from 'react-bootstrap';
-import { FranchiseTrade } from '../generated/graphql';
+import { FranchiseTrade } from '../../generated/graphql';
 import { faCodeBranch } from "@fortawesome/free-solid-svg-icons";
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { FranchiseUtilities } from '../utilities/FranchiseAvatar';
+import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
 
 
 interface TradeCardProps {

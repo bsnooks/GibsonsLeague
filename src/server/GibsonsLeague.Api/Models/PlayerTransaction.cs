@@ -16,6 +16,7 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Player.Position);
             Field(x => x.Description);
             Field(x => x.Date);
+            Field(x => x.Date.Year);
             Field(x => x.Team.Franchise.MainName).Name("FranchiseName");
             Field<StringGraphType>("type",
                 resolve: context => context.Source.TransactionType.ToString());

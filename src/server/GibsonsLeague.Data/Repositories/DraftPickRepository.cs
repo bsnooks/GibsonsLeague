@@ -46,7 +46,7 @@ namespace GibsonsLeague.Data.Repositories
                     .Include(x => x.Player)
                     .Include(x => x.Team)
                     .ThenInclude(x => x.Franchise)
-                    .OrderBy(x => x.Draft.Year)
+                    .OrderByDescending(x => x.Draft.Year)
                     .ThenBy(x => x.Pick)
                     .Skip(offset)
                     .Take(limit)

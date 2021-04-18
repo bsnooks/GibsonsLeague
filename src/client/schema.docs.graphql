@@ -4,13 +4,27 @@ schema {
 
 type GibsonsLeagueQuery {
   draft(year: Int): Draft
+  draftpicks(
+    offset: Int = 0
+    limit: Int = 1000
+    year: Int
+    franchiseId: Guid
+  ): [DraftPick]
   franchise(id: Guid, name: String): Franchise
   franchises: [Franchise]
   league(id: Guid, name: String = "Gibsons League"): League
   leagues: [League]
   player(id: Int, name: String): Player
-  players(offset: Int, limit: Int, query: String): [Player]
+  players(offset: Int = 0, limit: Int = 10, query: String): [Player]
   trade(id: Guid): FranchiseTrade
+  trades(offset: Int = 0, limit: Int = 100, franchiseId: Guid): [FranchiseTrade]
+  transactions(
+    offset: Int = 0
+    limit: Int = 1000
+    type: TransactionType
+    year: Int
+    franchiseId: Guid
+  ): [PlayerTransaction]
 }
 
 type League {
@@ -113,6 +127,7 @@ type PlayerTransaction {
   transactionGroupId: Guid
   transactionId: ID!
   type: String
+  year: Int!
 }
 
 scalar Guid

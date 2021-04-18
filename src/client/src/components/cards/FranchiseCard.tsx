@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
-import { FranchiseUtilities } from '../utilities/FranchiseAvatar';
+import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
 
 interface FranchiseCardProps {
     franchiseId: string

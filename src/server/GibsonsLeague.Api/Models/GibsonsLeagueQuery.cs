@@ -1,4 +1,5 @@
 ﻿using System;
+using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;
@@ -12,7 +13,9 @@ namespace GibsonsLeague.Api.Models
             FranchiseRepository franchiseRepository,
             PlayerRepository playerRepository,
             FranchiseTradeRepository franchiseTradeRepository,
-            DraftRepository draftRepository)
+            DraftRepository draftRepository,
+            DraftPickRepository draftPickRepository,
+            TransactionRepository transactionRepository)
         {
             Field<ListGraphType<League>>(
                 "leagues",
@@ -68,8 +71,8 @@ namespace GibsonsLeague.Api.Models
             Field<ListGraphType<Player>>(
                 "players",
                 arguments: new QueryArguments(
-                    new QueryArgument<IntGraphType> { Name = "offset" },
-                    new QueryArgument<IntGraphType> { Name = "limit" },
+                    new QueryArgument<IntGraphType> { Name = "offset", DefaultValue=0 },
+                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue=10 },
                     new QueryArgument<StringGraphType> { Name = "query" }
                 ),
                 resolve: context =>
@@ -77,8 +80,8 @@ namespace GibsonsLeague.Api.Models
                     var id = context.GetArgument<int?>("id");
                     var name = context.GetArgument<string>("name");
                     return playerRepository.LookupPlayer(
-                        offset: context.GetArgument<int>("offset", 0),
-                        limit: context.GetArgument<int>("limit", 20),
+                        offset: context.GetArgument<int>("offset"),
+                        limit: context.GetArgument<int>("limit"),
                         name: context.GetArgument<string>("query"));
                 });
 
@@ -92,6 +95,21 @@ namespace GibsonsLeague.Api.Models
                     return franchiseTradeRepository.GetFranchiseTrade(context.GetArgument<Guid>("id"));
                 });
 
+            Field<ListGraphType<FranchiseTrade>>(
+                "trades",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "offset", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 100 },
+                    new QueryArgument<GuidGraphType> { Name = "franchiseId" }
+                ),
+                resolve: context =>
+                {
+                    return franchiseTradeRepository.GetFranchiseTrades(
+                        limit: context.GetArgument<int>("limit"),
+                        offset: context.GetArgument<int>("offset"),
+                        franchiseId: context.GetArgument<Guid>("franchiseId"));
+                });
+
             Field<Draft>(
                 "draft",
                 arguments: new QueryArguments(
@@ -100,6 +118,42 @@ namespace GibsonsLeague.Api.Models
                 resolve: context =>
                 {
                     return draftRepository.GetOneByYear(context.GetArgument<int>("year"));
+                });
+
+            Field<ListGraphType<DraftPick>>(
+                "draftpicks",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "offset", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 1000 },
+                    new QueryArgument<IntGraphType> { Name = "year" },
+                    new QueryArgument<GuidGraphType> { Name = "franchiseId" }
+                ),
+                resolve: context =>
+                {
+                    return draftPickRepository.GetPicks(
+                        offset: context.GetArgument<int>("offset"),
+                        limit: context.GetArgument<int>("limit"),
+                        year: context.GetArgument<int?>("year"),
+                        franchiseId: context.GetArgument<Guid?>("franchiseId"));
+                });
+
+            Field<ListGraphType<PlayerTransaction>>(
+                "transactions",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "offset", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 1000 },
+                    new QueryArgument<TransactionTypeEnum> { Name = "type" },
+                    new QueryArgument<IntGraphType> { Name = "year" },
+                    new QueryArgument<GuidGraphType> { Name = "franchiseId" }
+                ),
+                resolve: context =>
+                {
+                    return transactionRepository.GetTransactions(
+                        offset: context.GetArgument<int>("offset"),
+                        limit: context.GetArgument<int>("limit"),
+                        type: context.GetArgument<TransactionType?>("type"),
+                        year: context.GetArgument<int?>("year"),
+                        franchiseId: context.GetArgument<Guid?>("franchiseId"));
                 });
         }
     }

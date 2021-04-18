@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image, Card } from 'react-bootstrap';
-import { LeagueRecords, LeagueRecord } from '../generated/graphql';
-import { FranchiseUtilities } from '../utilities/FranchiseAvatar';
+import { LeagueRecords, LeagueRecord } from '../../generated/graphql';
+import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
 
 interface RecordCardProps {
     leagueRecord: LeagueRecords,

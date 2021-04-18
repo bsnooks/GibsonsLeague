@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { DraftPick, Maybe } from '../generated/graphql';
+import { DraftPick, Maybe } from '../../generated/graphql';
 
 interface DraftRoundCardProps {
     round: any,

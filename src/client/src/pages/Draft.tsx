@@ -5,7 +5,7 @@ import GlobalLoading from '../components/GlobalLoading';
 import GlobalError from '../components/GlobalError';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryDraftArgs } from '../generated/graphql';
 import { groupBy } from 'lodash';
-import DraftRoundCard from '../components/DraftRoundCard';
+import DraftRoundCard from '../components/cards/DraftRoundCard';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($year: Int) {
