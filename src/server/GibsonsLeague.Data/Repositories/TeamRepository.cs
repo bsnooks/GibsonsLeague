@@ -24,10 +24,11 @@ namespace GibsonsLeague.Data.Repositories
                     .Where(x => (!franchiseId.HasValue || x.FranchiseId == franchiseId || x.FranchiseId == franchiseId)
                         && (!year.HasValue || x.Year == year))
                     .Include(x => x.Transactions)
+                    .Include(x => x.Franchise)
                     .OrderByDescending(x => x.Year)
+                    .ThenBy(x => x.Standing)
                     .ThenBy(x => x.Champion)
                     .ThenBy(x => x.SecondPlace)
-                    .ThenBy(x => x.Standing)
                     .ToListAsync();
             }
         }
@@ -41,6 +42,7 @@ namespace GibsonsLeague.Data.Repositories
                         && (!teamId.HasValue || x.TeamId == teamId)
                         && (!year.HasValue || x.Year == year))
                     .Include(x=> x.Transactions)
+                    .Include(x => x.Franchise)
                     .SingleOrDefaultAsync();
             }
         }

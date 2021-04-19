@@ -120,6 +120,7 @@ export type GibsonsLeagueQuery = {
   leagues?: Maybe<Array<Maybe<League>>>;
   player?: Maybe<Player>;
   players?: Maybe<Array<Maybe<Player>>>;
+  season?: Maybe<Season>;
   trade?: Maybe<FranchiseTrade>;
   trades?: Maybe<Array<Maybe<FranchiseTrade>>>;
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
@@ -164,6 +165,12 @@ export type GibsonsLeagueQueryPlayersArgs = {
 };
 
 
+export type GibsonsLeagueQuerySeasonArgs = {
+  year?: Maybe<Scalars['Int']>;
+  franchiseId?: Maybe<Scalars['Guid']>;
+};
+
+
 export type GibsonsLeagueQueryTradeArgs = {
   id?: Maybe<Scalars['Guid']>;
 };
@@ -173,6 +180,7 @@ export type GibsonsLeagueQueryTradesArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   franchiseId?: Maybe<Scalars['Guid']>;
+  year?: Maybe<Scalars['Int']>;
 };
 
 
@@ -276,13 +284,23 @@ export type PlayerTransaction = {
   year: Scalars['Int'];
 };
 
+export type Season = {
+  __typename?: 'Season';
+  finished?: Maybe<Scalars['Boolean']>;
+  teams?: Maybe<Array<Maybe<Team>>>;
+  yahooGameId?: Maybe<Scalars['Int']>;
+  year: Scalars['Int'];
+};
+
 export type Team = {
   __typename?: 'Team';
   champion: Scalars['Boolean'];
+  franchiseId: Scalars['ID'];
   franchiseName: Scalars['String'];
   loses: Scalars['Int'];
   matches?: Maybe<Array<Maybe<Match>>>;
   name: Scalars['String'];
+  points: Scalars['Float'];
   secondPlace: Scalars['Boolean'];
   standing: Scalars['Int'];
   ties: Scalars['Int'];

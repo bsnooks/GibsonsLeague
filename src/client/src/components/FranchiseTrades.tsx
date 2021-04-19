@@ -7,8 +7,8 @@ import GlobalError from './GlobalError';
 import TradeCard from './cards/TradeCard';
 
 export const GET_TRADES = gql`
-  query GibsonsLeagueQuery($franchiseId: Guid) {
-    trades(franchiseId: $franchiseId)
+  query GibsonsLeagueQuery($franchiseId: Guid, $year: Int) {
+    trades(franchiseId: $franchiseId, year: $year)
     {
         tradeId
         date
@@ -33,7 +33,8 @@ export const GET_TRADES = gql`
 `;
 
 interface FranchiseTradesProps {
-    franciseId: any;
+    franciseId?: any;
+    year?: any;
 }
 
 const FranchiseTrades: React.FC<FranchiseTradesProps> = ({ ...props }) => {
@@ -45,14 +46,16 @@ const FranchiseTrades: React.FC<FranchiseTradesProps> = ({ ...props }) => {
     } = useQuery<GibsonsLeagueQuery, GibsonsLeagueQueryTradesArgs>(GET_TRADES,
         {
             variables: {
-                franchiseId: props.franciseId
+                franchiseId: props.franciseId,
+                year: props.year
             }
         });
 
     const handleClick = () => {
         fetchMore({
             variables: {
-                franchiseId: props.franciseId
+                franchiseId: props.franciseId,
+                year: props.year
             }
         })
     };

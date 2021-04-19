@@ -10,6 +10,7 @@ const RouteComponents = {
     Player: React.lazy(() => import("./pages/Player")),
     Trade: React.lazy(() => import("./pages/Trade")),
     Draft: React.lazy(() => import("./pages/Draft")),
+    Season: React.lazy(() => import("./pages/Season")),
     NotFound: React.lazy(() => import("./pages/NotFound"))
 }
 
@@ -23,6 +24,7 @@ const RouterSwitch: React.FC = () => {
                 <Route path="/player/:id" component={RouteComponents.Player} />
                 <Route path="/trade/:id" component={RouteComponents.Trade} />
                 <Route path="/draft/:year" component={RouteComponents.Draft} />
+                <Route path="/season/:year" component={RouteComponents.Season} />
                 <Route component={RouteComponents.NotFound} />
             </Switch>
         </React.Suspense>

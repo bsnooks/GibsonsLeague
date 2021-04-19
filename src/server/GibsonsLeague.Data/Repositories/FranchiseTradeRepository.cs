@@ -16,13 +16,14 @@ namespace GibsonsLeague.Data.Repositories
             this.dbFunc = dbFunc;
         }
 
-        public async Task<IEnumerable<FranchiseTrade>> GetFranchiseTrades(int limit, int offset, Guid franchiseId)
+        public async Task<IEnumerable<FranchiseTrade>> GetFranchiseTrades(int limit, int offset, Guid? franchiseId = null, int? year = null)
         {
             using (var dbContext = dbFunc())
             {
-                var franchise = await dbContext.Franchises.SingleAsync(x => x.FranchiseId == franchiseId);
                 var tradeGroups = await dbContext.TransactionGroups
-                    .Where(x => x.Transactions.Any(t => t.TransactionType == TransactionType.Traded && t.Team.FranchiseId == franchiseId))
+                    .Where(x => x.Transactions.Any(t => t.TransactionType == TransactionType.Traded
+                        && (!franchiseId.HasValue || t.Team.FranchiseId == franchiseId)
+                        && (!year.HasValue || t.Date.Year == year)))
                     .Include(x => x.Transactions).ThenInclude(x => x.Team).ThenInclude(x => x.Franchise)
                     .Include(x => x.Transactions).ThenInclude(x => x.Player)
                     .OrderByDescending(x => x.Date)
@@ -31,15 +32,18 @@ namespace GibsonsLeague.Data.Repositories
                     .ToListAsync();
 
                 return tradeGroups.Select(x =>
-                    new FranchiseTrade()
+                {
+                    var firstFranchise = x.Transactions.Where(t => !franchiseId.HasValue || t.Team.FranchiseId == franchiseId).First().Team.Franchise;
+                    return new FranchiseTrade()
                     {
                         TradeId = x.TransactionGroupId,
                         Date = x.Date,
-                        Franchise = franchise,
-                        TradedWith = x.Transactions.Where(t => t.Team.FranchiseId != franchiseId).Select(t => t.Team.Franchise).FirstOrDefault(),
-                        TradedAwayTransactions = x.Transactions.Where(t => t.Team.FranchiseId != franchiseId),
-                        TradedForTransactions = x.Transactions.Where(t => t.Team.FranchiseId == franchiseId),
-                    });
+                        Franchise = firstFranchise,
+                        TradedWith = x.Transactions.Where(t => t.Team.FranchiseId != firstFranchise.FranchiseId).Select(t => t.Team.Franchise).FirstOrDefault(),
+                        TradedAwayTransactions = x.Transactions.Where(t => t.Team.FranchiseId != firstFranchise.FranchiseId),
+                        TradedForTransactions = x.Transactions.Where(t => t.Team.FranchiseId == firstFranchise.FranchiseId),
+                    };
+                });
             }
         }
 

@@ -16,8 +16,14 @@ type GibsonsLeagueQuery {
   leagues: [League]
   player(id: Int, name: String): Player
   players(offset: Int = 0, limit: Int = 10, query: String): [Player]
+  season(year: Int, franchiseId: Guid): Season
   trade(id: Guid): FranchiseTrade
-  trades(offset: Int = 0, limit: Int = 100, franchiseId: Guid): [FranchiseTrade]
+  trades(
+    offset: Int = 0
+    limit: Int = 100
+    franchiseId: Guid
+    year: Int
+  ): [FranchiseTrade]
   transactions(
     offset: Int = 0
     limit: Int = 1000
@@ -63,10 +69,12 @@ type Franchise {
 
 type Team {
   champion: Boolean!
+  franchiseId: ID!
   franchiseName: String!
   loses: Int!
   matches(type: MatchType, week: Int): [Match]
   name: String!
+  points: Float!
   secondPlace: Boolean!
   standing: Int!
   ties: Int!
@@ -162,6 +170,13 @@ type LeagueRecord {
   recordValue: String!
   week: Int
   year: Int
+}
+
+type Season {
+  finished: Boolean
+  teams: [Team]
+  yahooGameId: Int
+  year: Int!
 }
 
 type Player {

@@ -15,7 +15,8 @@ namespace GibsonsLeague.Api.Models
             FranchiseTradeRepository franchiseTradeRepository,
             DraftRepository draftRepository,
             DraftPickRepository draftPickRepository,
-            TransactionRepository transactionRepository)
+            TransactionRepository transactionRepository,
+            SeasonRepository seasonRepository)
         {
             Field<ListGraphType<League>>(
                 "leagues",
@@ -54,6 +55,18 @@ namespace GibsonsLeague.Api.Models
                     return id.HasValue ? franchiseRepository.GetOne(id.Value) : franchiseRepository.GetOneByName(name);
                 }
             );
+
+            Field<Season>(
+                "season",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "year" },
+                    new QueryArgument<GuidGraphType> { Name = "franchiseId" }
+                ),
+                resolve: context =>
+                {
+                    return seasonRepository.GetSeason(
+                        year: context.GetArgument<int>("year"));
+                });
 
             Field<Player>(
                 "player",
@@ -100,14 +113,16 @@ namespace GibsonsLeague.Api.Models
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "offset", DefaultValue = 0 },
                     new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 100 },
-                    new QueryArgument<GuidGraphType> { Name = "franchiseId" }
+                    new QueryArgument<GuidGraphType> { Name = "franchiseId", DefaultValue = null },
+                    new QueryArgument<IntGraphType> { Name = "year", DefaultValue = null }
                 ),
                 resolve: context =>
                 {
                     return franchiseTradeRepository.GetFranchiseTrades(
                         limit: context.GetArgument<int>("limit"),
                         offset: context.GetArgument<int>("offset"),
-                        franchiseId: context.GetArgument<Guid>("franchiseId"));
+                        franchiseId: context.GetArgument<Guid?>("franchiseId"),
+                        year: context.GetArgument<int?>("year"));
                 });
 
             Field<Draft>(

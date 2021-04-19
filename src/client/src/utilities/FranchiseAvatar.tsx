@@ -11,9 +11,12 @@ import franchise9 from '../assets/images/f483ecf1-cd17-4991-854b-e52dfc957b45.pn
 import franchise10 from '../assets/images/f5908944-6efd-40eb-af54-6c53004e0e2f.png';
 
 export class FranchiseUtilities {
-    pickAvatarByFranchiseId = (id: string): any => {
+    pickAvatarByFranchiseId = (id: string | undefined): any => {
         const avatars = [franchise1, franchise2, franchise3, franchise4, franchise5, franchise6, franchise7, franchise8, franchise9, franchise10];
-
-        return avatars.find(name => name.includes(id));
+        if (id)
+        {
+            return avatars.find(name => name.includes(id));
+        }
+        return null;
     }
 }

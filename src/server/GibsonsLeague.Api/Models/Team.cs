@@ -11,10 +11,12 @@ namespace GibsonsLeague.Api.Models
         {
             Field(x => x.Year);
             Field(x => x.Name);
+            Field(x => x.FranchiseId);
             Field(x => x.Franchise.MainName).Name("FranchiseName");
             Field(x => x.Wins);
             Field(x => x.Loses);
             Field(x => x.Ties);
+            Field(x => x.Points);
             Field(x => x.Standing);
             Field(x => x.Champion);
             Field(x => x.SecondPlace);
