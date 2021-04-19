@@ -16,7 +16,7 @@ const DraftRoundCard: React.FC<DraftRoundCardProps> = ({ ...props }) => {
             <Card.Body>
         {
             props.picks.map((pick: Maybe<DraftPick>) => (
-                <Row key={pick?.pick} className="text-left">
+                <Row key={pick?.pick} className={`text-left player-${pick?.playerPrimaryPosition}`}>
                     <Col xs={2} className="text-nowrap text-truncate">{pick?.pick}</Col>
                     <Col xs={4} className="text-nowrap text-truncate">
                         <Link to={`/player/${pick?.playerId}`}>
@@ -24,7 +24,7 @@ const DraftRoundCard: React.FC<DraftRoundCardProps> = ({ ...props }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className="text-nowrap text-truncate">
-                        {`${pick?.playerPosition}-${pick?.positionPick}`}
+                        {`${pick?.playerPrimaryPosition}-${pick?.positionPick}`}
                     </Col>
                     <Col xs={4} className="text-nowrap text-truncate">
                         <Link to={`/franchise/${pick?.franchiseId}`}>

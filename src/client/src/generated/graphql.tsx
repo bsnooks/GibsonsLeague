@@ -44,6 +44,7 @@ export type DraftPick = {
   playerId: Scalars['Int'];
   playerName: Scalars['String'];
   playerPosition: Scalars['String'];
+  playerPrimaryPosition: Scalars['String'];
   positionPick: Scalars['Int'];
   round: Scalars['Int'];
   year: Scalars['Int'];
@@ -246,6 +247,7 @@ export type Player = {
   name: Scalars['String'];
   playerId: Scalars['Int'];
   position: Scalars['String'];
+  primaryPosition: Scalars['String'];
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
   yahooPlayerId?: Maybe<Scalars['Int']>;
 };
@@ -261,10 +263,12 @@ export type PlayerTransaction = {
   __typename?: 'PlayerTransaction';
   date: Scalars['DateTime'];
   description: Scalars['String'];
+  franchiseId: Scalars['ID'];
   franchiseName: Scalars['String'];
   name: Scalars['String'];
   playerId: Scalars['Int'];
   position: Scalars['String'];
+  primaryPosition: Scalars['String'];
   related?: Maybe<Array<Maybe<PlayerTransaction>>>;
   transactionGroupId?: Maybe<Scalars['Guid']>;
   transactionId: Scalars['ID'];

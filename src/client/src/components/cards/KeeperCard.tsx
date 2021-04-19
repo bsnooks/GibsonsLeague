@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { Maybe, PlayerTransaction } from '../../generated/graphql';
 
 interface KeeperCardProps {
-    year: any,
+    grouping: any,
+    groupingLink: string,
     keepers: Maybe<PlayerTransaction>[]
 }
 
@@ -12,18 +13,22 @@ const KeeperCard: React.FC<KeeperCardProps> = ({ ...props }) => {
 
     return (
         <Card style={{ width: '22rem' }}>
-            <Card.Title>{props.year}</Card.Title>
+            <Card.Title>
+                <Link to={props.groupingLink}>
+                    {props.grouping}
+                </Link>
+            </Card.Title>
             <Card.Body>
                 {
                     props.keepers.map((transaction: Maybe<PlayerTransaction>) => (
-                        <Row key={transaction?.name} className="text-left">
+                        <Row key={transaction?.name} className={`text-left player-${transaction?.primaryPosition}`}>
                             <Col xs={9} className="text-nowrap text-truncate">
                                 <Link to={`/player/${transaction?.playerId}`}>
                                     {transaction?.name}
                                 </Link>
                             </Col>
                             <Col xs={3} className="text-nowrap text-truncate">
-                                {transaction?.position}
+                                {transaction?.primaryPosition}
                             </Col>
                         </Row>
                     ))

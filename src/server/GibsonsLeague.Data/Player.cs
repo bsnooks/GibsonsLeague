@@ -16,6 +16,7 @@ namespace GibsonsLeague.Data
         public int PlayerId { get; set; }
         public string Name { get; set; }
         public string Position { get; set; }
+        public string PrimaryPosition { get; set; }
         public int? YahooPlayerId { get; set; }
 
         public virtual ICollection<DraftPick> DraftPicks { get; set; }

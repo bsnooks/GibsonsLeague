@@ -12,6 +12,7 @@ namespace GibsonsLeague.Api.Models
             Field(l => l.PlayerId);
             Field(l => l.Name);
             Field(l => l.Position);
+            Field(l => l.PrimaryPosition);
             Field(x => x.YahooPlayerId, nullable: true, type: typeof(IntGraphType));
 
             Field<ListGraphType<PlayerTransaction>>("transactions",

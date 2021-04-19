@@ -208,6 +208,8 @@ namespace GibsonsLeague.Data
 
                 entity.Property(e => e.Position).HasMaxLength(10);
 
+                entity.Property(e => e.PrimaryPosition).HasMaxLength(2);
+
                 entity.Property(e => e.YahooPlayerId).HasColumnName("YahooPlayerID");
             });
 

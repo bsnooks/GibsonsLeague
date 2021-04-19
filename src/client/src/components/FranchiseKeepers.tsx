@@ -10,10 +10,12 @@ export const GET_TRADES = gql`
   query GibsonsLeagueQuery($franchiseId: Guid) {
     transactions(franchiseId: $franchiseId, type: KEPT)
     {
+        franchiseId
         franchiseName
         playerId
         name
         position
+        primaryPosition
         year
     }
   }
@@ -43,7 +45,7 @@ const FranchiseKeepers: React.FC<FranchiseKeepersProps> = ({ ...props }) => {
     const cards: any = [];
     for(const[key, value] of Object.entries(years).reverse())
     {
-      cards.push(<KeeperCard year={key} keepers={value} key={key} />);
+      cards.push(<KeeperCard grouping={key} groupingLink={`/draft/${key}`} keepers={value} key={key} />);
     }
 
     return (

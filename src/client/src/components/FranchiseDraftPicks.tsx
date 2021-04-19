@@ -18,6 +18,7 @@ export const GET_TRADES = gql`
         playerId
         playerName
         playerPosition
+        playerPrimaryPosition
         franchiseId
         franchiseName
     }
@@ -57,7 +58,7 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
     const cards: any = [];
     for(const[key, value] of Object.entries(years).reverse())
     {
-      cards.push(<DraftCard year={key} picks={value} key={key} />);
+      cards.push(<DraftCard grouping={key} groupingLink={`/draft/${key}`} picks={value} key={key} />);
     }
 
     return (

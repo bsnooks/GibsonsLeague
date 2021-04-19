@@ -15,6 +15,7 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.PlayerId);
             Field(x => x.Player.Name).Name("playerName");
             Field(x => x.Player.Position).Name("playerPosition");
+            Field(x => x.Player.PrimaryPosition).Name("playerPrimaryPosition");
             Field(x => x.Team.FranchiseId).Name("franchiseId");
             Field(x => x.Team.Franchise.MainName).Name("franchiseName");
         }
