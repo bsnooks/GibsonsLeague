@@ -44,6 +44,7 @@ export type DraftPick = {
   playerId: Scalars['Int'];
   playerName: Scalars['String'];
   playerPosition: Scalars['String'];
+  positionPick: Scalars['Int'];
   round: Scalars['Int'];
   year: Scalars['Int'];
 };

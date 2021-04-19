@@ -15,6 +15,7 @@ export const GET_FRANCHISE = gql`
       {
         round
         pick
+        positionPick
         playerId
         playerName
         playerPosition

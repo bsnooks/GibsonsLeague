@@ -17,6 +17,7 @@ namespace GibsonsLeague.Data
         public Guid TeamId { get; set; }
         public int Round { get; set; }
         public int Pick { get; set; }
+        public int PositionPick { get; set; }
         public int PlayerId { get; set; }
 
         public virtual Draft Draft { get; set; }

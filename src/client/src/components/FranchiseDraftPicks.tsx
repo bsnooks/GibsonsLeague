@@ -14,6 +14,7 @@ export const GET_TRADES = gql`
         year
         round
         pick
+        positionPick
         playerId
         playerName
         playerPosition
@@ -52,7 +53,6 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
     if (error || !data) return <GlobalError mode="component" apolloError={error} />;
     
     const years = groupBy(data.draftpicks, "year");
-    console.log(years);
 
     const cards: any = [];
     for(const[key, value] of Object.entries(years).reverse())

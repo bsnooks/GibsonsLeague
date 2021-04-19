@@ -39,7 +39,6 @@ const FranchiseKeepers: React.FC<FranchiseKeepersProps> = ({ ...props }) => {
     if (error || !data) return <GlobalError mode="component" apolloError={error} />;
     
     const years = groupBy(data.transactions, "year");
-    console.log(years);
 
     const cards: any = [];
     for(const[key, value] of Object.entries(years).reverse())

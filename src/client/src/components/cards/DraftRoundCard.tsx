@@ -24,7 +24,7 @@ const DraftRoundCard: React.FC<DraftRoundCardProps> = ({ ...props }) => {
                         </Link>
                     </Col>
                     <Col xs={2} className="text-nowrap text-truncate">
-                        {pick?.playerPosition}
+                        {`${pick?.playerPosition}-${pick?.positionPick}`}
                     </Col>
                     <Col xs={4} className="text-nowrap text-truncate">
                         <Link to={`/franchise/${pick?.franchiseId}`}>
