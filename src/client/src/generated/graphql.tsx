@@ -252,16 +252,49 @@ export enum MatchType {
 
 export type Player = {
   __typename?: 'Player';
+  avgPositionRank?: Maybe<Scalars['Float']>;
+  avgPositionRankPpg?: Maybe<Scalars['Float']>;
+  gamesPlayed?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
   playerId: Scalars['Int'];
+  points?: Maybe<Scalars['Float']>;
+  pointsPerGame?: Maybe<Scalars['Float']>;
+  pointsPerSeason?: Maybe<Scalars['Float']>;
   position: Scalars['String'];
   primaryPosition: Scalars['String'];
+  seasons?: Maybe<Array<Maybe<PlayerSeason>>>;
+  seasonsCount?: Maybe<Scalars['Int']>;
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
   yahooPlayerId?: Maybe<Scalars['Int']>;
 };
 
 
+export type PlayerSeasonsArgs = {
+  year?: Maybe<Scalars['Int']>;
+};
+
+
 export type PlayerTransactionsArgs = {
+  type?: Maybe<TransactionType>;
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+};
+
+export type PlayerSeason = {
+  __typename?: 'PlayerSeason';
+  gamesPlayed: Scalars['Int'];
+  name: Scalars['String'];
+  playerId: Scalars['Int'];
+  points: Scalars['Float'];
+  position: Scalars['String'];
+  positionRank: Scalars['Int'];
+  positionRankPpg: Scalars['Int'];
+  transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
+  year: Scalars['Int'];
+};
+
+
+export type PlayerSeasonTransactionsArgs = {
   type?: Maybe<TransactionType>;
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;

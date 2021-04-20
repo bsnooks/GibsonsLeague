@@ -3,21 +3,36 @@ import { Container, Jumbotron, Row, Col } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs } from '../generated/graphql';
-import { Link } from 'react-router-dom';
 import GlobalError from '../components/GlobalError';
+import PlayerSeasonCard from '../components/cards/PlayerSeasonCard';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Int) {
     player(id: $id) {
       name
       position
-      transactions(limit: 50)
+      points
+      pointsPerGame
+      pointsPerSeason
+      seasonsCount
+      gamesPlayed
+      avgPositionRank
+      avgPositionRankPpg
+      seasons
       {
-        transactionId
-        date
-        description
-        type
-        franchiseName
+        year
+        position
+        gamesPlayed
+        points
+        positionRank
+        positionRankPpg
+        transactions
+        {
+          type
+          transactionId
+          date
+          description
+        }
       }
     }
   }
@@ -46,72 +61,35 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
 
   const player = data.player;
 
-  let previousYear = 1900;
-  const transactions = player.transactions?.map((transaction) =>
-  {
-    if (!transaction)
-    {
-      return null;
-    }
-    const year = new Date(transaction.date).getFullYear();
-    const transactionRow =
-      transaction.type === "Traded" ?
-        (
-          <Row key={transaction.date}>
-            <Col>
-              <Link to={`/trade/${transaction?.transactionId}`}>
-                {transaction.description} on {(new Date(transaction.date).toLocaleDateString())}
-              </Link>
-            </Col>
-          </Row>
-        )
-        :
-        transaction.type === "DraftPicked" ?
-        (
-          <Row key={transaction.date}>
-           <Col>
-            <Link to={`/draft/${year}`}>
-              {transaction.description} on {(new Date(transaction.date).toLocaleDateString())}
-            </Link>
-            </Col>
-          </Row>
-        )
-        :
-        (
-          <Row key={transaction.date}>
-            <Col>
-              {transaction.description} on {(new Date(transaction.date).toLocaleDateString())}
-            </Col>
-          </Row>
-        );
-
-    if (year !== previousYear)
-    {
-      previousYear = new Date(transaction.date).getFullYear();
-      return (<React.Fragment key={transaction.date}>
-        <Row style={{backgroundColor: "#CCC"}}>
-          <Col><b>{previousYear}</b></Col>
-        </Row>
-        {transactionRow}
-      </React.Fragment>)
-    }
-    
-    return transactionRow;
-  });
-
   return (
     <Container>
       <Jumbotron fluid>
-          <h1>{player.name} ({player.position})</h1>
-      </Jumbotron>  
+        <h1>{player.name} ({player.position})</h1>
+        <Row>
+          <Col>Seasons: {player?.seasonsCount}</Col>
+          <Col>Games Played: {player?.gamesPlayed}</Col>
+          <Col>Average Position Rank: {Number(player?.avgPositionRank ?? 0).toLocaleString('en-US', { maximumFractionDigits: 1 })}</Col>
+          <Col>Average Position Rank (ppg): {Number(player?.avgPositionRankPpg ?? 0).toLocaleString('en-US', { maximumFractionDigits: 1 })}</Col>
+        </Row>
+        <Row>
+          <Col>Points: {Number(player?.points ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Col>
+          <Col>Points per Season: {Number(player?.pointsPerSeason ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Col>
+          <Col>Points per Game: {Number(player?.pointsPerGame ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Col>
+          <Col></Col>
+        </Row>
+      </Jumbotron>
       <section>
         <h1>Transactions</h1>
         <div className="d-flex flex-wrap justify-content-center">
-            <Container>
-                {transactions}
-            </Container>
+          <Container>
+            {
+              player.seasons?.map((playerSeason) => {
+                return <PlayerSeasonCard playerSeason={playerSeason} />
+              })
+            }
+          </Container>
         </div>
-      </section>    
+      </section>
 
     </Container>
   );

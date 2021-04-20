@@ -1,4 +1,6 @@
-﻿using GraphQL.Types;
+﻿using System.Linq;
+using GraphQL;
+using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
@@ -18,6 +20,20 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Player.PrimaryPosition).Name("playerPrimaryPosition");
             Field(x => x.Team.FranchiseId).Name("franchiseId");
             Field(x => x.Team.Franchise.MainName).Name("franchiseName");
+
+            Field<IntGraphType>("playerPositionRank",
+                resolve: context =>
+                {
+                    var match = context.Source.Player.PlayerSeasons.FirstOrDefault(p => p.Year == context.Source.Draft.Year);
+                    return match?.PositionRank ?? (int?)null;
+                });
+
+            Field<IntGraphType>("playerPositionRankPpg",
+                resolve: context =>
+                {
+                    var match = context.Source.Player.PlayerSeasons.FirstOrDefault(p => p.Year == context.Source.Draft.Year);
+                    return match?.PositionRankPpg ?? (int?)null;
+                });
         }
     }
 }

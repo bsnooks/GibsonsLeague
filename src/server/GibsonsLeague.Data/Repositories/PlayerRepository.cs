@@ -19,6 +19,7 @@ namespace GibsonsLeague.Data.Repositories
         public async Task<Player> GetOne(int id)
         {
             return await dbContext.Players
+                .Include(p => p.PlayerSeasons)
                 .SingleOrDefaultAsync(p => p.PlayerId == id);
         }
 

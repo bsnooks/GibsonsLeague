@@ -180,16 +180,40 @@ type Season {
 }
 
 type Player {
+  avgPositionRank: Float
+  avgPositionRankPpg: Float
+  gamesPlayed: Int
   name: String!
   playerId: Int!
+  points: Float
+  pointsPerGame: Float
+  pointsPerSeason: Float
   position: String!
   primaryPosition: String!
+  seasons(year: Int): [PlayerSeason]
+  seasonsCount: Int
   transactions(
     type: TransactionType
     offset: Int
     limit: Int
   ): [PlayerTransaction]
   yahooPlayerId: Int
+}
+
+type PlayerSeason {
+  gamesPlayed: Int!
+  name: String!
+  playerId: Int!
+  points: Float!
+  position: String!
+  positionRank: Int!
+  positionRankPpg: Int!
+  transactions(
+    type: TransactionType
+    offset: Int
+    limit: Int
+  ): [PlayerTransaction]
+  year: Int!
 }
 
 enum TransactionType {

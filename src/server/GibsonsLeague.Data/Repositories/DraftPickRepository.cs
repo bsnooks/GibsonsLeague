@@ -22,7 +22,9 @@ namespace GibsonsLeague.Data.Repositories
             {
                 return await dbContext.DraftPicks
                     .Where(x => x.DraftId == id && (!round.HasValue || x.Round == round) && (!pick.HasValue || x.Pick == pick))
+                    .Include(x => x.Draft)
                     .Include(x => x.Player)
+                    .ThenInclude(x => x.PlayerSeasons)
                     .Include(x => x.Team)
                     .ThenInclude(x => x.Franchise)
                     .OrderBy(x => x.Draft.Year)
@@ -44,6 +46,7 @@ namespace GibsonsLeague.Data.Repositories
                         && (!pick.HasValue || x.Pick == pick))
                     .Include(x => x.Draft)
                     .Include(x => x.Player)
+                    .ThenInclude(x => x.PlayerSeasons.Where(s => !year.HasValue || s.Year == year))
                     .Include(x => x.Team)
                     .ThenInclude(x => x.Franchise)
                     .OrderByDescending(x => x.Draft.Year)
