@@ -24,11 +24,21 @@ namespace GibsonsLeague.Data
         public virtual DbSet<Match> Matches { get; set; }
         public virtual DbSet<Owner> Owners { get; set; }
         public virtual DbSet<Player> Players { get; set; }
+        public virtual DbSet<PlayerSeason> PlayerSeasons { get; set; }
         public virtual DbSet<Season> Seasons { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<TeamScore> TeamScores { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<TransactionGroup> TransactionGroups { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=tcp:gibsonsleague.database.windows.net,1433;Initial Catalog=GLA;Persist Security Info=False;User ID=snooks;Password=Welcome1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -70,6 +80,8 @@ namespace GibsonsLeague.Data
                 entity.Property(e => e.DraftId).HasColumnName("DraftID");
 
                 entity.Property(e => e.PlayerId).HasColumnName("PlayerID");
+
+                entity.Property(e => e.PositionPick).HasDefaultValueSql("((1))");
 
                 entity.Property(e => e.TeamId).HasColumnName("TeamID");
 
@@ -210,7 +222,22 @@ namespace GibsonsLeague.Data
 
                 entity.Property(e => e.PrimaryPosition).HasMaxLength(2);
 
+                entity.Property(e => e.ShortName).HasMaxLength(100);
+
                 entity.Property(e => e.YahooPlayerId).HasColumnName("YahooPlayerID");
+            });
+
+            modelBuilder.Entity<PlayerSeason>(entity =>
+            {
+                entity.HasKey(e => new { e.PlayerId, e.Year });
+
+                entity.ToTable("PlayerSeason");
+
+                entity.HasOne(d => d.Player)
+                    .WithMany(p => p.PlayerSeasons)
+                    .HasForeignKey(d => d.PlayerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PlayerSeason_Player");
             });
 
             modelBuilder.Entity<Season>(entity =>
@@ -251,20 +278,6 @@ namespace GibsonsLeague.Data
                 entity.Property(e => e.OwnerId).HasColumnName("OwnerID");
 
                 entity.Property(e => e.YahooTeamId).HasColumnName("YahooTeamID");
-
-                entity.Property(e => e.Wins).HasColumnName("Wins");
-
-                entity.Property(e => e.Loses).HasColumnName("Loses");
-
-                entity.Property(e => e.Ties).HasColumnName("Ties");
-
-                entity.Property(e => e.Standing).HasColumnName("Standing");
-
-                entity.Property(e => e.Points).HasColumnName("Points");
-
-                entity.Property(e => e.Champion).HasColumnName("Champion");
-
-                entity.Property(e => e.SecondPlace).HasColumnName("SecondPlace");
 
                 entity.HasOne(d => d.Franchise)
                     .WithMany(p => p.Teams)
@@ -372,7 +385,9 @@ namespace GibsonsLeague.Data
                     .ValueGeneratedNever()
                     .HasColumnName("TransactionGroupID");
 
-                entity.Property(e => e.Date).HasColumnType("datetime");
+                entity.Property(e => e.Date)
+                    .HasColumnType("datetime")
+                    .HasDefaultValueSql("(getdate())");
             });
 
             OnModelCreatingPartial(modelBuilder);

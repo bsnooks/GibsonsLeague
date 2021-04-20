@@ -15,6 +15,7 @@ namespace GibsonsLeague.Data
         public DateTime Date { get; set; }
         public string Description { get; set; }
         public Guid? DraftPickId { get; set; }
+        public int Year { get; set; }
 
         public virtual DraftPick DraftPick { get; set; }
         public virtual Player Player { get; set; }
