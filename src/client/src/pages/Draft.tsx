@@ -33,6 +33,8 @@ export const GET_FRANCHISE = gql`
         playerPrimaryPosition
         franchiseId
         franchiseName
+        playerPositionRank
+        playerPositionRankPpg
       }
     }
   }

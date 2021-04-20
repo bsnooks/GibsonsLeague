@@ -44,6 +44,8 @@ export type DraftPick = {
   playerId: Scalars['Int'];
   playerName: Scalars['String'];
   playerPosition: Scalars['String'];
+  playerPositionRank?: Maybe<Scalars['Int']>;
+  playerPositionRankPpg?: Maybe<Scalars['Int']>;
   playerPrimaryPosition: Scalars['String'];
   positionPick: Scalars['Int'];
   round: Scalars['Int'];

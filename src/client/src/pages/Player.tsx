@@ -84,7 +84,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
           <Container>
             {
               player.seasons?.map((playerSeason) => {
-                return <PlayerSeasonCard playerSeason={playerSeason} />
+                return <PlayerSeasonCard key={playerSeason?.year} playerSeason={playerSeason} />
               })
             }
           </Container>

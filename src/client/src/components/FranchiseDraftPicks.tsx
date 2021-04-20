@@ -21,6 +21,8 @@ export const GET_TRADES = gql`
         playerPrimaryPosition
         franchiseId
         franchiseName
+        playerPositionRank
+        playerPositionRankPpg
     }
   }
 `;

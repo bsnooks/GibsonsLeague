@@ -106,6 +106,8 @@ type DraftPick {
   playerId: Int!
   playerName: String!
   playerPosition: String!
+  playerPositionRank: Int
+  playerPositionRankPpg: Int
   playerPrimaryPosition: String!
   positionPick: Int!
   round: Int!

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Row } from 'react-bootstrap';
+import { Card, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { DraftPick, Maybe } from '../../generated/graphql';
 
@@ -11,30 +11,50 @@ interface DraftRoundCardProps {
 const DraftRoundCard: React.FC<DraftRoundCardProps> = ({ ...props }) => {
 
     return (
-        <Card style={{ width: '40rem' }}>
+        <Card style={{ width: '100%' }}>
             <Card.Title>Round {props.round}</Card.Title>
             <Card.Body>
-        {
-            props.picks.map((pick: Maybe<DraftPick>) => (
-                <Row key={pick?.pick} className={`text-left player-${pick?.playerPrimaryPosition}`}>
-                    <Col xs={2} className="text-nowrap text-truncate">{pick?.pick}</Col>
-                    <Col xs={4} className="text-nowrap text-truncate">
-                        <Link to={`/player/${pick?.playerId}`}>
-                            {pick?.playerName}
-                        </Link>
-                    </Col>
-                    <Col xs={2} className="text-nowrap text-truncate">
-                        {`${pick?.playerPrimaryPosition}-${pick?.positionPick}`}
-                    </Col>
-                    <Col xs={4} className="text-nowrap text-truncate">
-                        <Link to={`/franchise/${pick?.franchiseId}`}>
-                            {pick?.franchiseName}
-                        </Link>
-                    </Col>
-                </Row>
-            ))
-        }
-        </Card.Body>
+                <Table striped bordered hover>
+                    <thead>
+                        <tr>
+                            <th>Pick</th>
+                            <th>Team</th>
+                            <th>Player</th>
+                            <th>Position Pick</th>
+                            <th>Position Rank</th>
+                            <th>Position Rank ppg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            props.picks.map((pick: Maybe<DraftPick>) => (
+                                <tr key={pick?.pick} className={`text-left player-${pick?.playerPrimaryPosition}`}>
+                                    <td className="text-nowrap text-truncate">{pick?.pick}</td>
+                                    <td className="text-nowrap text-truncate">
+                                        <Link to={`/franchise/${pick?.franchiseId}`}>
+                                            {pick?.franchiseName}
+                                        </Link>
+                                    </td>
+                                    <td className="text-nowrap text-truncate">
+                                        <Link to={`/player/${pick?.playerId}`}>
+                                            {pick?.playerName}
+                                        </Link>
+                                    </td>
+                                    <td className="text-nowrap text-truncate">
+                                        {`${pick?.playerPrimaryPosition}-${pick?.positionPick}`}
+                                    </td>
+                                    <td className="text-nowrap text-truncate">
+                                        {pick?.playerPositionRank ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRank}` : ""}
+                                    </td>
+                                    <td className="text-nowrap text-truncate">
+                                        {pick?.playerPositionRankPpg ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRankPpg}` : ""}
+                                    </td>
+                                </tr>
+                            ))
+                        }
+                    </tbody>
+                </Table>
+            </Card.Body>
         </Card>
     );
 }

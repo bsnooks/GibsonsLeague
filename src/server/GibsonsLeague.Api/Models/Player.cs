@@ -18,11 +18,41 @@ namespace GibsonsLeague.Api.Models
 
             Field<IntGraphType>("SeasonsCount", resolve: context => context.Source.PlayerSeasons.Count());
             Field<IntGraphType>("GamesPlayed", resolve: context => context.Source.PlayerSeasons.Sum(x => x.GamesPlayed));
-            Field<FloatGraphType>("AvgPositionRank", resolve: context => context.Source.PlayerSeasons.Average(x => x.PositionRank));
-            Field<FloatGraphType>("AvgPositionRankPpg", resolve: context => context.Source.PlayerSeasons.Average(x => x.PositionRankPpg));
-            Field<FloatGraphType>("Points", resolve: context => context.Source.PlayerSeasons.Sum(x => x.Points));
-            Field<FloatGraphType>("PointsPerSeason", resolve: context => context.Source.PlayerSeasons.Sum(x => x.Points) / context.Source.PlayerSeasons.Count());
-            Field<FloatGraphType>("PointsPerGame", resolve: context => context.Source.PlayerSeasons.Sum(x => x.Points) / context.Source.PlayerSeasons.Sum(x => x.GamesPlayed));
+            Field<FloatGraphType>("AvgPositionRank", resolve: context => {
+                if (!context.Source.PlayerSeasons.Any())
+                {
+                    return null;
+                }
+                return context.Source.PlayerSeasons.Average(x => x.PositionRank);
+            });
+            Field<FloatGraphType>("AvgPositionRankPpg", resolve: context => {
+                if (!context.Source.PlayerSeasons.Any())
+                {
+                    return null;
+                }
+                return context.Source.PlayerSeasons.Average(x => x.PositionRankPpg);
+            });
+            Field<FloatGraphType>("Points", resolve: context => {
+                if (!context.Source.PlayerSeasons.Any())
+                {
+                    return null;
+                }
+                return context.Source.PlayerSeasons.Sum(x => x.Points);
+            });
+            Field<FloatGraphType>("PointsPerSeason", resolve: context => {
+                if (!context.Source.PlayerSeasons.Any())
+                {
+                    return null;
+                }
+                return context.Source.PlayerSeasons.Sum(x => x.Points) / context.Source.PlayerSeasons.Count();
+            });
+            Field<FloatGraphType>("PointsPerGame", resolve: context => {
+                if (!context.Source.PlayerSeasons.Any())
+                {
+                    return null;
+                }
+                return context.Source.PlayerSeasons.Sum(x => x.Points) / context.Source.PlayerSeasons.Sum(x => x.GamesPlayed);
+            });
 
             Field< ListGraphType<PlayerSeason>>("seasons",
                 arguments: new QueryArguments(

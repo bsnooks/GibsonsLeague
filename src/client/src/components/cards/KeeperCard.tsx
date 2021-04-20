@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { Maybe, PlayerTransaction } from '../../generated/graphql';
+import { orderBy } from 'lodash';
 
 interface KeeperCardProps {
     grouping: any,
@@ -20,7 +21,7 @@ const KeeperCard: React.FC<KeeperCardProps> = ({ ...props }) => {
             </Card.Title>
             <Card.Body>
                 {
-                    props.keepers.map((transaction: Maybe<PlayerTransaction>) => (
+                    orderBy(props.keepers, ["primaryPosition"]).map((transaction: Maybe<PlayerTransaction>) => (
                         <Row key={transaction?.name} className={`text-left player-${transaction?.primaryPosition}`}>
                             <Col xs={9} className="text-nowrap text-truncate">
                                 <Link to={`/player/${transaction?.playerId}`}>
