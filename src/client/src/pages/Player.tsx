@@ -30,6 +30,7 @@ export const GET_FRANCHISE = gql`
         {
           type
           transactionId
+          transactionGroupId
           date
           description
         }

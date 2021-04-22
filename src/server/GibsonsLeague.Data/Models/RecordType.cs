@@ -6,8 +6,9 @@ namespace GibsonsLeague.Data.Models
 {
     public enum RecordType
     {
-        AllTime,
+        Franchise,
         Season,
-        Match
+        Match,
+        Player
     }
 }

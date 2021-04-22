@@ -16,7 +16,8 @@ namespace GibsonsLeague.Api.Models
             DraftRepository draftRepository,
             DraftPickRepository draftPickRepository,
             TransactionRepository transactionRepository,
-            SeasonRepository seasonRepository)
+            SeasonRepository seasonRepository,
+            MatchRepository matchRepository)
         {
             Field<ListGraphType<League>>(
                 "leagues",
@@ -170,6 +171,24 @@ namespace GibsonsLeague.Api.Models
                         year: context.GetArgument<int?>("year"),
                         franchiseId: context.GetArgument<Guid?>("franchiseId"));
                 });
+
+
+            Field<ListGraphType<Match>>("matches",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "offset", DefaultValue = 0 },
+                    new QueryArgument<IntGraphType> { Name = "limit", DefaultValue = 1000 },
+                    new QueryArgument<MatchTypeEnum> { Name = "type" },
+                    new QueryArgument<GuidGraphType> { Name = "franchiseId" },
+                    new QueryArgument<IntGraphType> { Name = "year" },
+                    new QueryArgument<IntGraphType> { Name = "week" }
+                ),
+                resolve: context => matchRepository.GetMatches(
+                    offset: context.GetArgument<int>("offset"),
+                    limit: context.GetArgument<int>("limit"),
+                    franchiseId: context.GetArgument<Guid?>("franchiseId"),
+                    type: context.GetArgument<MatchType?>("type"),
+                    year: context.GetArgument<int?>("year"),
+                    week: context.GetArgument<int?>("week")));
         }
     }
 }

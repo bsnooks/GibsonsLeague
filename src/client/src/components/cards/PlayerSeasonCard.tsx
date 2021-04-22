@@ -13,30 +13,35 @@ const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) => {
     if (!season) { return null; }
 
     const transactionRow = (transaction: any) => {
-        switch(transaction.type)
-        {
+        switch (transaction.type) {
             case "Traded":
                 return (
                     <Row key={transaction?.transactionId}>
-                        <Link to={`/trade/${transaction?.transactionId}`}>
-                            {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
-                        </Link>
+                        <Col>
+                            <Link to={`/trade/${transaction?.transactionGroupId}`}>
+                                {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
+                            </Link>
+                        </Col>
                     </Row>
                 );
-                
+
             case "DraftPicked":
                 return (
                     <Row key={transaction?.transactionId}>
-                        <Link to={`/draft/${season.year}`}>
-                            {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
-                        </Link>
+                        <Col>
+                            <Link to={`/season/${season.year}?t=draft`}>
+                                {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
+                            </Link>
+                        </Col>
                     </Row>
                 );
 
             default:
                 return (
                     <Row key={transaction?.transactionId}>
-                        {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
+                        <Col>
+                            {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
+                        </Col>
                     </Row>
                 );
         }
@@ -44,11 +49,11 @@ const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) => {
 
     return (
         <>
-            <Row style={{backgroundColor: "#CCC"}}>
-                <Col><b>{`${season?.year} (${season.position} Rank: ${season.positionRank}, ${season.position} Rank ppg: ${season.positionRankPpg}, Games: ${season.gamesPlayed})`}</b></Col>
+            <Row style={{ backgroundColor: "#CCC" }}>
+                <Col><b>{`${season?.year} ${(season.positionRank > 0) ? `(${season.position} Rank: ${season.positionRank}, ` : ""}${(season.positionRankPpg > 0) ? `(${season.position} Rank ppg: ${season.positionRankPpg}, ` : ""}Games: ${season.gamesPlayed})`}</b></Col>
             </Row>
             {
-                season?.transactions?.map((transaction) => 
+                season?.transactions?.map((transaction) =>
                     transactionRow(transaction)
                 )
             }

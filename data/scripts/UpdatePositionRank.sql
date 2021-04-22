@@ -1,5 +1,5 @@
 CREATE TABLE #table (PlayerID int, Year INT, NewPositionRank INT)
-DECLARE @year INT = 2013
+DECLARE @year INT
 
 INSERT INTO #table
 SELECT playerSeason.PlayerID,
@@ -7,7 +7,7 @@ SELECT playerSeason.PlayerID,
 	ROW_NUMBER() OVER (PARTITION BY PlayerSeason.Year, Player.PrimaryPosition ORDER BY (Points/GamesPlayed) DESC) AS NewPositionRank
 FROM dbo.PlayerSeason
 	INNER JOIN dbo.Player ON Player.PlayerID=PlayerSeason.PlayerID
-WHERE Year=@year AND GamesPlayed > 2
+WHERE (@year IS NULL OR Year=@year) AND GamesPlayed > 2
 
 UPDATE dbo.PlayerSeason
 SET PositionRankPpg=t.NewPositionRank
@@ -22,7 +22,7 @@ SELECT playerSeason.PlayerID,
 	ROW_NUMBER() OVER (PARTITION BY PlayerSeason.Year, Player.PrimaryPosition ORDER BY (Points) DESC) AS NewPositionRank
 FROM dbo.PlayerSeason
 	INNER JOIN dbo.Player ON Player.PlayerID=PlayerSeason.PlayerID
-WHERE Year=@year
+WHERE (@year IS NULL OR Year=@year)
 
 UPDATE dbo.PlayerSeason
 SET PositionRank=t.NewPositionRank

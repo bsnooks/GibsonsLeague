@@ -11,6 +11,7 @@ namespace GibsonsLeague.Api.Models
         {
             Field(x => x.Rank);
             Field(x => x.RecordValue);
+            Field(x => x.RecordNumericValue);
             Field(x => x.Franchise.FranchiseId).Name("FranchiseId");
             Field(x => x.Franchise.MainName).Name("FranchiseName");
             Field(x => x.Year, nullable: true, type: typeof(IntGraphType));

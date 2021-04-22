@@ -14,7 +14,7 @@ interface SeasonBadgeProps {
 
 const SeasonBadge: React.FC<SeasonBadgeProps> = ({ ...props }) => {
     return (
-        <LinkContainer to={`/season/${props.year}/${props.franchiseId}`} className="m-1">
+        <LinkContainer to={`/season/${props.year}?t=standings&f=${props.franchiseId}`} className="m-1">
             <Button variant="dark">
                 {props.year}
                 <Badge variant="light" className={`place-${props.place} mx-1`}>{props.place}</Badge>

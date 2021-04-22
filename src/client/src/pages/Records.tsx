@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Jumbotron, Tab, Tabs } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery } from '../generated/graphql';
@@ -10,7 +10,7 @@ export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {
     league
     {
-      records(number:3)
+      records(number:10, positivity:true)
       {
         recordTitle
         positiveRecord
@@ -21,6 +21,7 @@ export const GET_FRANCHISES = gql`
           franchiseId
           franchiseName
           recordValue
+          recordNumericValue
           year
           week
         }
@@ -41,31 +42,56 @@ const Records: React.FC<RecordsProps> = () => {
     if (loading) return <GlobalLoading mode="page" />;
     if (error || !data) return <GlobalError mode="page" apolloError={error} />;
 
+
+
     return (
-        <>
-            <Container fluid>
+        <Container>
+            <Jumbotron fluid>
                 <h1>Hall of Fame</h1>
-                <section className="d-flex flex-wrap justify-content-center">
-                    {
-                        data.league?.records?.filter(r => r?.positiveRecord).map((leagueRecord: any) => (
-                            <RecordCard key={leagueRecord.recordTitle}
-                                leagueRecord={leagueRecord} />
-                        ))
-                    }
-                </section>
-            </Container>
-            <Container fluid>
-                <h1>Hall of Shame</h1>
-                <section className="d-flex flex-wrap justify-content-center">
-                    {
-                        data.league?.records?.filter(r => !r?.positiveRecord).map((leagueRecord: any) => (
-                            <RecordCard key={leagueRecord.recordTitle}
-                                leagueRecord={leagueRecord} />
-                        ))
-                    }
-                </section>
-            </Container>
-        </>
+            </Jumbotron>
+            <Tabs defaultActiveKey="franchise">
+                <Tab eventKey="franchise" title="Franchise Records">
+                    <div className="d-flex flex-wrap justify-content-center">
+                        {
+                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "franchise").map((leagueRecord: any) => (
+                                <RecordCard key={leagueRecord.recordTitle}
+                                    leagueRecord={leagueRecord} />
+                            ))
+                        }
+                    </div>
+                </Tab>
+                <Tab eventKey="season" title="Season Records">
+                    <div className="d-flex flex-wrap justify-content-center">
+                        {
+                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "season").map((leagueRecord: any) => (
+                                <RecordCard key={leagueRecord.recordTitle}
+                                    leagueRecord={leagueRecord} />
+                            ))
+                        }
+                    </div>
+                </Tab>
+                <Tab eventKey="matchup" title="Matchup Records">
+                    <div className="d-flex flex-wrap justify-content-center">
+                        {
+                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "match").map((leagueRecord: any) => (
+                                <RecordCard key={leagueRecord.recordTitle}
+                                    leagueRecord={leagueRecord} />
+                            ))
+                        }
+                    </div>
+                </Tab>
+                {/* <Tab eventKey="player" title="Player Records">
+                    <div className="d-flex flex-wrap justify-content-center">
+                        {
+                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "player").map((leagueRecord: any) => (
+                                <RecordCard key={leagueRecord.recordTitle}
+                                    leagueRecord={leagueRecord} />
+                            ))
+                        }
+                    </div>
+                </Tab> */}
+            </Tabs>
+        </Container>
     );
 }
 

@@ -120,6 +120,7 @@ export type GibsonsLeagueQuery = {
   franchises?: Maybe<Array<Maybe<Franchise>>>;
   league?: Maybe<League>;
   leagues?: Maybe<Array<Maybe<League>>>;
+  matches?: Maybe<Array<Maybe<Match>>>;
   player?: Maybe<Player>;
   players?: Maybe<Array<Maybe<Player>>>;
   season?: Maybe<Season>;
@@ -151,6 +152,16 @@ export type GibsonsLeagueQueryFranchiseArgs = {
 export type GibsonsLeagueQueryLeagueArgs = {
   id?: Maybe<Scalars['Guid']>;
   name?: Maybe<Scalars['String']>;
+};
+
+
+export type GibsonsLeagueQueryMatchesArgs = {
+  offset?: Maybe<Scalars['Int']>;
+  limit?: Maybe<Scalars['Int']>;
+  type?: Maybe<MatchType>;
+  franchiseId?: Maybe<Scalars['Guid']>;
+  year?: Maybe<Scalars['Int']>;
+  week?: Maybe<Scalars['Int']>;
 };
 
 
@@ -222,6 +233,7 @@ export type LeagueRecord = {
   franchiseId: Scalars['ID'];
   franchiseName: Scalars['String'];
   rank: Scalars['Int'];
+  recordNumericValue: Scalars['Float'];
   recordValue: Scalars['String'];
   week?: Maybe<Scalars['Int']>;
   year?: Maybe<Scalars['Int']>;
@@ -238,10 +250,16 @@ export type LeagueRecords = {
 export type Match = {
   __typename?: 'Match';
   losingFranchise: Scalars['String'];
+  losingFranchiseId: Scalars['ID'];
+  losingFranchisePoints: Scalars['Float'];
+  losingFranchiseProjectedPoints?: Maybe<Scalars['Float']>;
   tied: Scalars['Boolean'];
   type?: Maybe<Scalars['String']>;
   week: Scalars['Int'];
   winningFranchise: Scalars['String'];
+  winningFranchiseId: Scalars['ID'];
+  winningTeamPoints: Scalars['Float'];
+  winningTeamProjectedPoints?: Maybe<Scalars['Float']>;
   year: Scalars['Int'];
 };
 

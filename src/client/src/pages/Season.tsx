@@ -6,12 +6,15 @@ import GlobalError from '../components/GlobalError';
 import { FranchiseUtilities } from '../utilities/FranchiseAvatar';
 import { orderBy } from 'lodash';
 import { GibsonsLeagueQuery, GibsonsLeagueQuerySeasonArgs } from '../generated/graphql';
-import { faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { faTrophy, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 import StandingsCard from '../components/cards/StandingsCard';
 import FranchiseTrades from '../components/FranchiseTrades';
 import FranchiseKeepers from '../components/FranchiseKeepers';
+import { LinkContainer } from 'react-router-bootstrap';
+import FranchiseDraftPicks from '../components/FranchiseDraftPicks';
+import FranchiseMatches from '../components/FranchiseMatches';
 
 export const GET_TEAMS = gql`
   query GibsonsLeagueQuery($year: Int) {
@@ -43,7 +46,9 @@ interface SeasonProps {
 
 const Season: React.FC<SeasonProps> = ({ ...props }) => {
 
-  const year = props.match.params.year;
+  const year:number = parseInt(props.match.params.year);
+  const nextYear:number = year + 1;
+  const previousYear:number = year - 1;
 
   const {
     data,
@@ -66,74 +71,92 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
 
   const champion = teams.find(t => t?.champion === true);
   const secondPlace = teams.find(t => t?.secondPlace === true);
-  const thirdPlace = orderBy(teams.filter(t => t?.champion !== true && t?.secondPlace !== true), ["standing"], ["desc"])[0];
+  const thirdPlace = orderBy(teams.filter(t => t?.champion !== true && t?.secondPlace !== true), ["standing"], ["asc"])[0];
 
   const championAvatar = new FranchiseUtilities().pickAvatarByFranchiseId(champion?.franchiseId);
   const secondPlaceAvatar = new FranchiseUtilities().pickAvatarByFranchiseId(secondPlace?.franchiseId);
   const thirdPlaceAvatar = new FranchiseUtilities().pickAvatarByFranchiseId(thirdPlace?.franchiseId);
   return (
     <Container>
-    <Jumbotron fluid>
-        <h1>{year}</h1>
+      <Jumbotron fluid>
         <Container>
-            <Row>
-                <Col>
-                    <FontAwesomeIcon icon={faTrophy} className="gold" size="3x"  />
-                </Col>     
-                <Col>
-                    <FontAwesomeIcon icon={faTrophy} className="silver" size="3x"  />
-                </Col>
-                <Col>
+          <Row>
+            <Col md="auto">
+              <LinkContainer to={`/season/${previousYear}`}>
+                <div className="btn">
+                  <FontAwesomeIcon icon={faArrowLeft} size="2x" />
+                </div>
+              </LinkContainer>
+            </Col>
+            <Col>
+              <h1>{year}</h1>
+              <Container>
+                <Row>
+                  <Col>
+                    <FontAwesomeIcon icon={faTrophy} className="gold" size="3x" />
+                  </Col>
+                  <Col>
+                    <FontAwesomeIcon icon={faTrophy} className="silver" size="3x" />
+                  </Col>
+                  <Col>
                     <FontAwesomeIcon icon={faTrophy} className="bronze" size="3x" />
-                </Col>
-            </Row>
-            <Row>
-                <Col>
+                  </Col>
+                </Row>
+                <Row className="my-3">
+                  <Col>
                     <Link to={`/franchise/${champion?.franchiseId}`}>
-                        {champion?.franchiseName}
-                    </Link>                    
-                </Col>   
-                <Col>
+                      {champion?.franchiseName}
+                    </Link>
+                  </Col>
+                  <Col>
                     <Link to={`/franchise/${secondPlace?.franchiseId}`}>
-                        {secondPlace?.franchiseName}
-                    </Link>  
-                </Col>
-                <Col>
+                      {secondPlace?.franchiseName}
+                    </Link>
+                  </Col>
+                  <Col>
                     <Link to={`/franchise/${thirdPlace?.franchiseId}`}>
-                        {thirdPlace?.franchiseName}
-                    </Link>  
-                </Col>
-            </Row>
-            <Row>
-                <Col>
+                      {thirdPlace?.franchiseName}
+                    </Link>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
                     <Image roundedCircle src={championAvatar} style={{ width: '5rem', height: '5rem' }} />
-                </Col>   
-                <Col>
+                  </Col>
+                  <Col>
                     <Image roundedCircle src={secondPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
-                </Col>
-                <Col>
+                  </Col>
+                  <Col>
                     <Image roundedCircle src={thirdPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
-                </Col>
-            </Row>
+                  </Col>
+                </Row>
+              </Container>
+            </Col>
+            <Col md="auto">
+              <LinkContainer to={`/season/${nextYear}`}>
+                <div className="btn">
+                  <FontAwesomeIcon icon={faArrowRight} size="2x" />
+                </div>
+              </LinkContainer>
+            </Col>
+          </Row>
         </Container>
-    </Jumbotron>  
+      </Jumbotron>
       <Tabs defaultActiveKey="standings">
         <Tab eventKey="standings" title="Standings">
-            <StandingsCard franchises={teams} />
+          <StandingsCard franchises={teams} />
         </Tab>
         <Tab eventKey="matchups" title="Matchups">
-        </Tab>
-        <Tab eventKey="playoffs" title="Playoffs">
+          <FranchiseMatches year={year} />
         </Tab>
         <Tab eventKey="keepers" title="Keepers">
           <FranchiseKeepers year={year} groupBy="franchiseName" />
         </Tab>
         <Tab eventKey="draft" title="Draft">
+          <FranchiseDraftPicks year={year} groupBy="round" />
         </Tab>
         <Tab eventKey="trades" title="Trades">
           <FranchiseTrades year={year} />
-        </Tab>
-        <Tab eventKey="transactions" title="Transactions">
         </Tab>
       </Tabs>
 

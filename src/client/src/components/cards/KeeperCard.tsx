@@ -6,7 +6,7 @@ import { orderBy } from 'lodash';
 
 interface KeeperCardProps {
     grouping: any,
-    groupingLink: string,
+    groupingLink?: string,
     keepers: Maybe<PlayerTransaction>[]
 }
 
@@ -15,9 +15,13 @@ const KeeperCard: React.FC<KeeperCardProps> = ({ ...props }) => {
     return (
         <Card style={{ width: '22rem' }}>
             <Card.Title>
-                <Link to={props.groupingLink}>
-                    {props.grouping}
-                </Link>
+                {
+                    props.groupingLink ? (
+                        <Link to={props.groupingLink}>
+                            {props.grouping}
+                        </Link>) :
+                        (<>{props.grouping}</>)
+                }
             </Card.Title>
             <Card.Body>
                 {

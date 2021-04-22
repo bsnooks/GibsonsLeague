@@ -8,8 +8,8 @@ import DraftCard from './cards/DraftCard';
 import { groupBy } from 'lodash';
 
 export const GET_TRADES = gql`
-  query GibsonsLeagueQuery($franchiseId: Guid) {
-    draftpicks(franchiseId: $franchiseId)
+  query GibsonsLeagueQuery($franchiseId: Guid, $year: Int) {
+    draftpicks(franchiseId: $franchiseId, year: $year)
     {
         year
         round
@@ -28,7 +28,9 @@ export const GET_TRADES = gql`
 `;
 
 interface FranchiseDraftPicksProps {
-    franciseId: any;
+    franciseId?: any;
+    year?: any;
+    groupBy?: any;
 }
 
 const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) => {
@@ -40,27 +42,38 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
     } = useQuery<GibsonsLeagueQuery, GibsonsLeagueQueryDraftpicksArgs>(GET_TRADES,
         {
             variables: {
-                franchiseId: props.franciseId
+                franchiseId: props.franciseId,
+                year: props.year
             }
         });
 
     const handleClick = () => {
         fetchMore({
             variables: {
-                franchiseId: props.franciseId
+                franchiseId: props.franciseId,
+                year: props.year
             }
         })
     };
 
     if (loading) return <GlobalLoading mode="component" />;
     if (error || !data) return <GlobalError mode="component" apolloError={error} />;
-    
-    const years = groupBy(data.draftpicks, "year");
+
+    const groupByKey = props.groupBy ?? "year";
+    const years = groupBy(data.draftpicks, groupByKey);
 
     const cards: any = [];
-    for(const[key, value] of Object.entries(years).reverse())
-    {
-      cards.push(<DraftCard grouping={key} groupingLink={`/draft/${key}`} picks={value} key={key} />);
+    const items = groupByKey === "year" ? Object.entries(years).reverse() : Object.entries(years);
+    for (const [key, value] of items) {
+        switch (groupByKey) {
+            case "round":
+                cards.push(<DraftCard grouping={key} groupingLabel={`Round ${key}`} picks={value} includeFranchise={true} key={key} />);
+                break;
+            case "year":
+            default:
+                cards.push(<DraftCard grouping={key} groupingLabel={key} groupingLink={`/season/${key}?t=draft`} picks={value} key={key} />);
+                break;
+        }
     }
 
     return (

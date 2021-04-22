@@ -45,25 +45,38 @@ const FranchiseKeepers: React.FC<FranchiseKeepersProps> = ({ ...props }) => {
     if (error || !data) return <GlobalError mode="component" apolloError={error} />;
     
     const positions = groupBy(data.transactions, "position");
-    const years = groupBy(data.transactions, props.groupBy ?? "year");
+
+    const groupByKey = props.groupBy ?? "year";
+    const years = groupBy(data.transactions, groupByKey);
 
     const cards: any = [];
     for(const[key, value] of Object.entries(years).reverse())
     {
-      cards.push(<KeeperCard grouping={key} groupingLink={`/draft/${key}`} keepers={value} key={key} />);
+        switch (groupByKey) {
+            case "franchiseName":
+                cards.push(<KeeperCard grouping={key} keepers={value} key={key} />);
+                break;
+            case "year":
+            default:
+                cards.push(<KeeperCard grouping={key} groupingLink={`/season/${key}?t=keepers`} keepers={value} key={key} />);
+                break;
+        }
     }
 
     return (
 
         <section>
-            <div>
-                <Row>
-                    <Col>{`QB's Kept: ${positions["QB"].length}`}</Col>
-                    <Col>{`RB's Kept: ${positions["RB"].length}`}</Col>
-                    <Col>{`WR's Kept: ${positions["WR"].length}`}</Col>
-                    <Col>{`TE's Kept: ${positions["TE"].length}`}</Col>
-                </Row>
-            </div>
+            {
+                props.groupBy === "year" ? (
+                <div>
+                    <Row>
+                        <Col>{`QB's Kept: ${positions["QB"].length}`}</Col>
+                        <Col>{`RB's Kept: ${positions["RB"].length}`}</Col>
+                        <Col>{`WR's Kept: ${positions["WR"].length}`}</Col>
+                        <Col>{`TE's Kept: ${positions["TE"].length}`}</Col>
+                    </Row>
+                </div>) : null
+            }
             <div className="d-flex flex-wrap justify-content-center">
                 {cards}
             </div>

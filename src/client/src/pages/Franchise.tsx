@@ -9,6 +9,7 @@ import { FranchiseUtilities } from '../utilities/FranchiseAvatar';
 import FranchiseTrades from '../components/FranchiseTrades';
 import FranchiseDraftPicks from '../components/FranchiseDraftPicks';
 import FranchiseKeepers from '../components/FranchiseKeepers';
+import FranchiseMatches from '../components/FranchiseMatches';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Guid) {
@@ -96,15 +97,18 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
           </Row>
         </Container>
       </Jumbotron>
-      <Tabs defaultActiveKey="trades">
-        <Tab eventKey="trades" title="Trades">
-          <FranchiseTrades franciseId={franchiseId} />
-        </Tab>
+      <Tabs defaultActiveKey="keepers">
         <Tab eventKey="keepers" title="Keepers">
           <FranchiseKeepers franciseId={franchiseId} />
         </Tab>
+        <Tab eventKey="trades" title="Trades">
+          <FranchiseTrades franciseId={franchiseId} />
+        </Tab>
         <Tab eventKey="drafts" title="Drafts">
           <FranchiseDraftPicks franciseId={franchiseId} />
+        </Tab>
+        <Tab eventKey="matchups" title="Matchups">
+          <FranchiseMatches franciseId={franchiseId} />
         </Tab>
       </Tabs>
 

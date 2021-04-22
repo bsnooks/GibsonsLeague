@@ -27,6 +27,8 @@ namespace GibsonsLeague.Data.Repositories
                         && (!week.HasValue || x.Week == week))
                     .Include(x => x.LosingTeam.Franchise)
                     .Include(x => x.WinningTeam.Franchise)
+                    .Include(x => x.WinningTeam.TeamScores.Where(s => !week.HasValue || s.Week == week))
+                    .Include(x => x.LosingTeam.TeamScores.Where(s => !week.HasValue || s.Week == week))
                     .OrderByDescending(x => x.Year)
                     .ThenBy(x => x.Week)
                     .Skip(offset)
