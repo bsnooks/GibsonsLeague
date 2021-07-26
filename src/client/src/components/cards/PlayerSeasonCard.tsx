@@ -50,7 +50,7 @@ const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) => {
     return (
         <>
             <Row style={{ backgroundColor: "#CCC" }}>
-                <Col><b>{`${season?.year} ${(season.positionRank > 0) ? `(${season.position} Rank: ${season.positionRank}, ` : ""}${(season.positionRankPpg > 0) ? `(${season.position} Rank ppg: ${season.positionRankPpg}, ` : ""}Games: ${season.gamesPlayed})`}</b></Col>
+                <Col><b>{`${season?.year} ${(season.positionRank > 0) ? `(${season.position} Rank: ${season.positionRank}, ` : ""}${(season.positionRankPpg > 0) ? `${season.position} Rank ppg: ${season.positionRankPpg}, ` : ""}Games: ${season.gamesPlayed})`}</b></Col>
             </Row>
             {
                 season?.transactions?.map((transaction) =>
