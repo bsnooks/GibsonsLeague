@@ -7,6 +7,7 @@ import GlobalError from './GlobalError';
 import DraftCard from './cards/DraftCard';
 import { groupBy } from 'lodash';
 import DraftGraph from './charts/DraftGraph';
+import DraftPositionGraph from './charts/DraftPositionGraph';
 
 export const GET_TRADES = gql`
   query GibsonsLeagueQuery($franchiseId: Guid, $year: Int) {
@@ -82,6 +83,7 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
         <section>
             <div className="d-flex flex-wrap justify-content-center">
                 { props.year && data?.draftpicks ? <DraftGraph picks={data?.draftpicks} /> : null }
+                { props.year && data?.draftpicks ? <DraftPositionGraph picks={data?.draftpicks} /> : null }
                 {cards}
             </div>
             <Button onClick={handleClick}>Load More</Button>

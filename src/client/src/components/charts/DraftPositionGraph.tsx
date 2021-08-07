@@ -4,52 +4,33 @@ import { ResponsiveLine, Serie } from '@nivo/line'
 import { groupBy } from 'lodash';
 import { useBaseTheme } from './theme';
 
-interface DraftGraphProps {
+interface DraftPositionGraphProps {
     picks?: Maybe<Maybe<DraftPick>>[],
 }
 
-const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
+const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => {
     const data: Serie[] = [];
     const positions = groupBy(props.picks, "playerPosition");
-    const keeperCounts = [];
     
     for (const [position, positionValue] of Object.entries(positions)) {
-
-        const rounds = groupBy(positionValue, "round");
-        const posData = [];
-        for (const [round, roundValue] of Object.entries(rounds)) {
-            const roundPositionPick = roundValue.map(v => v?.positionPick ?? 0);            
-            const minPick = Math.min(...roundPositionPick);
-            const ignorePositions = ["DE", "LB", "S", "LB, DE", "K"];
-            if (minPick >= 1 && !ignorePositions.includes(position) && keeperCounts.filter(k => k.position === position).length === 0) {
-                keeperCounts.push({
-                    "position": position,
-                    "numberKept": Math.min(...roundPositionPick) - 1
-                })
+        const posData: { x: number; y: number; name: string; round: number; pick: number; franchise: string; }[] = [];
+        positionValue.forEach((pick) => {
+            if (pick?.positionPick && pick?.playerPositionRank) {
+                posData.push({
+                    "x": pick?.positionPick,
+                    "y": (pick?.playerPositionRank - pick?.positionPick) ?? 0,
+                    "name": pick.playerName,
+                    "round": pick.round,
+                    "pick": pick.pick,
+                    "franchise": pick.franchiseName,
+                });
             }
+        });
 
-            posData.push({
-                "x": parseInt(round),
-                "y": Math.max(...roundPositionPick),
-            });
-        }
-        data.push({
-            "id": position,
-            "data": posData,
-        })
-    }
-    for (const position of Object.keys(positions)) {
-        const d = keeperCounts.filter(r => r?.position === position);
-        let numberKept: number = 0;
-        if (d && d.length > 0) {
-            numberKept = d[0].numberKept;
-        }
-
-        const e = data.filter(r => r?.id === position);
-        if (e && e.length > 0) {
-            e[0].data.unshift({
-                "x": 0,
-                "y": numberKept,
+        if (posData.length > 0) {
+            data.push({
+                "id": position,
+                "data": posData,
             });
         }
     }
@@ -71,7 +52,7 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'Round',
+                    legend: 'Positional Pick',
                     legendOffset: 36,
                     legendPosition: 'middle'
                 }}
@@ -79,10 +60,17 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
                     tickSize: 5,
                     tickPadding: 5,
                     tickRotation: 0,
-                    legend: 'Players Picked',
+                    legend: 'Pick vs. Season Rank',
                     legendOffset: -40,
                     legendPosition: 'middle'
                 }}
+                markers={[
+                    {
+                        axis: 'y',
+                        value: 0,
+                        lineStyle: { strokeDasharray: '6, 6', stroke: '#b0413e', strokeWidth: 2 },
+                    }
+                ]}
                 pointSize={5}
                 pointColor={{ theme: 'background' }}
                 pointBorderWidth={1}
@@ -105,9 +93,8 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
                     }
                 ]}
                 tooltip={(input) => {
-                    const text = input.point.data.x === 0 ?
-                        `${input.point.serieId}: ${input.point.data.y} kept`:
-                        `Round ${input.point.data.x} (${input.point.serieId}): ${input.point.data.y} taken`;
+                    const data : any = input.point.data;
+                    const text = `${input.point.serieId}${input.point.data.x}: ${data.name} (Round ${data.round} Pick ${data.pick} by ${data.franchise}) = ${input.point.data.y}`;
                     return (
                         <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.point.serieColor}`, borderWidth: "2px", padding: "5px"}}>
                             {text}
@@ -120,4 +107,4 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
     );
 }
 
-export default DraftGraph;
+export default DraftPositionGraph;
