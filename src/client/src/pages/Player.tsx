@@ -5,6 +5,7 @@ import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs } from '../generated/graphql';
 import GlobalError from '../components/GlobalError';
 import PlayerSeasonCard from '../components/cards/PlayerSeasonCard';
+import PlayerGraph from '../components/charts/PlayerGraph';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Int) {
@@ -80,6 +81,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
         </Row>
       </Jumbotron>
       <section>
+        <PlayerGraph seasons={player.seasons} position={player.position} />
         <h1>Transactions</h1>
         <div className="d-flex flex-wrap justify-content-center">
           <Container>

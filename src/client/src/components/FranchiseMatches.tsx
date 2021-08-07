@@ -7,6 +7,8 @@ import GlobalError from './GlobalError';
 import FranchiseSeasonMatchCard from './cards/FranchiseSeasonMatchCard';
 import { groupBy } from 'lodash';
 import SeasonMatchCard from './cards/SeasonMatchCard';
+import SeasonGraph from './charts/SeasonGraph';
+import WeekPointsGraph from './charts/WeekPointsGraph';
 
 export const GET_TRADES = gql`
   query GibsonsLeagueQuery($franchiseId: Guid, $year: Int) {
@@ -72,15 +74,17 @@ const FranchiseMatches: React.FC<FranchiseMatchesProps> = ({ ...props }) => {
     }
 
     const groupedCards = (
-        <Tab.Container id="left-tabs-example" defaultActiveKey={props.franciseId ? "2020" : "1"}>
+        <Tab.Container id="left-tabs-example" defaultActiveKey={props.franciseId ? "2020" : "graph"}>
             <Row>
                 <Col sm={3}>
                     <Nav variant="pills" className="flex-column">
+                        {props.year && data?.matches ? <Nav.Item><Nav.Link eventKey="graph">Summary</Nav.Link></Nav.Item> : null}
                         {tabs}
                     </Nav>
                 </Col>
                 <Col sm={9}>
                     <Tab.Content>
+                        {props.year && data?.matches ? <Tab.Pane eventKey="graph"><SeasonGraph matches={data?.matches} /><WeekPointsGraph matches={data?.matches} /></Tab.Pane> : null}
                         {cards}
                     </Tab.Content>
                 </Col>

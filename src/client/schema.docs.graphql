@@ -150,6 +150,8 @@ type PlayerTransaction {
   name: String!
   playerId: Int!
   position: String!
+  positionRank: Float
+  positionRankPpg: Float
   primaryPosition: String!
   related: [PlayerTransaction]
   transactionGroupId: Guid

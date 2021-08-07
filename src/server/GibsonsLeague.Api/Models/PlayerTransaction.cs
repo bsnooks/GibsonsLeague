@@ -1,4 +1,5 @@
-﻿using GibsonsLeague.Data;
+﻿using System.Linq;
+using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;
@@ -22,6 +23,12 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Team.Franchise.MainName).Name("FranchiseName");
             Field<StringGraphType>("type",
                 resolve: context => context.Source.TransactionType.ToString());
+            Field<FloatGraphType>("PositionRank", resolve: context => {
+                return context.Source.Player.PlayerSeasons.Where(x => x.Year == context.Source.Year).Select(x => x.PositionRank).FirstOrDefault();
+            });
+            Field<FloatGraphType>("PositionRankPpg", resolve: context => {
+                return context.Source.Player.PlayerSeasons.Where(x => x.Year == context.Source.Year).Select(x => x.PositionRankPpg).FirstOrDefault();
+            });
 
             Field<ListGraphType<PlayerTransaction>>("related",
                 resolve: context => transactionRepository.GetRelatedTransactions(context.Source.TransactionId, context.Source.TransactionGroupId));
