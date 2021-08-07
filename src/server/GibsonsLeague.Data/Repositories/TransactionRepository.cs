@@ -27,6 +27,7 @@ namespace GibsonsLeague.Data.Repositories
                         && (!year.HasValue || x.Team.Year == year))
                     .Include(x => x.Team.Franchise)
                     .Include(x => x.Player)
+                    .ThenInclude(x => x.PlayerSeasons)
                     .OrderByDescending(x => x.Date)
                     .Skip(offset)
                     .Take(limit)
@@ -47,6 +48,7 @@ namespace GibsonsLeague.Data.Repositories
                     .Where(x => x.TransactionId != id && x.TransactionGroupId == groupId)
                     .Include(x => x.Team.Franchise)
                     .Include(x => x.Player)
+                    .ThenInclude(x => x.PlayerSeasons)
                     .OrderByDescending(x => x.Date)
                     .ThenBy(x => x.TeamId)
                     .ToListAsync();

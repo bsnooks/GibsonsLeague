@@ -329,6 +329,8 @@ export type PlayerTransaction = {
   name: Scalars['String'];
   playerId: Scalars['Int'];
   position: Scalars['String'];
+  positionRank?: Maybe<Scalars['Float']>;
+  positionRankPpg?: Maybe<Scalars['Float']>;
   primaryPosition: Scalars['String'];
   related?: Maybe<Array<Maybe<PlayerTransaction>>>;
   transactionGroupId?: Maybe<Scalars['Guid']>;

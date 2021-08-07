@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { DraftPick, Maybe } from '../../generated/graphql';
+import { DraftPickGrader } from '../../utilities/DraftPickGrader';
 
 interface DraftCardProps {
     grouping: any,
@@ -12,6 +13,7 @@ interface DraftCardProps {
 }
 
 const DraftCard: React.FC<DraftCardProps> = ({ ...props }) => {
+    const grader = new DraftPickGrader();
 
     return (
         <Card style={{ width: '100%' }}>
@@ -34,11 +36,14 @@ const DraftCard: React.FC<DraftCardProps> = ({ ...props }) => {
                             <th>Position Pick</th>
                             <th>Position Rank</th>
                             <th>Position Rank ppg</th>
+                            <th>Grade</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            props.picks.map((pick: Maybe<DraftPick>) => (
+                            props.picks.map((pick: Maybe<DraftPick>) => {
+                            const grade = grader.gradeDraftPick(pick);
+                            return (
                                 <tr key={pick?.pick} className={`text-left player-${pick?.playerPrimaryPosition}`}>
                                     <td className="text-nowrap text-truncate">{pick?.pick}</td>
                                     {
@@ -63,8 +68,11 @@ const DraftCard: React.FC<DraftCardProps> = ({ ...props }) => {
                                     <td className="text-nowrap text-truncate">
                                         {pick?.playerPositionRankPpg ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRankPpg}` : ""}
                                     </td>
+                                    <td className="text-nowrap text-truncate">
+                                        {`${grade?.grade ? grade?.grade : ""}${grade?.asterisk ? grade?.asterisk : ""}`}
+                                    </td>
                                 </tr>
-                            ))
+                            )})
                         }
                     </tbody>
                 </Table>

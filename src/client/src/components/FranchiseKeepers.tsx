@@ -18,6 +18,8 @@ export const GET_TRADES = gql`
         position
         primaryPosition
         year
+        positionRank
+        positionRankPpg
     }
   }
 `;
