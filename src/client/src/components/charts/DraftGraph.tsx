@@ -21,7 +21,7 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
             const roundPositionPick = roundValue.map(v => v?.positionPick ?? 0);            
             const minPick = Math.min(...roundPositionPick);
             const ignorePositions = ["DE", "LB", "S", "LB, DE", "K"];
-            if (minPick >= 1 && !ignorePositions.includes(position) && keeperCounts.filter(k => k.position === position).length == 0) {
+            if (minPick >= 1 && !ignorePositions.includes(position) && keeperCounts.filter(k => k.position === position).length === 0) {
                 keeperCounts.push({
                     "position": position,
                     "numberKept": Math.min(...roundPositionPick) - 1
