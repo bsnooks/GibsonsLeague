@@ -10,6 +10,7 @@ import FranchiseTrades from '../components/FranchiseTrades';
 import FranchiseDraftPicks from '../components/FranchiseDraftPicks';
 import FranchiseKeepers from '../components/FranchiseKeepers';
 import FranchiseMatches from '../components/FranchiseMatches';
+import FranchiseGraphs from '../components/FranchiseGraphs';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Guid) {
@@ -109,6 +110,9 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
         </Tab>
         <Tab eventKey="matchups" title="Matchups">
           <FranchiseMatches franciseId={franchiseId} />
+        </Tab>
+        <Tab eventKey="graphs" title="Graphs">
+          <FranchiseGraphs franciseId={franchiseId} />
         </Tab>
       </Tabs>
 

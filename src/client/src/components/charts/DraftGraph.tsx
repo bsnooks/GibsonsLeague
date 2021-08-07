@@ -19,8 +19,9 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
         const posData = [];
         for (const [round, roundValue] of Object.entries(rounds)) {
             const roundPositionPick = roundValue.map(v => v?.positionPick ?? 0);            
-
-            if (round === "1") {
+            const minPick = Math.min(...roundPositionPick);
+            const ignorePositions = ["DE", "LB", "S", "LB, DE", "K"];
+            if (minPick >= 1 && !ignorePositions.includes(position) && keeperCounts.filter(k => k.position === position).length == 0) {
                 keeperCounts.push({
                     "position": position,
                     "numberKept": Math.min(...roundPositionPick) - 1
@@ -63,7 +64,7 @@ const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
                 colors={{ scheme: 'category10' }}
                 xScale={{ type: 'linear' }}
                 yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
-                curve="stepAfter"
+                //curve="stepAfter"
                 axisTop={null}
                 axisRight={null}
                 axisBottom={{
