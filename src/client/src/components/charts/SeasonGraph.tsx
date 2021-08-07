@@ -19,12 +19,14 @@ const SeasonGraph: React.FC<SeasonGraphProps> = ({ ...props }) => {
             "x": 0,
             "y": 0
         }]
-        let wins = 0;
+        
+        var wins = 0;
         for (const [, matches] of Object.entries(weeks)) {
+            // eslint-disable-next-line
             matches.filter(m => (m?.winningFranchise === franchise || m?.losingFranchise === franchise) && m.type === "Regular").forEach((match) => {
                 if (match) {
                     if (match.winningFranchise === franchise) {
-                        ++wins;
+                        wins = wins + 1;
                     }
                     weekWins.push({
                             "x": match.week,
