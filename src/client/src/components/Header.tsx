@@ -1,5 +1,5 @@
 import React from 'react';
-import { Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
@@ -74,6 +74,7 @@ const Header: React.FC<HeaderProps> = () => {
 
     return (
         <Navbar bg="success" variant="dark" expand="lg" sticky="top">
+            <Container>
             <LinkContainer to="/">
                 <Navbar.Brand>{data?.league?.name ?? "Gibsons League"} History</Navbar.Brand>
             </LinkContainer>
@@ -91,6 +92,7 @@ const Header: React.FC<HeaderProps> = () => {
                 </Nav>
                 <PlayerSearch />
             </Navbar.Collapse>
+            </Container>
         </Navbar>
     );
 }

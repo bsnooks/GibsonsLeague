@@ -1,7 +1,6 @@
 import React from 'react';
-import { Col, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { Maybe, PlayerSeason } from '../../generated/graphql';
+import TransactionRow from '../controls/TransactionRow';
 
 interface PlayerSeasonCardProps {
     playerSeason: Maybe<PlayerSeason>
@@ -12,52 +11,21 @@ const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) => {
 
     if (!season) { return null; }
 
-    const transactionRow = (transaction: any) => {
-        switch (transaction.type) {
-            case "Traded":
-                return (
-                    <Row key={transaction?.transactionId}>
-                        <Col>
-                            <Link to={`/trade/${transaction?.transactionGroupId}`}>
-                                {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
-                            </Link>
-                        </Col>
-                    </Row>
-                );
-
-            case "DraftPicked":
-                return (
-                    <Row key={transaction?.transactionId}>
-                        <Col>
-                            <Link to={`/season/${season.year}?t=draft`}>
-                                {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
-                            </Link>
-                        </Col>
-                    </Row>
-                );
-
-            default:
-                return (
-                    <Row key={transaction?.transactionId}>
-                        <Col>
-                            {`${transaction?.description} on ${(new Date(transaction?.date).toLocaleDateString())}`}
-                        </Col>
-                    </Row>
-                );
-        }
-    };
-
     return (
-        <>
-            <Row style={{ backgroundColor: "#CCC" }}>
-                <Col><b>{`${season?.year} ${(season.positionRank > 0) ? `(${season.position} Rank: ${season.positionRank}, ` : ""}${(season.positionRankPpg > 0) ? `${season.position} Rank ppg: ${season.positionRankPpg}, ` : ""}Games: ${season.gamesPlayed})`}</b></Col>
-            </Row>
+        <div className="transactions-list">
+            <div className="year">{season?.year}</div>
+            <div className="transactions-headings">
+                <div className="transaction-col team">Team</div>
+                <div className="transaction-col date">Date</div>
+                <div className="transaction-col details">Details</div>
+            </div>
             {
                 season?.transactions?.map((transaction) =>
-                    transactionRow(transaction)
+                    //transactionRow(transaction)
+                    transaction ? <TransactionRow key={transaction.transactionId} transaction={transaction} year={season.year} /> : null
                 )
             }
-        </>
+        </div>
     );
 }
 
