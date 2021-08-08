@@ -63,6 +63,9 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
     }
   );
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const defaultTab = urlParams.get('t') ?? "standings";
+
   if (loading) return <GlobalLoading mode="page" />;
   if (error || !data) return <GlobalError mode="page" apolloError={error} />;
   if (!data.season || !data.season.teams) return <p>Not Found</p>;
@@ -142,7 +145,7 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
           </Row>
         </Container>
       </Jumbotron>
-      <Tabs defaultActiveKey="standings">
+      <Tabs defaultActiveKey={defaultTab}>
         <Tab eventKey="standings" title="Standings">
           <StandingsCard franchises={teams} />
         </Tab>

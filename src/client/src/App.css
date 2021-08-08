@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  background-color: #f3f4f5 !important;
 }
 
 .App-logo {
@@ -77,3 +78,68 @@
 .place-10 {
   background-color: #FF0000;
 }
+
+.section-title {
+  color: #343434;
+  font-size: 20px;
+  font-weight: 900;
+  border-left: 4px solid #28a745;
+  padding-left: 8px;
+  line-height: 15px;
+  height: 18px;
+  text-align: left;
+  margin-top: 40px;
+}
+.section-body {
+  margin-top: 15px;
+  background-color: #fff;
+  border: 1px solid #cecece;
+  border-radius: 4px;
+  padding: 3px;
+}
+.section-body .section-info-box {
+  text-align: left;
+  padding-bottom: 15px;
+}
+.section-body .section-info-box > .title-container {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.section-body .section-info-box > .info-container {
+  font-weight: bold;
+}
+.transactions-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.transactions-list .year {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.transactions-list .transaction {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.transactions-list .transactions-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.transactions-list .transaction-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.transactions-list .transaction-col.team {
+  width: 20%;
+}
+.transactions-list .transaction-col.date {
+  width: 10%;
+}
+.transactions-list .transaction-col.details {
+  width: 70%;
+}
+
