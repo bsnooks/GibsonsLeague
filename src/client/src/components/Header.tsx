@@ -1,9 +1,10 @@
 import React from 'react';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap'
 import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
 import PlayerSearch from './controls/PlayerSearch';
+import logo from '../assets/images/logo_white.png';
 
 export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {
@@ -76,14 +77,11 @@ const Header: React.FC<HeaderProps> = () => {
         <Navbar bg="success" variant="dark" expand="lg" sticky="top">
             <Container>
             <LinkContainer to="/">
-                <Navbar.Brand>{data?.league?.name ?? "Gibsons League"} History</Navbar.Brand>
+                <Navbar.Brand><Image src={logo} style={{ width: '50px' }} /></Navbar.Brand>
             </LinkContainer>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <LinkContainer to="/">
-                        <Nav.Link>Home</Nav.Link>
-                    </LinkContainer>
                     <LinkContainer to="/records">
                         <Nav.Link>Records</Nav.Link>
                     </LinkContainer>
