@@ -1,6 +1,9 @@
+body {
+  background-color: #f3f4f5 !important;
+}
+
 .App {
   text-align: center;
-  background-color: #f3f4f5 !important;
 }
 
 .App-logo {
@@ -141,5 +144,80 @@
 }
 .transactions-list .transaction-col.details {
   width: 70%;
+}
+
+.franchise-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.franchise-list .year {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.franchise-list .transaction {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.franchise-list .franchise-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.franchise-list .franchise-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.franchise-list .franchise-col.team {
+  width: 40%;
+}
+.franchise-list .franchise-col.record {
+  width: 20%;
+}
+.franchise-list .franchise-col.points {
+  width: 20%;
+}
+.franchise-list .franchise-col.championships {
+  width: 20%;
+}
+
+.franchise-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.franchise-list .year {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.franchise-list .transaction {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.champion-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.champion-list .champion-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.champion-list .champion-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.champion-list .champion-col.year {
+  width: 20%;
+}
+.champion-list .champion-col.team {
+  width: 40%;
+}
+.champion-list .champion-col.second {
+  width: 40%;
 }
 
