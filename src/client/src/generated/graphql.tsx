@@ -175,6 +175,7 @@ export type GibsonsLeagueQueryPlayersArgs = {
   offset?: Maybe<Scalars['Int']>;
   limit?: Maybe<Scalars['Int']>;
   query?: Maybe<Scalars['String']>;
+  position?: Maybe<Scalars['String']>;
 };
 
 

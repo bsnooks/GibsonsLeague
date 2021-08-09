@@ -3,11 +3,10 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { AsyncTypeahead } from 'react-bootstrap-typeahead';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryPlayersArgs, Player } from '../../generated/graphql';
 import { gql, useLazyQuery } from '@apollo/client';
-import {useHistory} from 'react-router-dom';
 
 export const GET_PLAYERS = gql`
-  query GibsonsLeagueQuery($query: String) {
-    players(query:$query) {
+  query GibsonsLeagueQuery($query: String, $position: String) {
+    players(query:$query,position:$position) {
       name
       playerId
       position
@@ -16,16 +15,18 @@ export const GET_PLAYERS = gql`
 `;
 
 interface PlayerSearchProps {
+    handleSelection: (selection:any) => void;
+    position?: string
 }
 
 export type PlayerResult = Player | string;
 
-const PlayerSearch: React.FC<PlayerSearchProps> = () => {
+const PlayerSearch: React.FC<PlayerSearchProps> = ({ ...props }) => {
 
-    const history = useHistory();
     const [query, setQuery] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
     const [options, setOptions] = useState<PlayerResult[]>([]);
+    const [typeahead, setTypeahead] = useState<any | null>(null);
 
     const handleSearch = (q:string) => {
         setQuery(q);
@@ -34,8 +35,10 @@ const PlayerSearch: React.FC<PlayerSearchProps> = () => {
     const handleSelection = (selection:any) => {
 
         if (selection && selection.length > 0) {
-            console.log(selection[0].playerId);
-            history.push(`/player/${selection[0].playerId}`);
+            if (typeahead) {
+                typeahead.clear();
+            }
+            props.handleSelection(selection);
         }
     }
 
@@ -51,7 +54,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = () => {
         if (query.length > 2)
         {
             (() => {
-                execQuery({ variables: { query: query } });
+                execQuery({ variables: { query: query, position: props.position } });
             })();
         }
     }, [execQuery, query]);
@@ -72,6 +75,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = () => {
 
     return (
         <AsyncTypeahead
+            ref={(ref) => setTypeahead(ref)}
             filterBy={filterBy}
             id="async-example"
             isLoading={isLoading}

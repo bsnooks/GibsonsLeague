@@ -1,5 +1,5 @@
 import React from 'react';
-import { Maybe, PlayerSeason } from '../../generated/graphql';
+import { Maybe, Player, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine } from '@nivo/line'
 import { useBaseTheme } from './theme';
 import { useState } from 'react';
@@ -8,22 +8,18 @@ import Switch from "react-switch";
 interface PlayerPointsGraphProps {
     seasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;
     position: string;
+    compareWith?: Maybe<Player>;
+    usePpg: boolean
 }
 
 const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
-    const [usePpg, setUsePpg] = useState(false);
-    const [xAxisLabel, setxAxisLabel] = useState("Points");
-
-    const handleChange = (checked: boolean) => {
-        setUsePpg(checked);
-        setxAxisLabel(checked ? "Points per Game" : "Points");
-    };
+    const xAxisLabel = props.usePpg ? "Points per Game" : "Points";
 
     const seasonPointsData: { x: number | undefined; y: number | undefined; }[] = [];
 
     props.seasons?.forEach((season) => {
 
-        if (usePpg) {
+        if (props.usePpg) {
             if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
                 seasonPointsData.push({
                     "x": season?.year,
@@ -45,6 +41,31 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
             "data": seasonPointsData
         }
     ];
+
+    if (props.compareWith) {
+        const compareWithPointsData: { x: number | undefined; y: number | undefined; }[] = [];
+        props.compareWith.seasons?.forEach((season) => {
+    
+            if (props.usePpg) {
+                if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
+                    compareWithPointsData.push({
+                        "x": season?.year,
+                        "y": parseFloat((season?.points / season?.gamesPlayed).toFixed(2)),
+                    });
+                }
+            }
+            else {
+                compareWithPointsData.push({
+                    "x": season?.year,
+                    "y": season?.points,
+                });
+            }
+        });
+        data.push({
+            "id": props.compareWith.name,
+            "data": compareWithPointsData
+        });
+    }
 
     const theme = useBaseTheme();
 
@@ -102,7 +123,6 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
                     theme={theme}
                 />
             </div>
-            Use Points Per Game: <Switch  onChange={handleChange} checked={usePpg} />
         </div>
     );
 }

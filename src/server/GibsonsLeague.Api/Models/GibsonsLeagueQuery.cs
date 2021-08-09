@@ -87,7 +87,8 @@ namespace GibsonsLeague.Api.Models
                 arguments: new QueryArguments(
                     new QueryArgument<IntGraphType> { Name = "offset", DefaultValue=0 },
                     new QueryArgument<IntGraphType> { Name = "limit", DefaultValue=10 },
-                    new QueryArgument<StringGraphType> { Name = "query" }
+                    new QueryArgument<StringGraphType> { Name = "query" },
+                    new QueryArgument<StringGraphType> { Name = "position" }
                 ),
                 resolve: context =>
                 {
@@ -96,7 +97,8 @@ namespace GibsonsLeague.Api.Models
                     return playerRepository.LookupPlayer(
                         offset: context.GetArgument<int>("offset"),
                         limit: context.GetArgument<int>("limit"),
-                        name: context.GetArgument<string>("query"));
+                        name: context.GetArgument<string>("query"),
+                        position: context.GetArgument<string>("position"));
                 });
 
             Field<FranchiseTrade>(

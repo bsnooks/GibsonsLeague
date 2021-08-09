@@ -5,6 +5,7 @@ import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
 import PlayerSearch from './controls/PlayerSearch';
 import logo from '../assets/images/logo_white.png';
+import {useHistory} from 'react-router-dom';
 
 export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {
@@ -25,6 +26,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = () => {
+    const history = useHistory();
     const {
         data,
         loading,
@@ -73,6 +75,14 @@ const Header: React.FC<HeaderProps> = () => {
         return null;
     }
 
+    const handleSelection = (selection:any) => {
+
+        if (selection && selection.length > 0) {
+            console.log(selection[0].playerId);
+            history.push(`/player/${selection[0].playerId}`);
+        }
+    };
+
     return (
         <Navbar bg="success" variant="dark" expand="lg" sticky="top">
             <Container>
@@ -88,7 +98,7 @@ const Header: React.FC<HeaderProps> = () => {
                     {fanchiseNav()}
                     {seasonNav()}
                 </Nav>
-                <PlayerSearch />
+                <PlayerSearch handleSelection={handleSelection} />
             </Navbar.Collapse>
             </Container>
         </Navbar>

@@ -23,7 +23,12 @@ type GibsonsLeagueQuery {
     week: Int
   ): [Match]
   player(id: Int, name: String): Player
-  players(offset: Int = 0, limit: Int = 10, query: String): [Player]
+  players(
+    offset: Int = 0
+    limit: Int = 10
+    query: String
+    position: String
+  ): [Player]
   season(year: Int, franchiseId: Guid): Season
   trade(id: Guid): FranchiseTrade
   trades(

@@ -29,10 +29,10 @@ namespace GibsonsLeague.Data.Repositories
                 .SingleOrDefaultAsync(p => p.Name.Contains(name));
         }
 
-        public async Task<IEnumerable<Player>> LookupPlayer(string name, int offset, int limit)
+        public async Task<IEnumerable<Player>> LookupPlayer(string name, string position, int offset, int limit)
         {
             return await dbContext.Players
-                .Where(p => p.Name.Contains(name))
+                .Where(p => p.Name.Contains(name) && (string.IsNullOrEmpty(position) || p.Position == position))
                 .OrderBy(p => p.Name)
                 .Skip(offset)
                 .Take(limit)

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Maybe, PlayerSeason } from '../../generated/graphql';
+import { Maybe, Player, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine } from '@nivo/line'
 import { useBaseTheme } from './theme';
 import { CartesianMarkerProps } from '@nivo/core';
@@ -7,41 +7,46 @@ import { CartesianMarkerProps } from '@nivo/core';
 interface PlayerGraphProps {
     seasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;
     position: string;
+    compareWith?: Maybe<Player>;
+    usePpg: boolean
 }
 
 const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
 
     const seasonRankData: { x: number | undefined; y: number | undefined; }[] = [];
-    const seasonPpgRankData: { x: number | undefined; y: number | undefined; }[] = [];
-    const gamesPlayedData: { x: number | undefined; y: number | undefined; }[] = [];
     props.seasons?.forEach((season) => {
-        seasonRankData.push({
-            "x": season?.year,
-            "y": season?.positionRank
-        })
-        seasonPpgRankData.push({
-            "x": season?.year,
-            "y": season?.positionRankPpg
-        })
-        gamesPlayedData.push({
-            "x": season?.year,
-            "y": season?.gamesPlayed
-        })
+        const y = props.usePpg ? season?.positionRankPpg : season?.positionRank;
+        if (y && y > 0) {
+            seasonRankData.push({
+                "x": season?.year,
+                "y": y
+            });
+        }
     });
     const data = [
         {
-            "id": "Position Rank",
+            "id": props.usePpg ? "Position Rank (ppg)" : "Position Rank",
             "data": seasonRankData
         },
-        {
-            "id": "Position Rank (ppg)",
-            "data": seasonPpgRankData
-        },
-        {
-            "id": "Games Played",
-            "data": gamesPlayedData
-        },
     ];
+
+    if (props.compareWith) {
+        
+        const compareWithRankData: { x: number | undefined; y: number | undefined; }[] = [];
+        props.compareWith.seasons?.forEach((season) => {
+            const y = props.usePpg ? season?.positionRankPpg : season?.positionRank;
+            if (y && y > 0) {
+                compareWithRankData.push({
+                    "x": season?.year,
+                    "y": y
+                });
+            }
+        });
+        data.push({
+            "id": props.compareWith.name,
+            "data": compareWithRankData
+        });
+    }
 
     const positionStarterThreshold = props.position === "RB" || props.position === "QB" ? 20 : props.position === "WR" ? 30 : props.position === "TE" ? 10 : undefined;
 
