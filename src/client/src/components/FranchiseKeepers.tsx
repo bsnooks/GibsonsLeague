@@ -6,6 +6,7 @@ import GlobalError from './GlobalError';
 import { groupBy } from 'lodash';
 import KeeperCard from './cards/KeeperCard';
 import { Col, Row } from 'react-bootstrap';
+import KeepersGraph from './charts/KeepersGraph';
 
 export const GET_TRADES = gql`
   query GibsonsLeagueQuery($franchiseId: Guid, $year: Int) {
@@ -20,6 +21,7 @@ export const GET_TRADES = gql`
         year
         positionRank
         positionRankPpg
+        seasonPoints
     }
   }
 `;
@@ -69,7 +71,7 @@ const FranchiseKeepers: React.FC<FranchiseKeepersProps> = ({ ...props }) => {
 
         <section>
             {
-                props.groupBy === "year" ? (
+                props.year ? (
                 <div>
                     <Row>
                         <Col>{`QB's Kept: ${positions["QB"].length}`}</Col>
@@ -79,6 +81,9 @@ const FranchiseKeepers: React.FC<FranchiseKeepersProps> = ({ ...props }) => {
                     </Row>
                 </div>) : null
             }
+            <div>
+                <KeepersGraph keepers={data.transactions} groupBy={groupByKey} />
+            </div>
             <div className="d-flex flex-wrap justify-content-center">
                 {cards}
             </div>

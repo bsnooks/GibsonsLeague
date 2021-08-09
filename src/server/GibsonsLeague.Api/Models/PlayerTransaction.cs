@@ -29,6 +29,9 @@ namespace GibsonsLeague.Api.Models
             Field<FloatGraphType>("PositionRankPpg", resolve: context => {
                 return context.Source.Player.PlayerSeasons.Where(x => x.Year == context.Source.Year).Select(x => x.PositionRankPpg).FirstOrDefault();
             });
+            Field<FloatGraphType>("SeasonPoints", resolve: context => {
+                return context.Source.Player.PlayerSeasons.Where(x => x.Year == context.Source.Year).Select(x => x.Points).FirstOrDefault();
+            });
 
             Field<ListGraphType<PlayerTransaction>>("related",
                 resolve: context => transactionRepository.GetRelatedTransactions(context.Source.TransactionId, context.Source.TransactionGroupId));

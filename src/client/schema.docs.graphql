@@ -159,6 +159,7 @@ type PlayerTransaction {
   positionRankPpg: Float
   primaryPosition: String!
   related: [PlayerTransaction]
+  seasonPoints: Float
   transactionGroupId: Guid
   transactionId: ID!
   type: String

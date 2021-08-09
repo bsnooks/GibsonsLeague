@@ -2757,6 +2757,18 @@
             "deprecationReason": null
           },
           {
+            "name": "seasonPoints",
+            "description": null,
+            "args": [],
+            "type": {
+              "kind": "SCALAR",
+              "name": "Float",
+              "ofType": null
+            },
+            "isDeprecated": false,
+            "deprecationReason": null
+          },
+          {
             "name": "transactionGroupId",
             "description": null,
             "args": [],
