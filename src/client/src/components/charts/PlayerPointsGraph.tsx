@@ -2,8 +2,6 @@ import React from 'react';
 import { Maybe, Player, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine } from '@nivo/line'
 import { useBaseTheme } from './theme';
-import { useState } from 'react';
-import Switch from "react-switch";
 
 interface PlayerPointsGraphProps {
     seasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;

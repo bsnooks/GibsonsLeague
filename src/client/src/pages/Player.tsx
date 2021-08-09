@@ -1,5 +1,5 @@
-import React from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Container, Row, Col, Badge } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs } from '../generated/graphql';
@@ -8,6 +8,8 @@ import PlayerSeasonCard from '../components/cards/PlayerSeasonCard';
 import PlayerGraph from '../components/charts/PlayerGraph';
 import SectionInfoBox from '../components/controls/SectionInfoBox';
 import PlayerPointsGraph from '../components/charts/PlayerPointsGraph';
+import Switch from "react-switch";
+import PlayerSearch from '../components/controls/PlayerSearch';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Int) {
@@ -51,6 +53,14 @@ interface PlayerProps {
 }
 
 const Player: React.FC<PlayerProps> = ({ ...props }) => {
+  const [usePpg, setUsePpg] = useState(false);
+  const [compareWithId, setCompareWithId] = useState();
+  const [compareWith, setCompareWith] = useState<any | null>(null);
+
+  const handleChange = (checked: boolean) => {
+      setUsePpg(checked);
+  };
+
 
   const {
     data,
@@ -61,11 +71,30 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
     { variables: { id: props.match.params.id } }
   );
 
+  
+  const result = useQuery<GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs>(
+    GET_FRANCHISE,
+    { variables: { id: compareWithId } }
+  );
+
   if (loading) return <GlobalLoading mode="page" />;
   if (error || !data) return <GlobalError mode="page" apolloError={error} />;
   if (!data.player) return <p>Not Found</p>;
 
+  if (!result.loading && !result.error && result.data && result.data.player && compareWith !== result.data.player) {
+    console.log(result.data.player);
+    setCompareWith(result.data.player);
+  }
+
   const player = data.player;
+
+  const handleSelection = (selection:any) => {
+
+      if (selection && selection.length > 0) {
+          console.log(selection[0].playerId);
+          setCompareWithId(selection[0].playerId);
+      }
+  };
 
   return (
     <Container>
@@ -77,6 +106,32 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
             </div>
             <div className="section-body p-3">
               <h1>{player.name} ({player.position})</h1>
+            </div>
+            <div className="section-title">
+              <span>Analyze</span>
+            </div>
+            <div className="section-body p-3 text-left">
+              <div className="section-info-box">
+                  <div className="title-container">
+                      <div className="title">Use Points Per Game</div>
+                  </div>
+                  <div className="info-container">
+                    <div className="info">
+                      <Switch  onChange={handleChange} checked={usePpg} />
+                    </div>
+                  </div>
+              </div>
+              <div className="section-info-box">
+                  <div className="title-container">
+                      <div className="title">Compare With</div>
+                  </div>
+                  <div className="info-container">
+                    <div className="info">
+                      <PlayerSearch handleSelection={handleSelection} position={player.position} />
+                      {compareWith ? <Badge variant="dark" className={`my-2`}>{compareWith.name}</Badge> : null}
+                    </div>
+                  </div>
+              </div>
             </div>
           </Col>
           <Col>
@@ -109,7 +164,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
               <span>Points per Season</span>
             </div>
             <div className="section-body">
-              <PlayerPointsGraph seasons={player.seasons} position={player.position} />
+              <PlayerPointsGraph seasons={player.seasons} position={player.position} compareWith={compareWith} usePpg={usePpg} />
             </div>
           </Col>
           <Col>
@@ -117,7 +172,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
               <span>Rank per Season</span>
             </div>
             <div className="section-body">
-              <PlayerGraph seasons={player.seasons} position={player.position} />
+              <PlayerGraph seasons={player.seasons} position={player.position} compareWith={compareWith} usePpg={usePpg} />
             </div>
           </Col>
         </Row>

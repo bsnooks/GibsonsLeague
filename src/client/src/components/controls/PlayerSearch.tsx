@@ -16,7 +16,7 @@ export const GET_PLAYERS = gql`
 
 interface PlayerSearchProps {
     handleSelection: (selection:any) => void;
-    position?: string
+    position?: string;
 }
 
 export type PlayerResult = Player | string;
@@ -57,7 +57,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({ ...props }) => {
                 execQuery({ variables: { query: query, position: props.position } });
             })();
         }
-    }, [execQuery, query]);
+    }, [execQuery, query, props.position]);
 
     useEffect(() => {
         if (data && data.players)
