@@ -62,13 +62,13 @@ const FranchiseMatches: React.FC<FranchiseMatchesProps> = ({ ...props }) => {
 
         switch (groupByKey) {
             case "year":
-                tabs.push(<Nav.Item><Nav.Link eventKey={key}>{key}</Nav.Link></Nav.Item>);
-                cards.push(<Tab.Pane eventKey={key}><FranchiseSeasonMatchCard franchiseId={props.franciseId} matches={value} /></Tab.Pane>);
+                tabs.push(<Nav.Item key={key}><Nav.Link eventKey={key}>{key}</Nav.Link></Nav.Item>);
+                cards.push(<Tab.Pane key={key} eventKey={key}><FranchiseSeasonMatchCard franchiseId={props.franciseId} matches={value} /></Tab.Pane>);
                 break;
             case "week":
             default:
-                tabs.push(<Nav.Item><Nav.Link eventKey={key}>Week {key}</Nav.Link></Nav.Item>);
-                cards.push(<Tab.Pane eventKey={key}><SeasonMatchCard matches={value} /></Tab.Pane>);
+                tabs.push(<Nav.Item key={key}><Nav.Link eventKey={key}>Week {key}</Nav.Link></Nav.Item>);
+                cards.push(<Tab.Pane key={key} eventKey={key}><SeasonMatchCard matches={value} /></Tab.Pane>);
                 break;
         }
     }

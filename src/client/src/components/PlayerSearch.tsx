@@ -34,7 +34,6 @@ const PlayerSearch: React.FC<PlayerSearchProps> = () => {
     const handleSelection = (selection:any) => {
 
         if (selection && selection.length > 0) {
-            console.log(selection[0].playerId);
             history.push(`/player/${selection[0].playerId}`);
         }
     }

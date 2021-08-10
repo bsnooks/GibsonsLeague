@@ -54,14 +54,17 @@ interface PlayerProps {
 
 const Player: React.FC<PlayerProps> = ({ ...props }) => {
   const [usePpg, setUsePpg] = useState(false);
+  const [showGamesPlayed, setShowGamesPlayed] = useState(false);
   const [compareWithId, setCompareWithId] = useState();
   const [compareWith, setCompareWith] = useState<any | null>(null);
 
-  const handleChange = (checked: boolean) => {
-      setUsePpg(checked);
+  const handleChangeUsePpg = (checked: boolean) => {
+    setUsePpg(checked);
   };
-
-
+  const handleChangeGamesPlayed = (checked: boolean) => {
+    setShowGamesPlayed(checked);
+  };
+  
   const {
     data,
     loading,
@@ -71,7 +74,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
     { variables: { id: props.match.params.id } }
   );
 
-  
+
   const result = useQuery<GibsonsLeagueQuery, GibsonsLeagueQueryFranchiseArgs>(
     GET_FRANCHISE,
     { variables: { id: compareWithId } }
@@ -82,25 +85,23 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
   if (!data.player) return <p>Not Found</p>;
 
   if (!result.loading && !result.error && result.data && result.data.player && compareWith !== result.data.player) {
-    console.log(result.data.player);
     setCompareWith(result.data.player);
   }
 
   const player = data.player;
 
-  const handleSelection = (selection:any) => {
+  const handleSelection = (selection: any) => {
 
-      if (selection && selection.length > 0) {
-          console.log(selection[0].playerId);
-          setCompareWithId(selection[0].playerId);
-      }
+    if (selection && selection.length > 0) {
+      setCompareWithId(selection[0].playerId);
+    }
   };
 
   return (
     <Container>
       <section>
         <Row>
-          <Col>
+          <Col sm>
             <div className="section-title">
               <span>Player Info</span>
             </div>
@@ -111,30 +112,50 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
               <span>Analyze</span>
             </div>
             <div className="section-body p-3 text-left">
-              <div className="section-info-box">
-                  <div className="title-container">
+              <Row>
+                <Col sm>
+                  <div className="section-info-box">
+                    <div className="title-container">
                       <div className="title">Use Points Per Game</div>
-                  </div>
-                  <div className="info-container">
-                    <div className="info">
-                      <Switch  onChange={handleChange} checked={usePpg} />
+                    </div>
+                    <div className="info-container">
+                      <div className="info">
+                        <Switch onChange={handleChangeUsePpg} checked={usePpg} />
+                      </div>
                     </div>
                   </div>
-              </div>
-              <div className="section-info-box">
-                  <div className="title-container">
+                </Col>
+                <Col sm>
+                  <div className="section-info-box">
+                    <div className="title-container">
+                      <div className="title">Include Games Played</div>
+                    </div>
+                    <div className="info-container">
+                      <div className="info">
+                        <Switch onChange={handleChangeGamesPlayed} checked={showGamesPlayed} />
+                      </div>
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm>
+                  <div className="section-info-box">
+                    <div className="title-container">
                       <div className="title">Compare With</div>
-                  </div>
-                  <div className="info-container">
-                    <div className="info">
-                      <PlayerSearch handleSelection={handleSelection} position={player.position} />
-                      {compareWith ? <Badge variant="dark" className={`my-2`}>{compareWith.name}</Badge> : null}
+                    </div>
+                    <div className="info-container">
+                      <div className="info">
+                        <PlayerSearch handleSelection={handleSelection} position={player.position} />
+                        {compareWith ? <Badge variant="dark" className={`my-2`}>{compareWith.name}</Badge> : null}
+                      </div>
                     </div>
                   </div>
-              </div>
+                </Col>
+              </Row>
             </div>
           </Col>
-          <Col>
+          <Col sm>
             <div className="section-title">
               <span>Player Stats</span>
             </div>
@@ -159,7 +180,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
           </Col>
         </Row>
         <Row>
-          <Col>
+          <Col sm>
             <div className="section-title">
               <span>Points per Season</span>
             </div>
@@ -167,12 +188,12 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
               <PlayerPointsGraph seasons={player.seasons} position={player.position} compareWith={compareWith} usePpg={usePpg} />
             </div>
           </Col>
-          <Col>
+          <Col sm>
             <div className="section-title">
               <span>Rank per Season</span>
             </div>
             <div className="section-body">
-              <PlayerGraph seasons={player.seasons} position={player.position} compareWith={compareWith} usePpg={usePpg} />
+              <PlayerGraph seasons={player.seasons} position={player.position} compareWith={compareWith} usePpg={usePpg} showGamesPlayed={showGamesPlayed} />
             </div>
           </Col>
         </Row>

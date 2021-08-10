@@ -1,8 +1,9 @@
 import React from 'react';
-import { Card, Table } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { DraftPick, Maybe } from '../../generated/graphql';
 import { DraftPickGrader } from '../../utilities/DraftPickGrader';
+import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
 
 interface DraftCardProps {
     grouping: any,
@@ -14,70 +15,69 @@ interface DraftCardProps {
 
 const DraftCard: React.FC<DraftCardProps> = ({ ...props }) => {
     const grader = new DraftPickGrader();
+    const avatarPicker = new FranchiseUtilities();
 
     return (
-        <Card style={{ width: '100%' }}>
-            <Card.Title>
+        <>
+            <div className="drafts-list">
+                <div className="group">
+                    {
+                        props.groupingLink ? (
+                            <Link to={props.groupingLink}>
+                                {props.groupingLabel}
+                            </Link>) :
+                            (<>{props.groupingLabel}</>)
+                    }
+                </div>
+                <div className="drafts-headings">
+                    <div className="draft-col pick">Pick</div>
+                    {props.includeFranchise ? <div className="draft-col player">Franchise</div> : null}
+                    <div className="draft-col player">Player</div>
+                    <div className="draft-col posPick">Position Pick</div>
+                    <div className="draft-col rank">Position Rank</div>
+                    <div className="draft-col rankppg">Position Rank (ppg)</div>
+                    <div className="draft-col games">Games Played</div>
+                    <div className="draft-col grade">Grade</div>
+                </div>
                 {
-                    props.groupingLink ? (
-                        <Link to={props.groupingLink}>
-                            {props.groupingLabel}
-                        </Link>) :
-                        (<>{props.groupingLabel}</>)
-                }
-            </Card.Title>
-            <Card.Body>
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Pick</th>
-                            {props.includeFranchise ? <th>Franchise</th> : null}
-                            <th>Player</th>
-                            <th>Position Pick</th>
-                            <th>Position Rank</th>
-                            <th>Position Rank ppg</th>
-                            <th>Grade</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {
-                            props.picks.map((pick: Maybe<DraftPick>) => {
-                            const grade = grader.gradeDraftPick(pick);
-                            return (
-                                <tr key={pick?.pick} className={`text-left player-${pick?.playerPrimaryPosition}`}>
-                                    <td className="text-nowrap text-truncate">{pick?.pick}</td>
-                                    {
-                                        props.includeFranchise ? (
-                                            <td className="text-nowrap text-truncate">
-                                                <Link to={`/franchise/${pick?.franchiseId}`}>
-                                                    {pick?.franchiseName}
-                                                </Link>
-                                            </td>) : null
-                                    }
-                                    <td className="text-nowrap text-truncate">
-                                        <Link to={`/player/${pick?.playerId}`}>
-                                            {pick?.playerName}
-                                        </Link>
-                                    </td>
-                                    <td className="text-nowrap text-truncate">
-                                        {`${pick?.playerPrimaryPosition}-${pick?.positionPick}`}
-                                    </td>
-                                    <td className="text-nowrap text-truncate">
-                                        {pick?.playerPositionRank ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRank}` : ""}
-                                    </td>
-                                    <td className="text-nowrap text-truncate">
-                                        {pick?.playerPositionRankPpg ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRankPpg}` : ""}
-                                    </td>
-                                    <td className="text-nowrap text-truncate">
-                                        {`${grade?.grade ? grade?.grade : ""}${grade?.asterisk ? grade?.asterisk : ""}`}
-                                    </td>
-                                </tr>
-                            )})
-                        }
-                    </tbody>
-                </Table>
-            </Card.Body>
-        </Card>
+                    props.picks.map((pick: Maybe<DraftPick>) => {
+                        const grade = grader.gradeDraftPick(pick);
+                        return (
+                            <div key={pick?.pick} className={`draft player-${pick?.playerPrimaryPosition}`}>
+                                <div className="draft-col pick">{pick?.pick}</div>
+                                {
+                                    props.includeFranchise ? (
+                                        <div className="draft-col franchise">
+                                            <Image roundedCircle src={avatarPicker.pickAvatarByFranchiseId(pick?.franchiseId)} style={{ width: '1.5rem', marginRight: "4px" }} />
+                                            <Link to={`/franchise/${pick?.franchiseId}?t=drafts`}>
+                                                {pick?.franchiseName}
+                                            </Link>
+                                        </div>) : null
+                                }
+                                <div className="draft-col player">
+                                    <Link to={`/player/${pick?.playerId}`}>
+                                        {pick?.playerName}
+                                    </Link>
+                                </div>
+                                <div className="draft-col posPick">
+                                                    {`${pick?.playerPrimaryPosition}-${pick?.positionPick}`}
+                                                    </div>
+                                <div className="draft-col rank">
+                                                    {pick?.playerPositionRank ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRank}` : ""}
+                                                    </div>
+                                <div className="draft-col rankppg">
+                                                    {pick?.playerPositionRankPpg ? `${pick?.playerPrimaryPosition}-${pick?.playerPositionRankPpg}` : ""}
+                                                    </div>
+                                <div className="draft-col games">{pick?.gamesPlayed}</div>
+                                <div className="draft-col grade">
+                                {`${grade?.grade ? grade?.grade : ""}${grade?.asterisk ? grade?.asterisk : ""}`}
+                                </div>
+                            </div>
+                        );
+                    })}
+
+            </div>
+        </>
     );
 }
 

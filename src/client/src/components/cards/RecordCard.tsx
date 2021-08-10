@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Card, Row, Col, ProgressBar } from 'react-bootstrap';
+import { Image, Row, Col, ProgressBar } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { LeagueRecords, LeagueRecord } from '../../generated/graphql';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
@@ -22,9 +22,11 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
     }
 
     return (
-        <Card style={{ width: '40rem' }}>
-            <Card.Title>{props.leagueRecord.recordTitle}</Card.Title>
-            <Card.Body>
+        <>
+            <div className="section-title">
+                <span>{props.leagueRecord.recordTitle}</span>
+            </div>
+            <div className="section-body p-3">
                 <Row>
                     <Col xs={5}>
                         <div><Image src={avatar} roundedCircle fluid style={{ width: '8rem', height: '8rem' }} /></div>
@@ -36,20 +38,19 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                         {getRecordContext(record)}
                         <h5>{record.recordValue}</h5>
                     </Col>
-                    <Col xs={7} className="text-left">
+                    <Col xs={7} className="text-left record-list">
                         {
-                            props.leagueRecord.top.map((leagueRecord: any) => {
+                            props.leagueRecord.top.map((leagueRecord: any, index: number) => {
                                 const progress = Math.round((leagueRecord.recordNumericValue / record.recordNumericValue) * 100);
                                 return (
-                                    <div key={record.rank} className="my-2">
-                                        <ProgressBar now={progress} />
+                                    <div key={index} className="my-2">
+                                        <ProgressBar now={progress} label={leagueRecord.recordValue} />
                                         <div>
                                             {leagueRecord.rank}.&nbsp;
                                             <Link to={`/franchise/${leagueRecord.franchiseId}`}>
                                                 {leagueRecord.franchiseName}
                                             </Link>&nbsp;
-                                            {getRecordContext(leagueRecord)}&nbsp;
-                                            {leagueRecord.recordValue}
+                                            {getRecordContext(leagueRecord)}
                                         </div>
                                     </div>
                                 )
@@ -57,8 +58,9 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                         }
                     </Col>
                 </Row>
-            </Card.Body>
-        </Card>
+            
+            </div>
+                        </>
     );
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryDraftpicksArgs } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from './GlobalLoading';
@@ -25,6 +25,8 @@ export const GET_TRADES = gql`
         franchiseName
         playerPositionRank
         playerPositionRankPpg
+        gamesPlayed
+        points
     }
   }
 `;
@@ -81,9 +83,31 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
     return (
 
         <section>
-            <div className="d-flex flex-wrap justify-content-center">
-                { props.year && data?.draftpicks ? <DraftGraph picks={data?.draftpicks} /> : null }
-                { props.year && data?.draftpicks ? <DraftPositionGraph picks={data?.draftpicks} /> : null }
+            {props.year && data?.draftpicks ? (
+                <Row>
+                    <Col sm>
+                        <div className="section-title">
+                            <span>Drafted Positions</span>
+                        </div>
+                        <div className="section-body">
+                            <DraftGraph picks={data?.draftpicks} />
+                        </div>
+                    </Col>
+                    <Col>
+                        <div className="section-title">
+                            <span>Positional Performance</span>
+                        </div>
+                        <div className="section-body">
+                            <DraftPositionGraph picks={data?.draftpicks} />
+                        </div>
+                    </Col>
+                </Row>
+            ) : null}
+            
+            <div className="section-title">
+                <span>Draft</span>
+            </div>
+            <div className="section-body p-3">
                 {cards}
             </div>
             <Button onClick={handleClick}>Load More</Button>

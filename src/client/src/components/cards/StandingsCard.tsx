@@ -21,7 +21,7 @@ const StandingsCard: React.FC<StandingsCardProps> = ({ ...props }) => {
             <tbody>
                 {
                     props.franchises.map((team, index) => (
-                        <tr>
+                        <tr key={index}>
                             <td>{index+1}.</td>
                             <td className="text-left">
                                 <Link to={`/franchise/${team?.franchiseId}`}>

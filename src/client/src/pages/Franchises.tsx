@@ -42,7 +42,7 @@ const Franchises: React.FC<FranchisesProps> = () => {
     return (
         <Container>
             <Row>
-                <Col>
+                <Col sm>
                     <div className="section-title">
                         <span>Franchise Stats</span>
                     </div>
@@ -63,7 +63,7 @@ const Franchises: React.FC<FranchisesProps> = () => {
                         </div>
                     </div>
                 </Col>
-                <Col>
+                <Col sm>
                     <div className="section-title">
                         <span>Champions</span>
                     </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Jumbotron, Tabs, Tab, Image, Col, Row } from 'react-bootstrap';
+import { Container, Tab, Image, Col, Row, Nav } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import GlobalError from '../components/GlobalError';
@@ -12,9 +12,9 @@ import { Link } from 'react-router-dom';
 import StandingsCard from '../components/cards/StandingsCard';
 import FranchiseTrades from '../components/FranchiseTrades';
 import FranchiseKeepers from '../components/FranchiseKeepers';
-import { LinkContainer } from 'react-router-bootstrap';
 import FranchiseDraftPicks from '../components/FranchiseDraftPicks';
 import FranchiseMatches from '../components/FranchiseMatches';
+import { LinkContainer } from 'react-router-bootstrap';
 
 export const GET_TEAMS = gql`
   query GibsonsLeagueQuery($year: Int) {
@@ -46,7 +46,7 @@ interface SeasonProps {
 
 const Season: React.FC<SeasonProps> = ({ ...props }) => {
 
-  const year:number = parseInt(props.match.params.year);
+  const year: number = parseInt(props.match.params.year);
   const nextYear:number = year + 1;
   const previousYear:number = year - 1;
 
@@ -80,90 +80,96 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
   const secondPlaceAvatar = new FranchiseUtilities().pickAvatarByFranchiseId(secondPlace?.franchiseId);
   const thirdPlaceAvatar = new FranchiseUtilities().pickAvatarByFranchiseId(thirdPlace?.franchiseId);
   return (
-    <Container>
-      <Jumbotron fluid>
-        <Container>
-          <Row>
-            <Col md="auto">
-              <LinkContainer to={`/season/${previousYear}`}>
-                <div className="btn">
-                  <FontAwesomeIcon icon={faArrowLeft} size="2x" />
-                </div>
-              </LinkContainer>
-            </Col>
-            <Col>
-              <h1>{year}</h1>
-              <Container>
-                <Row>
-                  <Col>
-                    <FontAwesomeIcon icon={faTrophy} className="gold" size="3x" />
-                  </Col>
-                  <Col>
-                    <FontAwesomeIcon icon={faTrophy} className="silver" size="3x" />
-                  </Col>
-                  <Col>
-                    <FontAwesomeIcon icon={faTrophy} className="bronze" size="3x" />
-                  </Col>
-                </Row>
-                <Row className="my-3">
-                  <Col>
-                    <Link to={`/franchise/${champion?.franchiseId}`}>
-                      {champion?.franchiseName}
-                    </Link>
-                  </Col>
-                  <Col>
+    <div className="page">
+      <Tab.Container defaultActiveKey={defaultTab}>
+        <Container fluid style={{ backgroundColor: "#FFF" }}>
+          <Container className="p-3">
+            <Row>
+              <Col md="auto" style={{ margin: "auto" }}>
+                <LinkContainer to={`/season/${previousYear}`}>
+                  <div className="btn">
+                    <FontAwesomeIcon icon={faArrowLeft} size="2x" />
+                  </div>
+                </LinkContainer>
+              </Col>
+              <Col>
+                <div>
+                  <div style={{ display: "inline-block", verticalAlign: "bottom", width: "150px" }}>
+                    <div>
+                      <Image roundedCircle src={secondPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
+                    </div>
                     <Link to={`/franchise/${secondPlace?.franchiseId}`}>
                       {secondPlace?.franchiseName}
                     </Link>
-                  </Col>
-                  <Col>
+                    <div style={{ borderLeft: "1px solid black", borderTop: "1px solid black", padding: "20px", height: "100px", backgroundColor: "#f3f4f5" }}>
+                      <FontAwesomeIcon icon={faTrophy} className="silver" size="3x" />
+                    </div>
+                  </div>
+                  <div style={{ display: "inline-block", verticalAlign: "bottom", width: "150px" }}>
+                    <div>
+                      <Image roundedCircle src={championAvatar} style={{ width: '5rem', height: '5rem' }} />
+                    </div>
+                    <Link to={`/franchise/${champion?.franchiseId}`}>
+                      {champion?.franchiseName}
+                    </Link>
+                    <div style={{ borderLeft: "1px solid black", borderTop: "1px solid black", borderRight: "1px solid black", padding: "20px", height: "125px", backgroundColor: "#f3f4f5" }}>
+                      <FontAwesomeIcon icon={faTrophy} className="gold" size="3x" />
+                      <h1>{year}</h1>
+                    </div>
+                  </div>
+                  <div style={{ display: "inline-block", verticalAlign: "bottom", width: "150px" }}>
+                    <div>
+                      <Image roundedCircle src={thirdPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
+                    </div>
                     <Link to={`/franchise/${thirdPlace?.franchiseId}`}>
                       {thirdPlace?.franchiseName}
                     </Link>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col>
-                    <Image roundedCircle src={championAvatar} style={{ width: '5rem', height: '5rem' }} />
-                  </Col>
-                  <Col>
-                    <Image roundedCircle src={secondPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
-                  </Col>
-                  <Col>
-                    <Image roundedCircle src={thirdPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
-                  </Col>
-                </Row>
-              </Container>
-            </Col>
-            <Col md="auto">
-              <LinkContainer to={`/season/${nextYear}`}>
-                <div className="btn">
-                  <FontAwesomeIcon icon={faArrowRight} size="2x" />
+                    <div style={{ borderTop: "1px solid black", borderRight: "1px solid black", padding: "20px", height: "75px", backgroundColor: "#f3f4f5" }}>
+                      <FontAwesomeIcon icon={faTrophy} className="bronze" size="3x" />
+                    </div>
+                  </div>
                 </div>
-              </LinkContainer>
-            </Col>
-          </Row>
+              </Col>
+              <Col md="auto" style={{ margin: "auto" }}>
+                <LinkContainer to={`/season/${nextYear}`}>
+                  <div className="btn">
+                    <FontAwesomeIcon icon={faArrowRight} size="2x" />
+                  </div>
+                </LinkContainer>
+              </Col>
+            </Row>
+          </Container>
+          <Container>
+            <Nav>
+              <Nav.Item><Nav.Link eventKey="standings">Standings</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link eventKey="matchups">Matchups</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link eventKey="keepers">Keepers</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link eventKey="draft">Drafts</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link eventKey="trades">Trades</Nav.Link></Nav.Item>
+            </Nav>
+          </Container>
         </Container>
-      </Jumbotron>
-      <Tabs defaultActiveKey={defaultTab}>
-        <Tab eventKey="standings" title="Standings">
-          <StandingsCard franchises={teams} />
-        </Tab>
-        <Tab eventKey="matchups" title="Matchups">
-          <FranchiseMatches year={year} />
-        </Tab>
-        <Tab eventKey="keepers" title="Keepers">
-          <FranchiseKeepers year={year} groupBy="franchiseName" />
-        </Tab>
-        <Tab eventKey="draft" title="Draft">
-          <FranchiseDraftPicks year={year} groupBy="round" />
-        </Tab>
-        <Tab eventKey="trades" title="Trades">
-          <FranchiseTrades year={year} />
-        </Tab>
-      </Tabs>
-
-    </Container>
+        <Container>
+          <Tab.Content>
+            <Tab.Pane eventKey="standings">
+              <StandingsCard franchises={teams} />
+            </Tab.Pane>
+            <Tab.Pane eventKey="matchups">
+              <FranchiseMatches year={year} />
+            </Tab.Pane>
+            <Tab.Pane eventKey="keepers">
+              <FranchiseKeepers year={year} groupBy="franchiseName" />
+            </Tab.Pane>
+            <Tab.Pane eventKey="draft">
+              <FranchiseDraftPicks year={year} groupBy="round" />
+            </Tab.Pane>
+            <Tab.Pane eventKey="trades">
+              <FranchiseTrades year={year} />
+            </Tab.Pane>
+          </Tab.Content>
+        </Container>
+      </Tab.Container>
+    </div>
   );
 }
 

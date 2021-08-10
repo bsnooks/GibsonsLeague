@@ -172,9 +172,13 @@ body {
 }
 .franchise-list .franchise-col.team {
   width: 40%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .franchise-list .franchise-col.record {
   width: 20%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .franchise-list .franchise-col.points {
   width: 20%;
@@ -215,9 +219,204 @@ body {
   width: 20%;
 }
 .champion-list .champion-col.team {
+  text-overflow: ellipsis;
+  overflow: hidden;
   width: 40%;
 }
 .champion-list .champion-col.second {
+  text-overflow: ellipsis;
+  overflow: hidden;
   width: 40%;
 }
 
+.franchise-header {
+  text-align: left;
+}
+
+.franchise-header .name {
+  text-transform: uppercase;
+  font-size: 3em;
+  font-weight: bold;
+}
+
+.franchise-header .stats {
+  font-size: 0.9em;
+  font-weight:500;
+}
+
+.franchise-header .championships {
+  font-size: 1.2em;
+  font-weight:500;
+}
+
+.franchise-header .runnerUps {
+  font-size: 1.2em;
+  font-weight:300;
+}
+
+
+.keepers-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.keepers-list .group {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.keepers-list .keeper {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.keepers-list .keepers-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.keepers-list .keeper-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.keepers-list .keeper-col.player {
+  width: 40%;
+}
+.keepers-list .keeper-col.position {
+  width: 10%;
+}
+.keepers-list .keeper-col.rank {
+  width: 10%;
+}
+.keepers-list .keeper-col.rankppg {
+  width: 10%;
+}
+.keepers-list .keeper-col.points {
+  width: 10%;
+}
+.keepers-list .keeper-col.games {
+  width: 10%;
+}
+.keepers-list .keeper-col.grade {
+  width: 10%;
+}
+
+.page .nav-label {
+  color: #343434;
+  font-weight: 500;
+  margin: .2rem .5rem;
+  padding: 0;
+  border-bottom: 2px solid #FFF;
+}
+.page .nav-link {
+  color: #636a71;
+  font-weight: 500;
+  margin: .2rem .5rem;
+  padding: 0;
+  border-bottom: 2px solid #FFF;
+}
+.page .nav-link.active {
+  border-bottom: 2px solid #28a745;
+}
+
+
+.seasons-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.seasons-list .group {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.seasons-list .season {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.seasons-list .seasons-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.seasons-list .season-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.seasons-list .season-col.year {
+  width: 20%;
+}
+.seasons-list .season-col.record {
+  width: 20%;
+}
+.seasons-list .season-col.standing {
+  width: 20%;
+}
+.seasons-list .season-col.points {
+  width: 20%;
+}
+.seasons-list .season-col.owner {
+  width: 20%;
+}
+.col-sm {
+  min-width: 50%;
+}
+
+
+.drafts-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.drafts-list .group {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.drafts-list .draft {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.drafts-list .drafts-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.drafts-list .draft-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.drafts-list .draft-col.pick {
+  width: 5%;
+}
+.drafts-list .draft-col.franchise {
+  width: 20%;
+}
+.drafts-list .draft-col.player {
+  width: 20%;
+}
+.drafts-list .draft-col.posPick {
+  width: 12%;
+}
+.drafts-list .draft-col.rank {
+  width: 12%;
+}
+.drafts-list .draft-col.rankppg {
+  width: 12%;
+}
+.drafts-list .draft-col.games {
+  width: 10%;
+}
+.drafts-list .draft-col.grade {
+  width: 5%;
+}
+
+/*
+div[class*="-col"]{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow-x: hidden;
+}
+*/

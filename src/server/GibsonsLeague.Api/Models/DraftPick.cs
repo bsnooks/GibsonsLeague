@@ -34,6 +34,20 @@ namespace GibsonsLeague.Api.Models
                     var match = context.Source.Player.PlayerSeasons.FirstOrDefault(p => p.Year == context.Source.Draft.Year);
                     return match?.PositionRankPpg ?? (int?)null;
                 });
+
+            Field<FloatGraphType>("points",
+                resolve: context =>
+                {
+                    var match = context.Source.Player.PlayerSeasons.FirstOrDefault(p => p.Year == context.Source.Draft.Year);
+                    return match?.Points ?? null;
+                });
+
+            Field<IntGraphType>("gamesPlayed",
+                resolve: context =>
+                {
+                    var match = context.Source.Player.PlayerSeasons.FirstOrDefault(p => p.Year == context.Source.Draft.Year);
+                    return match?.GamesPlayed ?? null;
+                });
         }
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Jumbotron, Tab, Tabs } from 'react-bootstrap';
+import { Col, Container, Nav, Row, Tab } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery } from '../generated/graphql';
@@ -42,56 +42,68 @@ const Records: React.FC<RecordsProps> = () => {
     if (loading) return <GlobalLoading mode="page" />;
     if (error || !data) return <GlobalError mode="page" apolloError={error} />;
 
+    const urlParams = new URLSearchParams(window.location.search);
+    const defaultTab = urlParams.get('t') ?? "franchise";
 
 
     return (
-        <Container>
-            <Jumbotron fluid>
-                <h1>Hall of Fame</h1>
-            </Jumbotron>
-            <Tabs defaultActiveKey="franchise">
-                <Tab eventKey="franchise" title="Franchise Records">
-                    <div className="d-flex flex-wrap justify-content-center">
-                        {
-                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "franchise").map((leagueRecord: any) => (
-                                <RecordCard key={leagueRecord.recordTitle}
-                                    leagueRecord={leagueRecord} />
-                            ))
-                        }
-                    </div>
-                </Tab>
-                <Tab eventKey="season" title="Season Records">
-                    <div className="d-flex flex-wrap justify-content-center">
-                        {
-                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "season").map((leagueRecord: any) => (
-                                <RecordCard key={leagueRecord.recordTitle}
-                                    leagueRecord={leagueRecord} />
-                            ))
-                        }
-                    </div>
-                </Tab>
-                <Tab eventKey="matchup" title="Matchup Records">
-                    <div className="d-flex flex-wrap justify-content-center">
-                        {
-                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "match").map((leagueRecord: any) => (
-                                <RecordCard key={leagueRecord.recordTitle}
-                                    leagueRecord={leagueRecord} />
-                            ))
-                        }
-                    </div>
-                </Tab>
-                {/* <Tab eventKey="player" title="Player Records">
-                    <div className="d-flex flex-wrap justify-content-center">
-                        {
-                            data.league?.records?.filter(r => r?.type?.toLowerCase() === "player").map((leagueRecord: any) => (
-                                <RecordCard key={leagueRecord.recordTitle}
-                                    leagueRecord={leagueRecord} />
-                            ))
-                        }
-                    </div>
-                </Tab> */}
-            </Tabs>
-        </Container>
+        <div className="page">
+            <Tab.Container defaultActiveKey={defaultTab}>
+                <Container fluid style={{ backgroundColor: "#FFF" }}>
+                    <Container>
+                        <Nav>
+                            <Nav.Item className="nav-label">Hall of Fame |</Nav.Item>
+                            <Nav.Item><Nav.Link eventKey="franchise">Franchise Records</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link eventKey="season">Season Records</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link eventKey="matchup">Matchup Records</Nav.Link></Nav.Item>
+                        </Nav>
+                    </Container>
+                </Container>
+                <Container>
+                    <Tab.Content>
+                        <Tab.Pane eventKey="franchise">
+                            <section>
+                                <Row>
+                                    {
+                                        data.league?.records?.filter(r => r?.type?.toLowerCase() === "franchise").map((leagueRecord: any, index: number) => (
+                                            <Col sm key={leagueRecord.recordTitle}>
+                                                <RecordCard leagueRecord={leagueRecord} />
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            </section>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="season">
+                            <section>
+                                <Row>
+                                    {
+                                        data.league?.records?.filter(r => r?.type?.toLowerCase() === "season").map((leagueRecord: any) => (
+                                            <Col sm key={leagueRecord.recordTitle}>
+                                                <RecordCard leagueRecord={leagueRecord} />
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            </section>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="matchup">
+                            <section>
+                                <Row>
+                                    {
+                                        data.league?.records?.filter(r => r?.type?.toLowerCase() === "match").map((leagueRecord: any) => (
+                                            <Col sm key={leagueRecord.recordTitle}>
+                                                <RecordCard leagueRecord={leagueRecord} />
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            </section>
+                        </Tab.Pane>
+                    </Tab.Content>
+                </Container>
+            </Tab.Container>
+        </div>
     );
 }
 

@@ -51,7 +51,6 @@ const FranchiseWeekPointsGraph: React.FC<FranchiseWeekPointsGraphProps> = ({ ...
     }
 
     const theme = useBaseTheme();
-    console.log(barData);
 
     return (
         <div style={{ width: '100%', height: 400 }}>

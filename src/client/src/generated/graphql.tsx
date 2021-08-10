@@ -40,6 +40,7 @@ export type DraftPick = {
   draftId: Scalars['ID'];
   franchiseId: Scalars['ID'];
   franchiseName: Scalars['String'];
+  gamesPlayed?: Maybe<Scalars['Int']>;
   pick: Scalars['Int'];
   playerId: Scalars['Int'];
   playerName: Scalars['String'];
@@ -47,6 +48,7 @@ export type DraftPick = {
   playerPositionRank?: Maybe<Scalars['Int']>;
   playerPositionRankPpg?: Maybe<Scalars['Int']>;
   playerPrimaryPosition: Scalars['String'];
+  points?: Maybe<Scalars['Float']>;
   positionPick: Scalars['Int'];
   round: Scalars['Int'];
   year: Scalars['Int'];
@@ -334,6 +336,7 @@ export type PlayerTransaction = {
   positionRankPpg?: Maybe<Scalars['Float']>;
   primaryPosition: Scalars['String'];
   related?: Maybe<Array<Maybe<PlayerTransaction>>>;
+  seasonGamesPlayed?: Maybe<Scalars['Float']>;
   seasonPoints?: Maybe<Scalars['Float']>;
   transactionGroupId?: Maybe<Scalars['Guid']>;
   transactionId: Scalars['ID'];

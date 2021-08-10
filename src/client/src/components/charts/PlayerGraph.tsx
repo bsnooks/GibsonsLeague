@@ -8,18 +8,26 @@ interface PlayerGraphProps {
     seasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;
     position: string;
     compareWith?: Maybe<Player>;
-    usePpg: boolean
+    usePpg: boolean;
+    showGamesPlayed: boolean;
 }
 
 const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
 
-    const seasonRankData: { x: number | undefined; y: number | undefined; }[] = [];
+    const seasonRankData: { x: any | undefined; y: number | undefined; }[] = [];
+    const gamesPlayedData: { x: any | undefined; y: number | undefined; }[] = [];
     props.seasons?.forEach((season) => {
         const y = props.usePpg ? season?.positionRankPpg : season?.positionRank;
         if (y && y > 0) {
             seasonRankData.push({
                 "x": season?.year,
                 "y": y
+            });
+        }
+        if (props.showGamesPlayed) {
+            gamesPlayedData.push({
+                "x": season?.year,
+                "y": season?.gamesPlayed
             });
         }
     });
@@ -29,10 +37,17 @@ const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
             "data": seasonRankData
         },
     ];
+    if (props.showGamesPlayed && gamesPlayedData) {
+        data.push({
+            "id": "GP",
+            "data": gamesPlayedData
+        });
+    }
 
     if (props.compareWith) {
         
         const compareWithRankData: { x: number | undefined; y: number | undefined; }[] = [];
+        const compareWithGamesPlayedData: { x: any | undefined; y: number | undefined; }[] = [];
         props.compareWith.seasons?.forEach((season) => {
             const y = props.usePpg ? season?.positionRankPpg : season?.positionRank;
             if (y && y > 0) {
@@ -40,12 +55,24 @@ const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
                     "x": season?.year,
                     "y": y
                 });
+                if (props.showGamesPlayed) {
+                    compareWithGamesPlayedData.push({
+                        "x": season?.year,
+                        "y": season?.gamesPlayed
+                    });
+                }
             }
         });
         data.push({
             "id": props.compareWith.name,
             "data": compareWithRankData
         });
+        if (props.showGamesPlayed && gamesPlayedData) {
+            data.push({
+                "id": `${props.compareWith.name} GP`,
+                "data": compareWithGamesPlayedData
+            });
+        }
     }
 
     const positionStarterThreshold = props.position === "RB" || props.position === "QB" ? 20 : props.position === "WR" ? 30 : props.position === "TE" ? 10 : undefined;
@@ -104,7 +131,7 @@ const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
                         itemDirection: 'left-to-right',
                         symbolSize: 10,
                         symbolShape: 'square',
-                        itemWidth: 150,
+                        itemWidth: 90,
                         itemHeight: 20,
                         translateY: -25,
                         translateX: -5,

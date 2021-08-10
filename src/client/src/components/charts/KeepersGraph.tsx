@@ -29,7 +29,6 @@ const KeepersGraph: React.FC<KeepersGraphProps> = ({ ...props }) => {
         barData.push(franchiseData);
     }
     const theme = useBaseTheme();
-    console.log(barData);
 
     return (
         <div style={{ width: '100%', height: 400 }}>

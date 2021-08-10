@@ -121,6 +121,7 @@ type DraftPick {
   draftId: ID!
   franchiseId: ID!
   franchiseName: String!
+  gamesPlayed: Int
   pick: Int!
   playerId: Int!
   playerName: String!
@@ -128,6 +129,7 @@ type DraftPick {
   playerPositionRank: Int
   playerPositionRankPpg: Int
   playerPrimaryPosition: String!
+  points: Float
   positionPick: Int!
   round: Int!
   year: Int!
@@ -159,6 +161,7 @@ type PlayerTransaction {
   positionRankPpg: Float
   primaryPosition: String!
   related: [PlayerTransaction]
+  seasonGamesPlayed: Float
   seasonPoints: Float
   transactionGroupId: Guid
   transactionId: ID!
