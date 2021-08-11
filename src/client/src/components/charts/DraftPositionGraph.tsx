@@ -9,7 +9,7 @@ interface DraftPositionGraphProps {
 }
 
 const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => {
-    const data: Serie[] = [];
+    const data = [];
     const positions = groupBy(props.picks, "playerPosition");
     
     for (const [position, positionValue] of Object.entries(positions)) {
@@ -34,6 +34,16 @@ const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => 
             });
         }
     }
+
+    data.forEach((position) => {
+        const diffs = {
+            position: position.id,
+            good: position.data.map(p => p.y).filter(y => y <= 0).length / position.data.length * 100,
+            ok: position.data.map(p => p.y).filter(y => y > 0 && y <= 5).length / position.data.length * 100,
+            bad: position.data.map(p => p.y).filter(y => y > 5).length / position.data.length * 100,
+        }
+        console.log(diffs);
+    });
 
     const theme = useBaseTheme();
 
