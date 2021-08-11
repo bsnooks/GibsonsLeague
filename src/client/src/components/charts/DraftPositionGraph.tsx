@@ -1,6 +1,6 @@
 import React from 'react';
 import { DraftPick, Maybe } from '../../generated/graphql';
-import { ResponsiveLine, Serie } from '@nivo/line'
+import { ResponsiveLine } from '@nivo/line'
 import { groupBy } from 'lodash';
 import { useBaseTheme } from './theme';
 
