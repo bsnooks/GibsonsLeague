@@ -9,34 +9,86 @@ namespace GibsonsLeague.Data.Repositories
     public class PlayerRepository
     {
 
-        private readonly GLAContext dbContext;
+        private readonly Func<GLAContext> dbFunc;
 
-        public PlayerRepository(GLAContext dbContext)
+        public PlayerRepository(Func<GLAContext> dbFunc)
         {
-            this.dbContext = dbContext;
+            this.dbFunc = dbFunc;
         }
 
         public async Task<Player> GetOne(int id)
         {
-            return await dbContext.Players
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.Players
+                .Include(p => p.PlayerSeasons)
                 .Include(p => p.PlayerSeasons)
                 .SingleOrDefaultAsync(p => p.PlayerId == id);
+            }
         }
 
         public async Task<Player> GetOneByName(string name)
         {
-            return await dbContext.Players
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.Players
                 .SingleOrDefaultAsync(p => p.Name.Contains(name));
+            }
         }
+
+        public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasonComparison(IList<int> years, string position = null)
+        {
+            int starterThreshold = 0;
+            switch (position)
+            {
+                case "WR":
+                    starterThreshold = 30;
+                    break;
+                case "TE":
+                    starterThreshold = 10;
+                    break;
+                case "RB":
+                case "QB":
+                    starterThreshold = 20;
+                    break;
+                default:
+                    starterThreshold = 20;
+                    break;
+            }
+
+            if (starterThreshold == 0)
+            {
+                return Enumerable.Empty<PlayerSeason>();
+            }
+
+            int[] positionSlices = new int[] { 1, (starterThreshold / 2), starterThreshold };
+
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.PlayerSeasons
+                .Where(s => years.Contains(s.Year) &&
+                    (position == null || s.Player.Position == position) &&
+                    positionSlices.Contains(s.PositionRank))
+                .Include(s => s.Player)
+                .OrderByDescending(s => s.Year)
+                .ThenBy(s => s.PositionRank)
+                .ThenBy(s => s.Player.Position)
+                .ToListAsync();
+            }
+        }
+
 
         public async Task<IEnumerable<Player>> LookupPlayer(string name, string position, int offset, int limit)
         {
-            return await dbContext.Players
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.Players
                 .Where(p => p.Name.Contains(name) && (string.IsNullOrEmpty(position) || p.Position == position))
                 .OrderBy(p => p.Name)
                 .Skip(offset)
                 .Take(limit)
                 .ToListAsync();
+            }
         }
     }
 }

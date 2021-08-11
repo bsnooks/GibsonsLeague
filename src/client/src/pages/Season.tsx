@@ -15,6 +15,7 @@ import FranchiseKeepers from '../components/FranchiseKeepers';
 import FranchiseDraftPicks from '../components/FranchiseDraftPicks';
 import FranchiseMatches from '../components/FranchiseMatches';
 import { LinkContainer } from 'react-router-bootstrap';
+import SeasonPositionPoints from '../components/charts/SeasonPositionPoints';
 
 export const GET_TEAMS = gql`
   query GibsonsLeagueQuery($year: Int) {
@@ -34,6 +35,13 @@ export const GET_TEAMS = gql`
         standing
         points
       }
+      positionComparison
+      {
+        position
+        points
+        positionRank
+        name
+      }
     }	
   }
 `;
@@ -47,8 +55,8 @@ interface SeasonProps {
 const Season: React.FC<SeasonProps> = ({ ...props }) => {
 
   const year: number = parseInt(props.match.params.year);
-  const nextYear:number = year + 1;
-  const previousYear:number = year - 1;
+  const nextYear: number = year + 1;
+  const previousYear: number = year - 1;
 
   const {
     data,
@@ -146,6 +154,7 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
               <Nav.Item><Nav.Link eventKey="keepers">Keepers</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link eventKey="draft">Drafts</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link eventKey="trades">Trades</Nav.Link></Nav.Item>
+              <Nav.Item><Nav.Link eventKey="analyze">Analyze</Nav.Link></Nav.Item>
             </Nav>
           </Container>
         </Container>
@@ -165,6 +174,14 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
             </Tab.Pane>
             <Tab.Pane eventKey="trades">
               <FranchiseTrades year={year} />
+            </Tab.Pane>
+            <Tab.Pane eventKey="analyze">
+              <div className="section-title">
+                <span>Positional Point Difference</span>
+              </div>
+              <div className="section-body">
+                <SeasonPositionPoints comparisonSeasons={data.season.positionComparison} usePpg={false} />
+              </div>
             </Tab.Pane>
           </Tab.Content>
         </Container>

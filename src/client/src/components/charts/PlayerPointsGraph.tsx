@@ -2,9 +2,11 @@ import React from 'react';
 import { Maybe, Player, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine } from '@nivo/line'
 import { useBaseTheme } from './theme';
+import { groupBy } from 'lodash';
 
 interface PlayerPointsGraphProps {
     seasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;
+    comparisonSeasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;
     position: string;
     compareWith?: Maybe<Player>;
     usePpg: boolean
@@ -12,7 +14,6 @@ interface PlayerPointsGraphProps {
 
 const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
     const xAxisLabel = props.usePpg ? "Points per Game" : "Points";
-
     const seasonPointsData: { x: number | undefined; y: number | undefined; }[] = [];
 
     props.seasons?.forEach((season) => {
@@ -39,6 +40,36 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
             "data": seasonPointsData
         }
     ];
+
+    if (props.comparisonSeasons) {
+
+        const comparisonSeasonsRanks = groupBy(props.comparisonSeasons, "positionRank");
+        
+        for (const [rank, seasons] of Object.entries(comparisonSeasonsRanks)) {
+            const seasonPointsCompareData: { x: number | undefined; y: number | undefined; }[] = [];
+            seasons.forEach((season) => {
+                if (props.usePpg) {
+                    if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
+                        seasonPointsCompareData.push({
+                            "x": season?.year,
+                            "y": parseFloat((season?.points / season?.gamesPlayed).toFixed(2)),
+                        });
+                    }
+                }
+                else {
+                    seasonPointsCompareData.push({
+                        "x": season?.year,
+                        "y": season?.points,
+                    });
+                }
+            });
+            
+            data.push({
+                "id": `${props.position}-${rank}`,
+                "data": seasonPointsCompareData
+            });
+        }
+    }
 
     if (props.compareWith) {
         const compareWithPointsData: { x: number | undefined; y: number | undefined; }[] = [];
@@ -85,7 +116,10 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
                         tickRotation: 0,
                         legend: 'Year',
                         legendOffset: 36,
-                        legendPosition: 'middle'
+                        legendPosition: 'middle',
+                        format: tick => {
+                            return  tick % 1 === 0 ? tick : "";
+                        }
                     }}
                     axisLeft={{
                         tickSize: 5,
@@ -102,21 +136,6 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
                     pointLabelYOffset={-12}
                     useMesh={true}
                     isInteractive={true}
-                    legends={[
-                        {
-                            anchor: 'top',
-                            direction: 'row',
-                            justify: false,
-                            itemDirection: 'left-to-right',
-                            symbolSize: 10,
-                            symbolShape: 'square',
-                            itemWidth: 150,
-                            itemHeight: 20,
-                            translateY: -25,
-                            translateX: -5,
-                            toggleSerie: true
-                        }
-                    ]}
                     enableSlices={"x"}
                     theme={theme}
                 />

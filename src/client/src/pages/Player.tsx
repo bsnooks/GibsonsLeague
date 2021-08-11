@@ -42,6 +42,14 @@ export const GET_FRANCHISE = gql`
           franchiseName
         }
       }
+      comparisonSeasons
+      {
+        year
+        points
+        gamesPlayed
+        positionRank
+        name
+      }
     }
   }
 `;
@@ -185,7 +193,7 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
               <span>Points per Season</span>
             </div>
             <div className="section-body">
-              <PlayerPointsGraph seasons={player.seasons} position={player.position} compareWith={compareWith} usePpg={usePpg} />
+              <PlayerPointsGraph seasons={player.seasons} comparisonSeasons={player.comparisonSeasons} position={player.position} compareWith={compareWith} usePpg={usePpg} />
             </div>
           </Col>
           <Col sm>

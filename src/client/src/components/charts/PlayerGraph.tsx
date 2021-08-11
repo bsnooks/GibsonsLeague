@@ -106,7 +106,10 @@ const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
                     tickRotation: 0,
                     legend: 'Year',
                     legendOffset: 36,
-                    legendPosition: 'middle'
+                    legendPosition: 'middle',
+                    format: tick => {
+                        return  tick % 1 === 0 ? tick : "";
+                    }
                 }}
                 axisLeft={{
                     tickSize: 5,

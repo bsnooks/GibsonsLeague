@@ -8,7 +8,7 @@ namespace GibsonsLeague.Api.Models
 {
     public class Player : ObjectGraphType<GibsonsLeague.Data.Player>
     {
-        public Player(TransactionRepository transactionRepository)
+        public Player(PlayerRepository playerRepository, TransactionRepository transactionRepository)
         {
             Field(l => l.PlayerId);
             Field(l => l.Name);
@@ -77,6 +77,16 @@ namespace GibsonsLeague.Api.Models
                         playerId: context.Source.PlayerId,
                         type: context.GetArgument<TransactionType?>("type"));
                 });
+
+            Field<ListGraphType<PlayerSeason>>("comparisonSeasons",
+                resolve: context =>
+                {
+                    return playerRepository.GetPlayerSeasonComparison(
+                        position: context.Source.Position,
+                        years: context.Source.PlayerSeasons.Select(s => s.Year).ToList());
+                });
+
+            
         }
     }
 }

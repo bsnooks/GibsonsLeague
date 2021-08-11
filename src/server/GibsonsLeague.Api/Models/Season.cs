@@ -5,7 +5,7 @@ namespace GibsonsLeague.Api.Models
 {
     public class Season : ObjectGraphType<GibsonsLeague.Data.Season>
     {
-        public Season(TeamRepository teamRepository)
+        public Season(TeamRepository teamRepository, PlayerRepository playerRepository)
         {
             Field(x => x.Year);
             Field(x => x.Finished, nullable: true, type: typeof(BooleanGraphType));
@@ -14,6 +14,13 @@ namespace GibsonsLeague.Api.Models
             Field<ListGraphType<Team>>("teams",
                 resolve: context => teamRepository.GetTeams(
                     year: context.Source.Year));
+
+            Field<ListGraphType<PlayerSeason>>("positionComparison",
+                resolve: context =>
+                {
+                    return playerRepository.GetPlayerSeasonComparison(
+                        years: new[] { context.Source.Year });
+                });
         }
     }
 }

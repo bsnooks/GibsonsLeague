@@ -277,6 +277,7 @@ export type Player = {
   __typename?: 'Player';
   avgPositionRank?: Maybe<Scalars['Float']>;
   avgPositionRankPpg?: Maybe<Scalars['Float']>;
+  comparisonSeasons?: Maybe<Array<Maybe<PlayerSeason>>>;
   gamesPlayed?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
   playerId: Scalars['Int'];
@@ -347,6 +348,7 @@ export type PlayerTransaction = {
 export type Season = {
   __typename?: 'Season';
   finished?: Maybe<Scalars['Boolean']>;
+  positionComparison?: Maybe<Array<Maybe<PlayerSeason>>>;
   teams?: Maybe<Array<Maybe<Team>>>;
   yahooGameId?: Maybe<Scalars['Int']>;
   year: Scalars['Int'];
