@@ -36,7 +36,7 @@ namespace GibsonsLeague.Data.Repositories
             }
         }
 
-        public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasonComparison(IList<int> years, string position = null)
+        public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasonComparison(IList<int> years, string position = null, bool allSlices = false)
         {
             int starterThreshold = 0;
             switch (position)
@@ -61,7 +61,9 @@ namespace GibsonsLeague.Data.Repositories
                 return Enumerable.Empty<PlayerSeason>();
             }
 
-            int[] positionSlices = new int[] { 1, (starterThreshold / 2), starterThreshold };
+            int[] positionSlices = allSlices ?
+                Enumerable.Range(1, starterThreshold).ToArray() :
+                new int[] { 1, (starterThreshold / 2), starterThreshold };
 
             using (var dbContext = dbFunc())
             {

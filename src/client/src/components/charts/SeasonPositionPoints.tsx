@@ -69,13 +69,13 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
 
     return (
         <div>
-            <div style={{ width: '100%', height: 400 }}>
+            <div style={{ width: '100%', height: 800 }}>
                 <ResponsiveLine
                     data={data}
                     margin={{ top: 25, right: 20, bottom: 60, left: 55 }}
                     colors={{ scheme: 'category10' }}
                     xScale={{ type: 'point'}}
-                    yScale={{ type: 'linear', min: 0, max: 'auto', stacked: false, reverse: false }}
+                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
                     curve="monotoneX"
                     axisTop={null}
                     axisRight={null}

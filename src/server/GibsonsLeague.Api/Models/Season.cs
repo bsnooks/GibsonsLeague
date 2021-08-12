@@ -19,7 +19,8 @@ namespace GibsonsLeague.Api.Models
                 resolve: context =>
                 {
                     return playerRepository.GetPlayerSeasonComparison(
-                        years: new[] { context.Source.Year });
+                        years: new[] { context.Source.Year },
+                        allSlices: true);
                 });
         }
     }
