@@ -24,6 +24,7 @@ namespace GibsonsLeague.Data.Repositories
                     .Where(x => (!franchiseId.HasValue || x.FranchiseId == franchiseId || x.FranchiseId == franchiseId)
                         && (!year.HasValue || x.Year == year))
                     .Include(x => x.Transactions)
+                    .Include(x => x.Owner)
                     .Include(x => x.Franchise)
                     .OrderByDescending(x => x.Year)
                     .ThenBy(x => x.Standing)
@@ -43,6 +44,7 @@ namespace GibsonsLeague.Data.Repositories
                         && (!year.HasValue || x.Year == year))
                     .Include(x=> x.Transactions)
                     .Include(x => x.Franchise)
+                    .Include(x => x.Owner)
                     .SingleOrDefaultAsync();
             }
         }

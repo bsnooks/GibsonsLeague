@@ -13,6 +13,7 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Name);
             Field(x => x.FranchiseId);
             Field(x => x.Franchise.MainName).Name("FranchiseName");
+            Field("Owner", x => x.Owner.Name);
             Field(x => x.Wins);
             Field(x => x.Loses);
             Field(x => x.Ties);

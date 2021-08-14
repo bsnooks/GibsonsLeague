@@ -88,6 +88,7 @@ type Team {
   loses: Int!
   matches(type: MatchType, week: Int): [Match]
   name: String!
+  owner: String!
   points: Float!
   secondPlace: Boolean!
   standing: Int!

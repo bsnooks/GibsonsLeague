@@ -14,7 +14,7 @@ namespace GibsonsLeague.Data
 
         public Guid FranchiceId { get; set; }
         public Guid OwnerId { get; set; }
-        public int? YahooTeamId { get; set; }
+        public string Name { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool? Active { get; set; }

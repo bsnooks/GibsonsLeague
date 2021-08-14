@@ -199,8 +199,6 @@ namespace GibsonsLeague.Data
 
                 entity.Property(e => e.StartDate).HasColumnType("datetime");
 
-                entity.Property(e => e.YahooTeamId).HasColumnName("YahooTeamID");
-
                 entity.HasOne(d => d.Franchice)
                     .WithMany(p => p.Owners)
                     .HasForeignKey(d => d.FranchiceId)

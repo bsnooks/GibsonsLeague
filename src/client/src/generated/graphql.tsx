@@ -370,6 +370,7 @@ export type Team = {
   loses: Scalars['Int'];
   matches?: Maybe<Array<Maybe<Match>>>;
   name: Scalars['String'];
+  owner: Scalars['String'];
   points: Scalars['Float'];
   secondPlace: Scalars['Boolean'];
   standing: Scalars['Int'];

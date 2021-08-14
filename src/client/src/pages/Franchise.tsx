@@ -28,6 +28,7 @@ export const GET_FRANCHISE = gql`
       teams
       {
         year
+        owner
         standing
         champion
         secondPlace
@@ -218,6 +219,7 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                                 {Number(team.points ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 })}
                               </div>
                               <div className="season-col owner">
+                                {team.owner}
                               </div>
                           </div>
                         ))
