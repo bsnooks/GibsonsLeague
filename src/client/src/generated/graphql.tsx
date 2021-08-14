@@ -60,6 +60,7 @@ export type Franchise = {
   championships?: Maybe<Scalars['Int']>;
   dropCount?: Maybe<Scalars['Int']>;
   franchiseId: Scalars['ID'];
+  legends?: Maybe<Array<Maybe<Legend>>>;
   loses?: Maybe<Scalars['Int']>;
   mainName: Scalars['String'];
   matches?: Maybe<Array<Maybe<Match>>>;
@@ -248,6 +249,13 @@ export type LeagueRecords = {
   recordTitle: Scalars['String'];
   top?: Maybe<Array<Maybe<LeagueRecord>>>;
   type?: Maybe<Scalars['String']>;
+};
+
+export type Legend = {
+  __typename?: 'Legend';
+  player?: Maybe<Player>;
+  points: Scalars['Float'];
+  years: Array<Scalars['Int']>;
 };
 
 export type Match = {

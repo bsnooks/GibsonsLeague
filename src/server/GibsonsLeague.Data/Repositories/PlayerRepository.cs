@@ -22,7 +22,6 @@ namespace GibsonsLeague.Data.Repositories
             {
                 return await dbContext.Players
                 .Include(p => p.PlayerSeasons)
-                .Include(p => p.PlayerSeasons)
                 .SingleOrDefaultAsync(p => p.PlayerId == id);
             }
         }
@@ -52,7 +51,7 @@ namespace GibsonsLeague.Data.Repositories
                     starterThreshold = 20;
                     break;
                 default:
-                    starterThreshold = 20;
+                    starterThreshold = 30;
                     break;
             }
 
@@ -67,15 +66,33 @@ namespace GibsonsLeague.Data.Repositories
 
             using (var dbContext = dbFunc())
             {
+                try
+                {
+                    return await dbContext.PlayerSeasons
+                       .Where(s => years.Contains(s.Year) &&
+                           (position == null || s.Player.Position == position) &&
+                           positionSlices.Contains(s.PositionRank))
+                       .Include(s => s.Player)
+                       .OrderByDescending(s => s.Year)
+                       .ThenBy(s => s.PositionRank)
+                       .ThenBy(s => s.Player.Position)
+                       .ToListAsync();
+                }
+                catch (Exception)
+                {
+                    return Enumerable.Empty<PlayerSeason>();
+                }
+            }
+        }
+
+        public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasons(Franchise franchise)
+        {
+            using (var dbContext = dbFunc())
+            {
                 return await dbContext.PlayerSeasons
-                .Where(s => years.Contains(s.Year) &&
-                    (position == null || s.Player.Position == position) &&
-                    positionSlices.Contains(s.PositionRank))
-                .Include(s => s.Player)
-                .OrderByDescending(s => s.Year)
-                .ThenBy(s => s.PositionRank)
-                .ThenBy(s => s.Player.Position)
-                .ToListAsync();
+                    .Where(ps => ps.EndTeam.FranchiseId == franchise.FranchiseId)
+                    .Include(ps => ps.Player)
+                    .ToListAsync();
             }
         }
 

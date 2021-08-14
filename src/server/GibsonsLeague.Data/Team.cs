@@ -14,6 +14,7 @@ namespace GibsonsLeague.Data
             MatchWinningTeams = new HashSet<Match>();
             TeamScores = new HashSet<TeamScore>();
             Transactions = new HashSet<Transaction>();
+            PlayerSeasons = new HashSet<PlayerSeason>();
         }
 
         public Guid TeamId { get; set; }
@@ -40,5 +41,6 @@ namespace GibsonsLeague.Data
         public virtual ICollection<Match> MatchWinningTeams { get; set; }
         public virtual ICollection<TeamScore> TeamScores { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
+        public virtual ICollection<PlayerSeason> PlayerSeasons { get; set; }
     }
 }

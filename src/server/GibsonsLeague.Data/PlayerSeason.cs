@@ -13,7 +13,9 @@ namespace GibsonsLeague.Data
         public int PositionRank { get; set; }
         public int PositionRankPpg { get; set; }
         public int GamesPlayed { get; set; }
+        public Guid? EndTeamId { get; set; }
 
         public virtual Player Player { get; set; }
+        public virtual Team EndTeam { get; set; }
     }
 }

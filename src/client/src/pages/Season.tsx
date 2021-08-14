@@ -41,6 +41,7 @@ export const GET_TEAMS = gql`
         points
         positionRank
         name
+        gamesPlayed
       }
     }	
   }

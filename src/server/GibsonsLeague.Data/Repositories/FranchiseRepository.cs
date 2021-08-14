@@ -29,6 +29,9 @@ namespace GibsonsLeague.Data.Repositories
             return await dbContext.Franchises
                 .Include(x => x.Teams)
                 .ThenInclude(x => x.Transactions)
+                .Include(x => x.Teams)
+                .ThenInclude(x => x.PlayerSeasons)
+                .ThenInclude(x => x.Player)
                 .SingleOrDefaultAsync(x => x.FranchiseId== id);
         }
 
@@ -37,6 +40,9 @@ namespace GibsonsLeague.Data.Repositories
             return await dbContext.Franchises
                 .Include(x => x.Teams)
                 .ThenInclude(x => x.Transactions)
+                .Include(x => x.Teams)
+                .ThenInclude(x => x.PlayerSeasons)
+                .ThenInclude(x => x.Player)
                 .SingleOrDefaultAsync(x => x.MainName == name);
         }
     }

@@ -12,7 +12,8 @@ namespace GibsonsLeague.Api.Models
             DraftPickRepository draftPickRepository,
             TransactionRepository transactionRepository,
             MatchRepository matchRepository,
-            FranchiseTradeRepository franchiseTradeRepository)
+            FranchiseTradeRepository franchiseTradeRepository,
+            PlayerRepository playerRepository)
         {
             Field(f => f.FranchiseId);
             Field(f => f.MainName);
@@ -77,6 +78,20 @@ namespace GibsonsLeague.Api.Models
                     type: context.GetArgument<MatchType?>("type"),
                     year: context.GetArgument<int?>("year"),
                     week: context.GetArgument<int?>("week")));
+
+            Field<ListGraphType<Legend>>("legends",
+                resolve: context => {
+
+                    var seasons = context.Source.Teams.SelectMany(x => x.PlayerSeasons.Where(ps => ps.EndTeamId == x.TeamId));
+
+                    var group = seasons.GroupBy(s => new { s.PlayerId, s.Player }).OrderByDescending(x => x.Sum(y => y.Points)).Take(15);
+
+                    return group.Select(g => new GibsonsLeague.Data.Models.Legend(){
+                        Years = g.Select(x => x.Year).ToList(),
+                        Player = g.Key.Player,
+                        Points = g.Sum(x => x.Points),
+                    });
+                });
 
         }
     }

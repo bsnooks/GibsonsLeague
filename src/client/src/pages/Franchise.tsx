@@ -36,6 +36,17 @@ export const GET_FRANCHISE = gql`
         ties
         points
       }
+      legends
+      {
+        points
+        years
+        player
+        {
+          playerId
+          name
+          position
+        }
+      }
     }
   }
 `;
@@ -82,6 +93,20 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
   //  return self.indexOf(value) === index;
   //}
 
+  const getRange = (array: number[]) : string[] => {
+    var ranges = [], rstart, rend;
+    for (var i = 0; i < array.length; i++) {
+      rstart = array[i];
+      rend = rstart;
+      while (array[i + 1] - array[i] === 1) {
+        rend = array[i + 1]; // increment the index if the numbers sequential
+        i++;
+      }
+      ranges.push(rstart === rend ? rstart+'' : rstart + '-' + rend);
+    }
+    return ranges;
+  }
+
   return (
     <div className="page">
       <Tab.Container defaultActiveKey={defaultTab}>
@@ -127,7 +152,37 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                     <span>Legends</span>
                   </div>
                   <div className="section-body p-3">
-                    Coming Soon...
+                    <div className="legends-list">
+                      <div className="legends-headings">
+                        <div className="legend-col name">Player</div>
+                        <div className="legend-col years">Years</div>
+                        <div className="legend-col points">Points</div>
+                      </div>
+                      {
+                        franchise?.legends?.map((legend, int) => {
+                          if (!legend) { return null; }
+                          const points = Number(legend?.points ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2 });
+                          return (
+                            <div key={int} className="legend">
+                              <div className="legend-col name">
+                                {`#${(int + 1)}. `}
+                                <Link to={`/player/${legend?.player?.playerId}`} title={`${points} points`}>
+                                    {legend?.player?.name}
+                                </Link>
+                                <span>{` (${legend?.player?.position})`}</span><br/>
+                                <span className="pointstext">{`${points} points`}</span>
+                              </div>
+                              <div className="legend-col years">
+                                {getRange([...legend.years].sort()).join(", ")}
+                              </div>
+                              <div className="legend-col points">
+                                {points}
+                              </div>
+                            </div>
+                          );
+                        })
+                      }
+                    </div>
                   </div>
                 </Col>
                 <Col sm>

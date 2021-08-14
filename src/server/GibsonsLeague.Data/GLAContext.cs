@@ -238,6 +238,12 @@ namespace GibsonsLeague.Data
                     .HasForeignKey(d => d.PlayerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PlayerSeason_Player");
+
+                entity.HasOne(d => d.EndTeam)
+                    .WithMany(p => p.PlayerSeasons)
+                    .HasForeignKey(d => d.EndTeamId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PlayerSeason_Team");
             });
 
             modelBuilder.Entity<Season>(entity =>

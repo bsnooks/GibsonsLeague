@@ -61,6 +61,7 @@ type Franchise {
   championships: Int
   dropCount: Int
   franchiseId: ID!
+  legends: [Legend]
   loses: Int
   mainName: String!
   matches(
@@ -171,6 +172,59 @@ type PlayerTransaction {
 
 scalar Guid
 
+type Legend {
+  player: Player
+  points: Float!
+  years: [Int!]!
+}
+
+type Player {
+  avgPositionRank: Float
+  avgPositionRankPpg: Float
+  comparisonSeasons: [PlayerSeason]
+  gamesPlayed: Int
+  name: String!
+  playerId: Int!
+  points: Float
+  pointsPerGame: Float
+  pointsPerSeason: Float
+  position: String!
+  primaryPosition: String!
+  seasons(year: Int): [PlayerSeason]
+  seasonsCount: Int
+  transactions(
+    type: TransactionType
+    offset: Int
+    limit: Int
+  ): [PlayerTransaction]
+  yahooPlayerId: Int
+}
+
+type PlayerSeason {
+  gamesPlayed: Int!
+  name: String!
+  playerId: Int!
+  points: Float!
+  position: String!
+  positionRank: Int!
+  positionRankPpg: Int!
+  transactions(
+    type: TransactionType
+    offset: Int
+    limit: Int
+  ): [PlayerTransaction]
+  year: Int!
+}
+
+enum TransactionType {
+  DRAFT_PICKED
+  KEPT
+  ADDED
+  DROPPED
+  TRADED
+  VETOED_TRADE
+}
+
 type Draft {
   date: Date
   draftId: ID!
@@ -206,51 +260,4 @@ type Season {
   teams: [Team]
   yahooGameId: Int
   year: Int!
-}
-
-type PlayerSeason {
-  gamesPlayed: Int!
-  name: String!
-  playerId: Int!
-  points: Float!
-  position: String!
-  positionRank: Int!
-  positionRankPpg: Int!
-  transactions(
-    type: TransactionType
-    offset: Int
-    limit: Int
-  ): [PlayerTransaction]
-  year: Int!
-}
-
-enum TransactionType {
-  DRAFT_PICKED
-  KEPT
-  ADDED
-  DROPPED
-  TRADED
-  VETOED_TRADE
-}
-
-type Player {
-  avgPositionRank: Float
-  avgPositionRankPpg: Float
-  comparisonSeasons: [PlayerSeason]
-  gamesPlayed: Int
-  name: String!
-  playerId: Int!
-  points: Float
-  pointsPerGame: Float
-  pointsPerSeason: Float
-  position: String!
-  primaryPosition: String!
-  seasons(year: Int): [PlayerSeason]
-  seasonsCount: Int
-  transactions(
-    type: TransactionType
-    offset: Int
-    limit: Int
-  ): [PlayerTransaction]
-  yahooPlayerId: Int
 }

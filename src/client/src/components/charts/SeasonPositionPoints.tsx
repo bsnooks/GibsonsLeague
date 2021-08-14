@@ -1,6 +1,7 @@
 import React from 'react';
 import { Maybe, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine, Serie } from '@nivo/line'
+import { ResponsiveSwarmPlot } from '@nivo/swarmplot'
 import { useBaseTheme } from './theme';
 import { groupBy } from 'lodash';
 
@@ -11,6 +12,8 @@ interface SeasonPositionPointsProps {
 
 const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props }) => {
     const data: Serie[] = [];
+    const swarmData: any[] = [];
+
 
     interface ILeaders {
         QB: number,
@@ -50,6 +53,17 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                             "y": season?.points,
                             "name": season?.name,
                         });
+                        
+                        if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
+                            swarmData.push({
+                                "id": `${position}-${season.positionRank}`,
+                                "group": position,
+                                "points": season?.points,
+                                "gamesMissed": 17 - season?.gamesPlayed,
+                                "gamesPlayed": season?.gamesPlayed,
+                                "name": season?.name,
+                            });
+                        }
                     }
 
                     if (season?.points && leaders[position as keyof ILeaders] < season?.points) {
@@ -62,59 +76,128 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                 "id": rank,
                 "data": seasonPointsCompareData
             });
+                
         }
     }
 
     const theme = useBaseTheme();
+    const showLine = false;
+
+    const lineGraph = 
+    <ResponsiveLine
+    data={data}
+    margin={{ top: 25, right: 20, bottom: 60, left: 55 }}
+    colors={{ scheme: 'category10' }}
+    xScale={{ type: 'point'}}
+    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
+    curve="monotoneX"
+    axisTop={null}
+    axisRight={null}
+    axisBottom={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: 'Position',
+        legendOffset: 36,
+        legendPosition: 'middle',
+    }}
+    axisLeft={{
+        tickSize: 5,
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: "Points",
+        legendOffset: -40,
+        legendPosition: 'middle'
+    }}
+    pointSize={5}
+    pointColor={{ theme: 'background' }}
+    pointBorderWidth={1}
+    pointBorderColor={{ from: 'serieColor' }}
+    pointLabelYOffset={-12}
+    useMesh={true}
+    isInteractive={true}
+    tooltip={(input) => {
+        const data : any = input.point.data;
+        const leaderDiff = parseFloat(input.point.data.y.toString()) / leaders[input.point.data.x as keyof ILeaders] * 100;
+        const leaderDiffString = leaderDiff < 100 ? ` - ${Number(leaderDiff).toLocaleString('en-US', { maximumFractionDigits: 1 })}% of leader` : "";
+        
+        return (
+            <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.point.serieColor}`, borderWidth: "2px", padding: "5px"}}>
+                {`${input.point.data.x}-${input.point.serieId}: ${data.name}${leaderDiffString}`}
+            </div>
+        )
+    }}
+    theme={theme}
+/>
 
     return (
         <div>
             <div style={{ width: '100%', height: 800 }}>
-                <ResponsiveLine
-                    data={data}
-                    margin={{ top: 25, right: 20, bottom: 60, left: 55 }}
-                    colors={{ scheme: 'category10' }}
-                    xScale={{ type: 'point'}}
-                    yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
-                    curve="monotoneX"
-                    axisTop={null}
-                    axisRight={null}
-                    axisBottom={{
-                        tickSize: 5,
+                {showLine ? lineGraph : null}
+                <ResponsiveSwarmPlot
+                    data={swarmData}
+                    groups={[ 'QB', 'RB', 'WR', 'TE' ]}
+                    value="points"
+                    valueScale={{ type: 'linear', min: 0, max: 500, reverse: false }}
+                    size={{ key: 'gamesMissed', values: [ 0, 17 ], sizes: [ 10, 80 ] }}
+                    forceStrength={4}
+                    simulationIterations={100}
+                    borderColor={{
+                        from: 'color',
+                        modifiers: [
+                            [
+                                'darker',
+                                0.6
+                            ],
+                            [
+                                'opacity',
+                                0.5
+                            ]
+                        ]
+                    }}margin={{ top: 80, right: 100, bottom: 80, left: 100 }}
+                    axisTop={{
+                        tickSize: 10,
                         tickPadding: 5,
                         tickRotation: 0,
                         legend: 'Position',
-                        legendOffset: 36,
                         legendPosition: 'middle',
+                        legendOffset: -46
                     }}
-                    axisLeft={{
-                        tickSize: 5,
+                    axisRight={{
+                        tickSize: 10,
                         tickPadding: 5,
                         tickRotation: 0,
-                        legend: "Points",
-                        legendOffset: -40,
-                        legendPosition: 'middle'
+                        legend: 'Points',
+                        legendPosition: 'middle',
+                        legendOffset: 76
                     }}
-                    pointSize={5}
-                    pointColor={{ theme: 'background' }}
-                    pointBorderWidth={1}
-                    pointBorderColor={{ from: 'serieColor' }}
-                    pointLabelYOffset={-12}
-                    useMesh={true}
-                    isInteractive={true}
+                    axisBottom={{
+                        tickSize: 10,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Position',
+                        legendPosition: 'middle',
+                        legendOffset: 46
+                    }}
+                    axisLeft={{
+                        tickSize: 10,
+                        tickPadding: 5,
+                        tickRotation: 0,
+                        legend: 'Points',
+                        legendPosition: 'middle',
+                        legendOffset: -76
+                    }}
                     tooltip={(input) => {
-                        const data : any = input.point.data;
-                        const leaderDiff = parseFloat(input.point.data.y.toString()) / leaders[input.point.data.x as keyof ILeaders] * 100;
-                        const leaderDiffString = leaderDiff < 100 ? ` - ${Number(leaderDiff).toLocaleString('en-US', { maximumFractionDigits: 1 })}% of leader` : "";
+                        const data : any = input.data;
                         
                         return (
-                            <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.point.serieColor}`, borderWidth: "2px", padding: "5px"}}>
-                                {`${input.point.data.x}-${input.point.serieId}: ${data.name}${leaderDiffString}`}
+                            <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.color}`, borderWidth: "2px", padding: "5px"}}>
+                                {`${input.id}: ${data.name} ${input.data.points} (${input.data.gamesPlayed} games)`}
                             </div>
                         )
                     }}
-                    theme={theme}
                 />
+            
             </div>
         </div>
     );

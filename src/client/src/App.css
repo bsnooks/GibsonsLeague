@@ -413,6 +413,46 @@ body {
   width: 5%;
 }
 
+
+.legends-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.legends-list .group {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.legends-list .legend {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.legends-list .legends-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.legends-list .legend-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.legends-list .legend-col.name {
+  width: 50%;
+}
+.legends-list .legend-col.years {
+  width: 50%;
+}
+.legends-list .legend-col.points {
+  display: none;
+  /*width: 20%;*/
+}
+.legends-list .legend-col .pointstext {
+  font-size: 0.8em;
+  color: #636a71;
+}
+
 /*
 div[class*="-col"]{
   white-space: nowrap;
