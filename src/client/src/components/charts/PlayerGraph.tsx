@@ -17,6 +17,9 @@ const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
     const seasonRankData: { x: any | undefined; y: number | undefined; }[] = [];
     const gamesPlayedData: { x: any | undefined; y: number | undefined; }[] = [];
     props.seasons?.forEach((season) => {
+        if (season?.gamesPlayed === 0) {
+            return;
+        }
         const y = props.usePpg ? season?.positionRankPpg : season?.positionRank;
         if (y && y > 0) {
             seasonRankData.push({
@@ -49,6 +52,9 @@ const PlayerGraph: React.FC<PlayerGraphProps> = ({ ...props }) => {
         const compareWithRankData: { x: number | undefined; y: number | undefined; }[] = [];
         const compareWithGamesPlayedData: { x: any | undefined; y: number | undefined; }[] = [];
         props.compareWith.seasons?.forEach((season) => {
+            if (season?.gamesPlayed === 0) {
+                return;
+            }
             const y = props.usePpg ? season?.positionRankPpg : season?.positionRank;
             if (y && y > 0) {
                 compareWithRankData.push({

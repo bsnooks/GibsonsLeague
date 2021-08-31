@@ -200,7 +200,7 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                         <div className="season-col owner">Owner</div>
                       </div>
                       {
-                        franchise.teams?.map((team: any) => (
+                        franchise.teams?.filter(t => t?.standing !== 0).map((team: any) => (
                           <div key={team.year} className="season">
                               <div className="season-col year">
                                   <Link to={`/season/${team.year}?t=standings&f=${team.franchiseId}`}>

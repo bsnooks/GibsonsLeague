@@ -61,7 +61,9 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                                 "points": season?.points,
                                 "gamesMissed": 17 - season?.gamesPlayed,
                                 "gamesPlayed": season?.gamesPlayed,
+                                "ppg": season?.gamesPlayed > 0 ? season?.points / season?.gamesPlayed : 0,
                                 "name": season?.name,
+                                "team": season?.endfranchise,
                             });
                         }
                     }
@@ -82,6 +84,15 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
 
     const theme = useBaseTheme();
     const showLine = false;
+
+    const palette : string[] = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
+    const team : string[] = [];
+    const getColor = (data: any) => {
+        if (!team.includes(data.data.team)) {
+            team.push(data.data.team);
+        }
+        return palette[team.indexOf(data.data.team) ?? 11];
+    }
 
     const lineGraph = 
     <ResponsiveLine
@@ -139,9 +150,10 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                     groups={[ 'QB', 'RB', 'WR', 'TE' ]}
                     value="points"
                     valueScale={{ type: 'linear', min: 0, max: 500, reverse: false }}
-                    size={{ key: 'gamesMissed', values: [ 0, 17 ], sizes: [ 10, 80 ] }}
+                    size={{ key: 'ppg', values: [ 4, 30 ], sizes: [ 5, 40 ] }}
                     forceStrength={4}
                     simulationIterations={100}
+                    colors={getColor}
                     borderColor={{
                         from: 'color',
                         modifiers: [
@@ -192,7 +204,8 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                         
                         return (
                             <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.color}`, borderWidth: "2px", padding: "5px"}}>
-                                {`${input.id}: ${data.name} ${input.data.points} (${input.data.gamesPlayed} games)`}
+                                {`${input.id}: ${data.name} ${input.data.points} (${input.data.gamesPlayed} games)`}<br/>
+                                {`${input.data.team ?? "Unowned"}`}
                             </div>
                         )
                     }}

@@ -44,7 +44,7 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                                 const progress = Math.round((leagueRecord.recordNumericValue / record.recordNumericValue) * 100);
                                 return (
                                     <div key={index} className="my-2">
-                                        <ProgressBar now={progress} label={leagueRecord.recordValue} />
+                                        <ProgressBar now={progress} label={leagueRecord.recordValue} variant="success" />
                                         <div>
                                             {leagueRecord.rank}.&nbsp;
                                             <Link to={`/franchise/${leagueRecord.franchiseId}`}>

@@ -23,7 +23,8 @@ export const GET_TEAMS = gql`
     {
       year
       yahooGameId
-      teams
+      finished
+      teams      
       {
         franchiseId
         franchiseName
@@ -42,6 +43,7 @@ export const GET_TEAMS = gql`
         positionRank
         name
         gamesPlayed
+        endfranchise
       }
     }	
   }
@@ -102,6 +104,7 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                 </LinkContainer>
               </Col>
               <Col>
+                {data.season.finished ? (
                 <div>
                   <div style={{ display: "inline-block", verticalAlign: "bottom", width: "150px" }}>
                     <div>
@@ -138,6 +141,8 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                     </div>
                   </div>
                 </div>
+                ) : <h1>{year}</h1>
+                }
               </Col>
               <Col md="auto" style={{ margin: "auto" }}>
                 <LinkContainer to={`/season/${nextYear}`}>
@@ -155,7 +160,7 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
               <Nav.Item><Nav.Link eventKey="keepers">Keepers</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link eventKey="draft">Drafts</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link eventKey="trades">Trades</Nav.Link></Nav.Item>
-              <Nav.Item><Nav.Link eventKey="analyze">Analyze</Nav.Link></Nav.Item>
+              { data.season.finished ? (<Nav.Item><Nav.Link eventKey="analyze">Analyze</Nav.Link></Nav.Item>) : null }
             </Nav>
           </Container>
         </Container>
@@ -176,6 +181,9 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
             <Tab.Pane eventKey="trades">
               <FranchiseTrades year={year} />
             </Tab.Pane>
+            {
+            data.season.finished ?
+            (
             <Tab.Pane eventKey="analyze">
               <div className="section-title">
                 <span>Positional Point Difference</span>
@@ -184,6 +192,8 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                 <SeasonPositionPoints comparisonSeasons={data.season.positionComparison} usePpg={false} />
               </div>
             </Tab.Pane>
+            ) : null
+            }
           </Tab.Content>
         </Container>
       </Tab.Container>

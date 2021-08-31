@@ -73,6 +73,8 @@ namespace GibsonsLeague.Data.Repositories
                            (position == null || s.Player.Position == position) &&
                            positionSlices.Contains(s.PositionRank))
                        .Include(s => s.Player)
+                       .Include(s => s.EndTeam)
+                       .ThenInclude(t => t.Franchise)
                        .OrderByDescending(s => s.Year)
                        .ThenBy(s => s.PositionRank)
                        .ThenBy(s => s.Player.Position)

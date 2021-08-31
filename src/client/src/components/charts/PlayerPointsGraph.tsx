@@ -17,6 +17,9 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
     const seasonPointsData: { x: number | undefined; y: number | undefined; }[] = [];
 
     props.seasons?.forEach((season) => {
+        if (season?.gamesPlayed === 0) {
+            return;
+        }
 
         if (props.usePpg) {
             if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
@@ -48,6 +51,9 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
         for (const [rank, seasons] of Object.entries(comparisonSeasonsRanks)) {
             const seasonPointsCompareData: { x: number | undefined; y: number | undefined; }[] = [];
             seasons.forEach((season) => {
+                if (season?.gamesPlayed === 0) {
+                    return;
+                }
                 if (props.usePpg) {
                     if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
                         seasonPointsCompareData.push({
@@ -74,7 +80,9 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
     if (props.compareWith) {
         const compareWithPointsData: { x: number | undefined; y: number | undefined; }[] = [];
         props.compareWith.seasons?.forEach((season) => {
-    
+            if (season?.gamesPlayed === 0) {
+                return;
+            }
             if (props.usePpg) {
                 if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
                     compareWithPointsData.push({

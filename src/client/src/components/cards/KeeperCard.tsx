@@ -40,7 +40,7 @@ const KeeperCard: React.FC<KeeperCardProps> = ({ ...props }) => {
                             {transaction?.primaryPosition}
                         </div>
                         <div className="keeper-col rank">
-                            {`${transaction?.primaryPosition}-${transaction?.positionRank}`}
+                            { (transaction?.seasonGamesPlayed ?? 0) > 0 ? `${transaction?.primaryPosition}-${transaction?.positionRank}` : ""}
                         </div>
                         <div className="keeper-col rankppg">
                             {transaction?.positionRankPpg ? `${transaction?.primaryPosition}-${transaction?.positionRankPpg}` : ""}
@@ -52,7 +52,7 @@ const KeeperCard: React.FC<KeeperCardProps> = ({ ...props }) => {
                             {transaction?.seasonGamesPlayed}
                         </div>
                         <div className="keeper-col grade">
-                            {grader.gradeKeeper(transaction)?.grade}
+                            { (transaction?.seasonGamesPlayed ?? 0) > 0 ? grader.gradeKeeper(transaction)?.grade : ""}
                         </div>
                     </div>
                 ))

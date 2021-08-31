@@ -17,6 +17,12 @@ namespace GibsonsLeague.Api.Models
             Field(l => l.PositionRankPpg);
             Field(l => l.GamesPlayed);
             Field(l => l.Points);
+            Field(l => l.EndTeam.Franchise.MainName).Name("FranchiseName");
+            Field<StringGraphType>("endfranchise",
+                resolve: context =>
+                {
+                    return context.Source.EndTeam?.Franchise?.MainName ?? "";
+                });
 
             Field<ListGraphType<PlayerTransaction>>("transactions",
                 arguments: new QueryArguments(

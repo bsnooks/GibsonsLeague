@@ -314,6 +314,8 @@ export type PlayerTransactionsArgs = {
 
 export type PlayerSeason = {
   __typename?: 'PlayerSeason';
+  endfranchise?: Maybe<Scalars['String']>;
+  franchiseName: Scalars['String'];
   gamesPlayed: Scalars['Int'];
   name: Scalars['String'];
   playerId: Scalars['Int'];
