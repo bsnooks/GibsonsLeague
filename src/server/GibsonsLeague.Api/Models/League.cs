@@ -6,7 +6,7 @@ namespace GibsonsLeague.Api.Models
 {
     public class League : ObjectGraphType<GibsonsLeague.Data.League>
     {
-        public League(DraftRepository draftRepository, FranchiseRepository franchiseRepository, RecordRepository recordRepository)
+        public League(DraftRepository draftRepository, FranchiseRepository franchiseRepository, RecordRepository recordRepository, AnalysisRepository analysisRepository)
         {
             Field(l => l.LeagueId);
             Field(l => l.Name);
@@ -28,6 +28,22 @@ namespace GibsonsLeague.Api.Models
                         context.GetArgument<int>("number"),
                         recordPositivity: context.GetArgument<bool?>("positivity"));
                 });
+
+            Field<ListGraphType<TeamStrength>>("teamstrength",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "startyear" },
+                    new QueryArgument<IntGraphType> { Name = "endyear" },
+                    new QueryArgument<BooleanGraphType> { Name = "champion" },
+                    new QueryArgument<IntGraphType> { Name = "standing", DefaultValue = 1 }),
+                resolve: context =>
+                {
+                    return analysisRepository.GetTeamStrength(
+                        context.GetArgument<int?>("startyear"),
+                        context.GetArgument<int?>("endyear"),
+                        champion: context.GetArgument<bool>("champion"),
+                        standing: context.GetArgument<int?>("standing"));
+                });
+            
         }
     }
 }

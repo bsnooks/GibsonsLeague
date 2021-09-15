@@ -219,6 +219,7 @@ export type League = {
   name: Scalars['String'];
   records?: Maybe<Array<Maybe<LeagueRecords>>>;
   startYear?: Maybe<Scalars['Int']>;
+  teamstrength?: Maybe<Array<Maybe<TeamStrength>>>;
 };
 
 
@@ -232,10 +233,20 @@ export type LeagueRecordsArgs = {
   positivity?: Maybe<Scalars['Boolean']>;
 };
 
+
+export type LeagueTeamstrengthArgs = {
+  startyear?: Maybe<Scalars['Int']>;
+  endyear?: Maybe<Scalars['Int']>;
+  champion?: Maybe<Scalars['Boolean']>;
+  standing?: Maybe<Scalars['Int']>;
+};
+
 export type LeagueRecord = {
   __typename?: 'LeagueRecord';
   franchiseId: Scalars['ID'];
   franchiseName: Scalars['String'];
+  otherFranchiseId?: Maybe<Scalars['Guid']>;
+  otherFranchiseName?: Maybe<Scalars['String']>;
   rank: Scalars['Int'];
   recordNumericValue: Scalars['Float'];
   recordValue: Scalars['String'];
@@ -385,6 +396,15 @@ export type Team = {
 export type TeamMatchesArgs = {
   type?: Maybe<MatchType>;
   week?: Maybe<Scalars['Int']>;
+};
+
+export type TeamStrength = {
+  __typename?: 'TeamStrength';
+  p1?: Maybe<Scalars['String']>;
+  p2?: Maybe<Scalars['String']>;
+  p3?: Maybe<Scalars['String']>;
+  p4?: Maybe<Scalars['String']>;
+  position: Scalars['String'];
 };
 
 export enum TransactionType {

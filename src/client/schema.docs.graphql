@@ -54,6 +54,12 @@ type League {
   name: String!
   records(number: Int! = 1, positivity: Boolean): [LeagueRecords]
   startYear: Int
+  teamstrength(
+    startyear: Int
+    endyear: Int
+    champion: Boolean
+    standing: Int = 1
+  ): [TeamStrength]
 }
 
 type Franchise {
@@ -250,11 +256,21 @@ type LeagueRecords {
 type LeagueRecord {
   franchiseId: ID!
   franchiseName: String!
+  otherFranchiseId: Guid
+  otherFranchiseName: String
   rank: Int!
   recordNumericValue: Float!
   recordValue: String!
   week: Int
   year: Int
+}
+
+type TeamStrength {
+  p1: String
+  p2: String
+  p3: String
+  p4: String
+  position: String!
 }
 
 type Season {

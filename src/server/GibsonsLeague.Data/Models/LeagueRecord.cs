@@ -8,6 +8,7 @@ namespace GibsonsLeague.Data.Models
     {
         public int Rank { get; set; }
         public Franchise Franchise { get; set; }
+        public Franchise OtherFranchise { get; set; }
         public string RecordValue { get; set; }
         public double RecordNumericValue { get; set; }
         public int? Year { get; set; }

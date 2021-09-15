@@ -47,6 +47,7 @@ namespace GibsonsLeague.Api
             services.AddScoped<RecordRepository>();
             services.AddScoped<FranchiseTradeRepository>();
             services.AddScoped<SeasonRepository>();
+            services.AddScoped<AnalysisRepository>();
 
             services.AddScoped<GibsonsLeagueSchema>();
 

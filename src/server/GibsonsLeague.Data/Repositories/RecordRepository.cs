@@ -130,6 +130,124 @@ namespace GibsonsLeague.Data.Repositories
                                 RecordType.Match));
 
                         recordCollection.Add(
+                            CreateMatchResultRecord("Biggest Blowouts",
+                                await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId)
+                                    .Select(x => new MatchResult
+                                    {
+                                        Year = x.Year,
+                                        Week = x.Week,
+                                        Winner = x.WinningTeam.Franchise,
+                                        WinnerPoints = x.WinningTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Loser = x.LosingTeam.Franchise,
+                                        LoserPoints = x.LosingTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Tied = x.Tied
+                                    })
+                                    .OrderByDescending(x => x.WinnerPoints - x.LoserPoints)
+                                    .ThenBy(x => x.Year)
+                                    .Take(number)
+                                    .ToListAsync()));
+
+                        recordCollection.Add(
+                            CreateMatchResultRecord("Closest Wins",
+                                await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId)
+                                    .Select(x => new MatchResult
+                                    {
+                                        Year = x.Year,
+                                        Week = x.Week,
+                                        Winner = x.WinningTeam.Franchise,
+                                        WinnerPoints = x.WinningTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Loser = x.LosingTeam.Franchise,
+                                        LoserPoints = x.LosingTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Tied = x.Tied
+                                    })
+                                    .OrderBy(x => x.WinnerPoints - x.LoserPoints)
+                                    .ThenBy(x => x.Year)
+                                    .Take(number)
+                                    .ToListAsync()));
+
+                        recordCollection.Add(
+                            CreateMatchResultRecord("Highest Combined Points",
+                                await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId)
+                                    .Select(x => new MatchResult
+                                    {
+                                        Year = x.Year,
+                                        Week = x.Week,
+                                        Winner = x.WinningTeam.Franchise,
+                                        WinnerPoints = x.WinningTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Loser = x.LosingTeam.Franchise,
+                                        LoserPoints = x.LosingTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Tied = x.Tied
+                                    })
+                                    .OrderByDescending(x => x.WinnerPoints + x.LoserPoints)
+                                    .ThenBy(x => x.Year)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                recordValueType: MatchResultRecordType.Combined));
+
+                        recordCollection.Add(
+                            CreateMatchResultRecord("Lowest Combined Points",
+                                await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId)
+                                    .Select(x => new MatchResult
+                                    {
+                                        Year = x.Year,
+                                        Week = x.Week,
+                                        Winner = x.WinningTeam.Franchise,
+                                        WinnerPoints = x.WinningTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Loser = x.LosingTeam.Franchise,
+                                        LoserPoints = x.LosingTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Tied = x.Tied
+                                    })
+                                    .OrderBy(x => x.WinnerPoints + x.LoserPoints)
+                                    .ThenBy(x => x.Year)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                recordValueType: MatchResultRecordType.Combined));
+
+                        recordCollection.Add(
+                            CreateMatchResultRecord("Lowest Point Win",
+                                await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId)
+                                    .Select(x => new MatchResult
+                                    {
+                                        Year = x.Year,
+                                        Week = x.Week,
+                                        Winner = x.WinningTeam.Franchise,
+                                        WinnerPoints = x.WinningTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Loser = x.LosingTeam.Franchise,
+                                        LoserPoints = x.LosingTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Tied = x.Tied
+                                    })
+                                    .OrderBy(x => x.WinnerPoints)
+                                    .ThenBy(x => x.Year)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                recordValueType: MatchResultRecordType.Winner));
+
+                        recordCollection.Add(
+                            CreateMatchResultRecord("Highest Point Loss",
+                                await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId)
+                                    .Select(x => new MatchResult
+                                    {
+                                        Year = x.Year,
+                                        Week = x.Week,
+                                        Winner = x.WinningTeam.Franchise,
+                                        WinnerPoints = x.WinningTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Loser = x.LosingTeam.Franchise,
+                                        LoserPoints = x.LosingTeam.TeamScores.FirstOrDefault(s => s.Week == x.Week && s.Year == x.Year).Points,
+                                        Tied = x.Tied
+                                    })
+                                    .OrderByDescending(x => x.LoserPoints)
+                                    .ThenBy(x => x.Year)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                recordValueType: MatchResultRecordType.Loser));
+
+                        recordCollection.Add(
                             CreateTeamScoreRecord("High Projection Exceeded",
                                 await dbContext.TeamScores
                                     .Where(x => x.LeagueId == leagueId && x.ProjectedPoints.HasValue && x.ProjectedPoints.Value != 0)
@@ -374,6 +492,62 @@ namespace GibsonsLeague.Data.Repositories
             return record;
         }
 
+        private LeagueRecords CreateMatchResultRecord(string title, ICollection<MatchResult> results,
+            bool positiveRecord = true,
+            MatchResultRecordType recordValueType = MatchResultRecordType.Difference,
+            RecordType recordType = RecordType.Match)
+        {
+            LeagueRecords record = new LeagueRecords()
+            {
+                RecordTitle = title,
+                PositiveRecord = positiveRecord,
+                RecordType = recordType,
+                Records = new List<LeagueRecord>()
+            };
+
+            var count = 1;
+            foreach (var result in results)
+            {
+                string recordValue;
+                double recordNumericValue;
+                switch (recordValueType)
+                {
+                    case MatchResultRecordType.Winner:
+                        recordValue = result.WinnerPoints.ToString("0.##");
+                        recordNumericValue = result.WinnerPoints;
+                        break;
+
+                    case MatchResultRecordType.Loser:
+                        recordValue = result.LoserPoints.ToString("0.##");
+                        recordNumericValue = result.LoserPoints;
+                        break;
+
+                    case MatchResultRecordType.Combined:
+                        recordValue = $"{(result.WinnerPoints + result.LoserPoints).ToString("0.##")} ({result.WinnerPoints.ToString("0.##")} - {result.LoserPoints.ToString("0.##")})";
+                        recordNumericValue = result.WinnerPoints + result.LoserPoints;
+                        break;
+
+                    case MatchResultRecordType.Difference:
+                    default:
+                        recordValue = $"{(result.WinnerPoints - result.LoserPoints).ToString("0.##")} ({result.WinnerPoints.ToString("0.##")} - {result.LoserPoints.ToString("0.##")})";
+                        recordNumericValue = result.WinnerPoints - result.LoserPoints;
+                        break;
+                }
+
+                record.Records.Add(new LeagueRecord()
+                {
+                    Rank = count++,
+                    Franchise = recordValueType != MatchResultRecordType.Loser ? result.Winner : result.Loser,
+                    OtherFranchise = recordValueType != MatchResultRecordType.Loser ? result.Loser : result.Winner,
+                    RecordValue = recordValue,
+                    RecordNumericValue = recordNumericValue,
+                    Year = result.Year,
+                    Week = result.Week
+                });
+            }
+            return record;
+        }
+
         private enum FranchiseRecordValueType
         {
             Championships,
@@ -399,6 +573,14 @@ namespace GibsonsLeague.Data.Repositories
             Points,
             ProjectedPoints,
             ProjectedPointsDifference
+        }
+
+        private enum MatchResultRecordType
+        {
+            Difference,
+            Combined,
+            Winner,
+            Loser
         }
     }
 }

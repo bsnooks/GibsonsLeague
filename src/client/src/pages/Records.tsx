@@ -20,6 +20,8 @@ export const GET_FRANCHISES = gql`
           rank
           franchiseId
           franchiseName
+          otherFranchiseId
+          otherFranchiseName
           recordValue
           recordNumericValue
           year

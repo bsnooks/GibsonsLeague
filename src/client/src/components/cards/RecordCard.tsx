@@ -49,7 +49,17 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                                             {leagueRecord.rank}.&nbsp;
                                             <Link to={`/franchise/${leagueRecord.franchiseId}`}>
                                                 {leagueRecord.franchiseName}
-                                            </Link>&nbsp;
+                                            </Link>
+                                            {
+                                                record.otherFranchiseId ? " vs. " : null
+                                            }
+                                            {
+                                                record.otherFranchiseId ?
+                                                    <Link to={`/franchise/${record.otherFranchiseId}`}>
+                                                        {record.otherFranchiseName}
+                                                    </Link> : null
+                                            }
+                                            &nbsp;
                                             {getRecordContext(leagueRecord)}
                                         </div>
                                     </div>
