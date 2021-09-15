@@ -254,10 +254,13 @@ type LeagueRecords {
 }
 
 type LeagueRecord {
-  franchiseId: ID!
-  franchiseName: String!
+  franchiseId: Guid
+  franchiseName: String
   otherFranchiseId: Guid
   otherFranchiseName: String
+  playerId: Int
+  playerName: String
+  playerPosition: String
   rank: Int!
   recordNumericValue: Float!
   recordValue: String!

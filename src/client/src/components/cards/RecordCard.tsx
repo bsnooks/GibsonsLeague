@@ -29,12 +29,21 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
             <div className="section-body p-3">
                 <Row>
                     <Col xs={5}>
-                        <div><Image src={avatar} roundedCircle fluid style={{ width: '8rem', height: '8rem' }} /></div>
-                        <h5>
-                            <Link to={`/franchise/${record.franchiseId}`}>
-                                {record.franchiseName}
-                            </Link>
-                        </h5>
+                        {
+                            record.franchiseId ? (<>
+                            <div><Image src={avatar} roundedCircle fluid style={{ width: '8rem', height: '8rem' }} /></div>
+                            <h5>
+                                <Link to={`/franchise/${record.franchiseId}`}>
+                                    {record.franchiseName}
+                                </Link>
+                            </h5></>) : (
+                                <h5>
+                                    <Link to={`/player/${record.playerId}`}>
+                                        {record.playerName} ({record.playerPosition})
+                                    </Link>
+                                </h5>
+                            )
+                        }
                         {getRecordContext(record)}
                         <h5>{record.recordValue}</h5>
                     </Col>
@@ -51,16 +60,22 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                                                 {leagueRecord.franchiseName}
                                             </Link>
                                             {
-                                                record.otherFranchiseId ? " vs. " : null
+                                                leagueRecord.otherFranchiseId ? " vs. " : null
                                             }
                                             {
-                                                record.otherFranchiseId ?
-                                                    <Link to={`/franchise/${record.otherFranchiseId}`}>
-                                                        {record.otherFranchiseName}
+                                                leagueRecord.otherFranchiseId ?
+                                                    <Link to={`/franchise/${leagueRecord.otherFranchiseId}`}>
+                                                        {leagueRecord.otherFranchiseName}
                                                     </Link> : null
                                             }
                                             &nbsp;
                                             {getRecordContext(leagueRecord)}
+                                            {
+                                                leagueRecord.playerId ? (
+                                                <Link to={`/player/${leagueRecord.playerId}`}>
+                                                    {leagueRecord.playerName} ({leagueRecord.playerPosition})
+                                                </Link>) : null
+                                            }
                                         </div>
                                     </div>
                                 )

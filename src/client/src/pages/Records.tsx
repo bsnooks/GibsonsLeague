@@ -22,6 +22,9 @@ export const GET_FRANCHISES = gql`
           franchiseName
           otherFranchiseId
           otherFranchiseName
+          playerId
+          playerName
+          playerPosition
           recordValue
           recordNumericValue
           year
@@ -58,6 +61,7 @@ const Records: React.FC<RecordsProps> = () => {
                             <Nav.Item><Nav.Link eventKey="franchise">Franchise Records</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link eventKey="season">Season Records</Nav.Link></Nav.Item>
                             <Nav.Item><Nav.Link eventKey="matchup">Matchup Records</Nav.Link></Nav.Item>
+                            <Nav.Item><Nav.Link eventKey="player">Player Records</Nav.Link></Nav.Item>
                         </Nav>
                     </Container>
                 </Container>
@@ -94,6 +98,19 @@ const Records: React.FC<RecordsProps> = () => {
                                 <Row>
                                     {
                                         data.league?.records?.filter(r => r?.type?.toLowerCase() === "match").map((leagueRecord: any) => (
+                                            <Col sm key={leagueRecord.recordTitle}>
+                                                <RecordCard leagueRecord={leagueRecord} />
+                                            </Col>
+                                        ))
+                                    }
+                                </Row>
+                            </section>
+                        </Tab.Pane>
+                        <Tab.Pane eventKey="player">
+                            <section>
+                                <Row>
+                                    {
+                                        data.league?.records?.filter(r => r?.type?.toLowerCase() === "player").map((leagueRecord: any) => (
                                             <Col sm key={leagueRecord.recordTitle}>
                                                 <RecordCard leagueRecord={leagueRecord} />
                                             </Col>

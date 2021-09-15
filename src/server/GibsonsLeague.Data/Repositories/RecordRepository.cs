@@ -276,6 +276,88 @@ namespace GibsonsLeague.Data.Repositories
 
                     if (!recordType.HasValue || recordType == RecordType.Player)
                     {
+                        string[] keyPositions = new[] { "QB", "RB", "WR", "TE" };
+
+                        foreach(var position in keyPositions)
+                        {
+                            recordCollection.Add(
+                                CreatePlayerRecord($"Most Kept {position}",
+                                await dbContext.Players
+                                    .Where(x => x.PrimaryPosition == position)
+                                    .Select(x => new PlayerData
+                                    {
+                                        Player = x,
+                                        Transactions = x.Transactions.Where(t => t.TransactionType == TransactionType.Kept)
+                                    })
+                                    .OrderByDescending(x => x.Transactions.Count())
+                                    .Take(number)
+                                    .ToListAsync()));
+                        }
+
+                        recordCollection.Add(
+                            CreatePlayerRecord("Most Traded",
+                            await dbContext.Players
+                                .Select(x => new PlayerData
+                                {
+                                    Player = x,
+                                    Transactions = x.Transactions.Where(t => t.TransactionType == TransactionType.Traded)
+                                })
+                                .OrderByDescending(x => x.Transactions.Count())
+                                .Take(number)
+                                .ToListAsync()));
+
+                        recordCollection.Add(
+                            CreatePlayerRecord("Most Drafted",
+                            await dbContext.Players
+                                .Where(x => keyPositions.Contains(x.PrimaryPosition))
+                                .Select(x => new PlayerData
+                                {
+                                    Player = x,
+                                    Transactions = x.Transactions.Where(t => t.TransactionType == TransactionType.DraftPicked)
+                                })
+                                .OrderByDescending(x => x.Transactions.Count())
+                                .Take(number)
+                                .ToListAsync()));
+
+                        recordCollection.Add(
+                            CreatePlayerRecord("Most Drafted in the 1st Round",
+                            await dbContext.Players
+                                .Where(x => keyPositions.Contains(x.PrimaryPosition))
+                                .Select(x => new PlayerData
+                                {
+                                    Player = x,
+                                    DraftPicks = x.DraftPicks.Where(d => d.Round == 1),
+                                })
+                                .OrderByDescending(x => x.DraftPicks.Count())
+                                .Take(number)
+                                .ToListAsync(),
+                                recordValueType: PlayerRecordType.DraftPicks));
+
+                        recordCollection.Add(
+                            CreatePlayerRecord("Most Added",
+                            await dbContext.Players
+                                .Where(x => keyPositions.Contains(x.PrimaryPosition))
+                                .Select(x => new PlayerData
+                                {
+                                    Player = x,
+                                    Transactions = x.Transactions.Where(t => t.TransactionType == TransactionType.Added)
+                                })
+                                .OrderByDescending(x => x.Transactions.Count())
+                                .Take(number)
+                                .ToListAsync()));
+
+                        recordCollection.Add(
+                            CreatePlayerRecord("Most Dropped",
+                            await dbContext.Players
+                                .Where(x => keyPositions.Contains(x.PrimaryPosition))
+                                .Select(x => new PlayerData
+                                {
+                                    Player = x,
+                                    Transactions = x.Transactions.Where(t => t.TransactionType == TransactionType.Dropped)
+                                })
+                                .OrderByDescending(x => x.Transactions.Count())
+                                .Take(number)
+                                .ToListAsync()));
                     }
                 }
 
@@ -548,6 +630,49 @@ namespace GibsonsLeague.Data.Repositories
             return record;
         }
 
+        private LeagueRecords CreatePlayerRecord(string title, ICollection<PlayerData> players,
+            bool positiveRecord = true,
+            PlayerRecordType recordValueType = PlayerRecordType.Transactions,
+            RecordType recordType = RecordType.Player)
+        {
+            LeagueRecords record = new LeagueRecords()
+            {
+                RecordTitle = title,
+                PositiveRecord = positiveRecord,
+                RecordType = recordType,
+                Records = new List<LeagueRecord>()
+            };
+
+            var count = 1;
+            foreach (var player in players)
+            {
+                string recordValue;
+                double recordNumericValue;
+                switch (recordValueType)
+                {
+                    case PlayerRecordType.DraftPicks:
+                        recordValue = player.DraftPicks.Count().ToString();
+                        recordNumericValue = player.DraftPicks.Count();
+                        break;
+
+                    case PlayerRecordType.Transactions:
+                    default:
+                        recordValue = player.Transactions.Count().ToString();
+                        recordNumericValue = player.Transactions.Count();
+                        break;
+                }
+
+                record.Records.Add(new LeagueRecord()
+                {
+                    Rank = count++,
+                    Player = player.Player,
+                    RecordValue = recordValue,
+                    RecordNumericValue = recordNumericValue
+                });
+            }
+            return record;
+        }
+
         private enum FranchiseRecordValueType
         {
             Championships,
@@ -581,6 +706,12 @@ namespace GibsonsLeague.Data.Repositories
             Combined,
             Winner,
             Loser
+        }
+
+        private enum PlayerRecordType
+        {
+            Transactions,
+            DraftPicks
         }
     }
 }

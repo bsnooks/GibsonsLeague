@@ -243,10 +243,13 @@ export type LeagueTeamstrengthArgs = {
 
 export type LeagueRecord = {
   __typename?: 'LeagueRecord';
-  franchiseId: Scalars['ID'];
-  franchiseName: Scalars['String'];
+  franchiseId?: Maybe<Scalars['Guid']>;
+  franchiseName?: Maybe<Scalars['String']>;
   otherFranchiseId?: Maybe<Scalars['Guid']>;
   otherFranchiseName?: Maybe<Scalars['String']>;
+  playerId?: Maybe<Scalars['Int']>;
+  playerName?: Maybe<Scalars['String']>;
+  playerPosition?: Maybe<Scalars['String']>;
   rank: Scalars['Int'];
   recordNumericValue: Scalars['Float'];
   recordValue: Scalars['String'];
