@@ -4,7 +4,7 @@
 
 Archive of the Gibsons League fantasy football franchises since the leagues inception in 2002. Includes all time team records as well as the transaction history for all players.
 
-[Live Site](https://gibsonsleague/com) - Note uses auto paused DB that takes several seconds to spin up.
+[Live Site](https://gibsonsleague.com) - Note uses auto paused DB that takes several seconds to spin up.
 ## Technologies Used
 - .NET Core 3.1
 - Azure SQL Server
@@ -20,3 +20,4 @@ Archive of the Gibsons League fantasy football franchises since the leagues ince
 
 ### Data
 Raw files that were previously downloaded using the *ConsoleDataDownloader*.  Stored in the repo in the event yahoo changes their hosting approach.
+As of 2021-09-30 support for updating a seasons data directly from yahoo was added.
