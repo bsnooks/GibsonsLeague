@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Maybe, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine, Serie } from '@nivo/line'
 import { ResponsiveSwarmPlot } from '@nivo/swarmplot'
@@ -13,6 +13,7 @@ interface SeasonPositionPointsProps {
 const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props }) => {
     const data: Serie[] = [];
     const swarmData: any[] = [];
+    const [maxPoints, setMaxPoints] = useState(0);
 
 
     interface ILeaders {
@@ -28,8 +29,6 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
         TE: 0,
         WR: 0
     };
-
-    let max = 0;
 
     if (props.comparisonSeasons) {
         const comparisonSeasonsPosition = groupBy(props.comparisonSeasons, "positionRank");
@@ -72,8 +71,8 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
 
                     if (season?.points && leaders[position as keyof ILeaders] < season?.points) {
                         leaders[position as keyof ILeaders] = season?.points;
-                        if (season?.points > max) {
-                            max = season?.points;
+                        if (season?.points > maxPoints) {
+                            setMaxPoints(season?.points);
                         }
                     }
                 });
@@ -154,7 +153,7 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                     data={swarmData}
                     groups={[ 'QB', 'RB', 'WR', 'TE' ]}
                     value="points"
-                    valueScale={{ type: 'linear', min: 0, max: (max + 20), reverse: false }}
+                    valueScale={{ type: 'linear', min: 0, max: (maxPoints + 20), reverse: false }}
                     size={{ key: 'ppg', values: [ 4, 30 ], sizes: [ 5, 40 ] }}
                     forceStrength={4}
                     simulationIterations={100}
