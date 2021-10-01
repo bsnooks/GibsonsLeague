@@ -8,7 +8,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class Match : ObjectGraphType<GibsonsLeague.Data.Match>
+    public class Match : ObjectGraphType<GibsonsLeague.Core.Models.Match>
     {
         public Match()
         {

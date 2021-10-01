@@ -5,7 +5,7 @@ using System;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class LeagueRecord : ObjectGraphType<GibsonsLeague.Data.Models.LeagueRecord>
+    public class LeagueRecord : ObjectGraphType<GibsonsLeague.Core.Models.LeagueRecord>
     {
 
         public LeagueRecord()

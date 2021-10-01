@@ -1,4 +1,5 @@
 ﻿using System;
+using GibsonsLeague.Core.Models;
 using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;

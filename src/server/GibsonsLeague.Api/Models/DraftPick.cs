@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class DraftPick : ObjectGraphType<GibsonsLeague.Data.DraftPick>
+    public class DraftPick : ObjectGraphType<GibsonsLeague.Core.Models.DraftPick>
     {
         public DraftPick()
         {

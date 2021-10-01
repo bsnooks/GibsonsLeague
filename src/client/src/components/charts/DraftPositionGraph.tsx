@@ -10,7 +10,7 @@ interface DraftPositionGraphProps {
 
 const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => {
     const data = [];
-    const positions = groupBy(props.picks, "playerPosition");
+    const positions = groupBy(props.picks, "playerPrimaryPosition");
     
     for (const [position, positionValue] of Object.entries(positions)) {
         const posData: { x: number; y: number; name: string; round: number; pick: number; franchise: string; }[] = [];

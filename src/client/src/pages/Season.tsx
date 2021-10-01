@@ -39,6 +39,7 @@ export const GET_TEAMS = gql`
       positionComparison
       {
         position
+        primaryPosition
         points
         positionRank
         name
@@ -160,7 +161,7 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
               <Nav.Item><Nav.Link eventKey="keepers">Keepers</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link eventKey="draft">Drafts</Nav.Link></Nav.Item>
               <Nav.Item><Nav.Link eventKey="trades">Trades</Nav.Link></Nav.Item>
-              { data.season.finished ? (<Nav.Item><Nav.Link eventKey="analyze">Analyze</Nav.Link></Nav.Item>) : null }
+              <Nav.Item><Nav.Link eventKey="analyze">Analyze</Nav.Link></Nav.Item>
             </Nav>
           </Container>
         </Container>
@@ -181,9 +182,6 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
             <Tab.Pane eventKey="trades">
               <FranchiseTrades year={year} />
             </Tab.Pane>
-            {
-            data.season.finished ?
-            (
             <Tab.Pane eventKey="analyze">
               <div className="section-title">
                 <span>Positional Point Difference</span>
@@ -192,8 +190,6 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                 <SeasonPositionPoints comparisonSeasons={data.season.positionComparison} usePpg={false} />
               </div>
             </Tab.Pane>
-            ) : null
-            }
           </Tab.Content>
         </Container>
       </Tab.Container>

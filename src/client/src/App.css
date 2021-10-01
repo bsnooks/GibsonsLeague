@@ -1,3 +1,7 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
 body {
   background-color: #f3f4f5 !important;
 }
@@ -15,6 +19,15 @@ body {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  background-color: #FFFFFF;
 }
 
 .App-header {
@@ -301,6 +314,9 @@ body {
   width: 10%;
 }
 
+.page {
+  padding-bottom: 55px;
+}
 .page .nav-label {
   color: #343434;
   font-weight: 500;
@@ -451,6 +467,41 @@ body {
 .legends-list .legend-col .pointstext {
   font-size: 0.8em;
   color: #636a71;
+}
+
+
+.seasonsync-list {
+  text-align: left;
+  padding-bottom: 10px;
+}
+.seasonsync-list .group {
+  font-weight: bold;
+  color: #343434;
+  font-size: 14px;
+  padding: 10px 0;
+}
+.seasonsync-list .seasonsync {
+  border-bottom: 1px solid #cecece;
+  padding-bottom: 3px;
+}
+
+.seasonsync-list .seasonsync-headings {
+  text-transform: uppercase;
+  color: #636a71;
+  font-size: 12px;
+}
+.seasonsync-list .seasonsync-col {
+  display: inline-block;
+  vertical-align: top;
+}
+.seasonsync-list .seasonsync-col.status {
+  width: 5%;
+}
+.seasonsync-list .seasonsync-col.data {
+  width: 15%;
+}
+.seasonsync-list .seasonsync-col.date {
+  width: 80%;
 }
 
 /*

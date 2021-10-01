@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GibsonsLeague.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GibsonsLeague.Data.Repositories
@@ -32,6 +33,18 @@ namespace GibsonsLeague.Data.Repositories
             {
                 return await dbContext.Players
                 .SingleOrDefaultAsync(p => p.Name.Contains(name));
+            }
+        }
+
+        public async Task<IEnumerable<Player>> GetPlayersBySeason(params int[] years)
+        {
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.Players
+                .Where(p => p.PlayerSeasons.Any(s => years.Contains(s.Year)))
+                .Include(p => p.PlayerSeasons)
+                .OrderByDescending(p => p.PlayerId)
+                .ToListAsync();
             }
         }
 
@@ -87,6 +100,19 @@ namespace GibsonsLeague.Data.Repositories
             }
         }
 
+        public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasons(int year, string[] positions = null)
+        {
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.PlayerSeasons
+                    .Where(ps => ps.Year == year &&
+                        (positions == null || positions.Contains(ps.Player.PrimaryPosition)))
+                    .Include(ps => ps.Player)
+                    .OrderBy(ps => ps.PlayerId)
+                    .ToListAsync();
+            }
+        }
+
         public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasons(Franchise franchise)
         {
             using (var dbContext = dbFunc())
@@ -109,6 +135,28 @@ namespace GibsonsLeague.Data.Repositories
                 .Skip(offset)
                 .Take(limit)
                 .ToListAsync();
+            }
+        }
+
+        public async Task<int> CreatePlayer(Player newPlayer)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext .AddAsync(newPlayer);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newPlayer.PlayerId;
+        }
+
+        public async Task UpdatePlayersSeasons(IEnumerable<PlayerSeason> playerSeasons, int year)
+        {
+            using (var dbContext = dbFunc())
+            {
+                dbContext.PlayerSeasons.UpdateRange(playerSeasons);
+                await dbContext.SaveChangesAsync();
+
+                dbContext.Database.ExecuteSqlRaw("EXECUTE [dbo].[UpdatePositionRanks] {0}", year);
             }
         }
     }

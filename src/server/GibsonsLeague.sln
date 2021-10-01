@@ -5,9 +5,11 @@ VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GibsonsLeague.Data", "GibsonsLeague.Data\GibsonsLeague.Data.csproj", "{FD89D8D2-8708-4DDE-93D0-9CED0FB20127}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GibsonsLeague.Core", "GibsonsLeague.Core\GibsonsLeague.Core.csproj", "{24C6AC4C-EA60-4CE2-B5C1-D477F00376E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GibsonsLeague.Core", "GibsonsLeague.Core\GibsonsLeague.Core.csproj", "{24C6AC4C-EA60-4CE2-B5C1-D477F00376E1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GibsonsLeague.Api", "GibsonsLeague.Api\GibsonsLeague.Api.csproj", "{219ABEA6-1AE3-416B-9418-10696B734382}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GibsonsLeague.Api", "GibsonsLeague.Api\GibsonsLeague.Api.csproj", "{219ABEA6-1AE3-416B-9418-10696B734382}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GibsonsLeague.YahooSync", "GibsonsLeague.YahooSync\GibsonsLeague.YahooSync.csproj", "{2139D452-A8D1-4752-986F-854EBDE4A2D1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{219ABEA6-1AE3-416B-9418-10696B734382}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{219ABEA6-1AE3-416B-9418-10696B734382}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{219ABEA6-1AE3-416B-9418-10696B734382}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2139D452-A8D1-4752-986F-854EBDE4A2D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2139D452-A8D1-4752-986F-854EBDE4A2D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2139D452-A8D1-4752-986F-854EBDE4A2D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2139D452-A8D1-4752-986F-854EBDE4A2D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

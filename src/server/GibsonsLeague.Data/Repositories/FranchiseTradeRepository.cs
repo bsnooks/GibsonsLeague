@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GibsonsLeague.Data.Models;
+using GibsonsLeague.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GibsonsLeague.Data.Repositories

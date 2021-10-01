@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Col, Row } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryDraftpicksArgs } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from './GlobalLoading';
@@ -41,8 +41,7 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
     const {
         data,
         loading,
-        error,
-        fetchMore
+        error
     } = useQuery<GibsonsLeagueQuery, GibsonsLeagueQueryDraftpicksArgs>(GET_TRADES,
         {
             variables: {
@@ -50,15 +49,6 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
                 year: props.year
             }
         });
-
-    const handleClick = () => {
-        fetchMore({
-            variables: {
-                franchiseId: props.franciseId,
-                year: props.year
-            }
-        })
-    };
 
     if (loading) return <GlobalLoading mode="component" />;
     if (error || !data) return <GlobalError mode="component" apolloError={error} />;
@@ -110,7 +100,6 @@ const FranchiseDraftPicks: React.FC<FranchiseDraftPicksProps> = ({ ...props }) =
             <div className="section-body p-3">
                 {cards}
             </div>
-            <Button onClick={handleClick}>Load More</Button>
         </section>
     );
 }

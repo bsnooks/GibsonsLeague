@@ -4,7 +4,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class LeagueRecords : ObjectGraphType<GibsonsLeague.Data.Models.LeagueRecords>
+    public class LeagueRecords : ObjectGraphType<GibsonsLeague.Core.Models.LeagueRecords>
     {
 
         public LeagueRecords()

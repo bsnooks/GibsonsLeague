@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GibsonsLeague.Api.Middleware;
 using GibsonsLeague.Api.Models;
 using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
+using GibsonsLeague.YahooSync;
 using GraphQL.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,6 +29,8 @@ namespace GibsonsLeague.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();
+
             services.AddCors();
             services.AddDbContext<GLAContext>(options =>
                 options.UseSqlServer(_config.GetConnectionString("GibsonsLeagueDb")));
@@ -49,6 +53,8 @@ namespace GibsonsLeague.Api
             services.AddScoped<SeasonRepository>();
             services.AddScoped<AnalysisRepository>();
 
+            services.AddScoped<IYahooSyncService, YahooSyncService>();
+
             services.AddScoped<GibsonsLeagueSchema>();
 
             services.AddGraphQL()
@@ -62,16 +68,24 @@ namespace GibsonsLeague.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRouting();
             app.UseCors(builder =>
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
             app.UseWebSockets();
             app.UseGraphQLWebSockets<GibsonsLeagueSchema>("/graphql");
             app.UseGraphQL<GibsonsLeagueSchema>();
 
+            app.UseMiddleware<YahooAuthenticationMiddleware>();
+
             if (env.IsDevelopment())
             {
                 app.UseGraphQLPlayground(new GraphQL.Server.Ui.Playground.GraphQLPlaygroundOptions());
             }
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

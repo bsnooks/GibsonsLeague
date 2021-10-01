@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GibsonsLeague.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GibsonsLeague.Data.Repositories
@@ -53,6 +54,50 @@ namespace GibsonsLeague.Data.Repositories
                     .ThenBy(x => x.TeamId)
                     .ToListAsync();
             }
+        }
+
+        public async Task<Guid> CreateTransaction(Transaction newTransaction)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.AddAsync(newTransaction);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newTransaction.TransactionId;
+        }
+
+        public async Task<int> CreateTransactions(IEnumerable<Transaction> newTransactions)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.AddRangeAsync(newTransactions);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newTransactions.Count();
+        }
+
+        public async Task<Guid> CreateTransactionGroup(TransactionGroup newTransactionGroup)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.AddAsync(newTransactionGroup);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newTransactionGroup.TransactionGroupId;
+        }
+
+        public async Task<int> CreateTransactionGroups(IEnumerable<TransactionGroup> newTransactionGroups)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.AddRangeAsync(newTransactionGroups);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newTransactionGroups.Count();
         }
     }
 }

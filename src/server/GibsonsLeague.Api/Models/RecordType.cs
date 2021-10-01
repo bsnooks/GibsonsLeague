@@ -1,4 +1,4 @@
-﻿using GibsonsLeague.Data.Models;
+﻿using GibsonsLeague.Core.Models;
 using GraphQL.Types;
 
 namespace GibsonsLeague.Data

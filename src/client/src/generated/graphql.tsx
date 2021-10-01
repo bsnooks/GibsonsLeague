@@ -218,6 +218,7 @@ export type League = {
   leagueId: Scalars['ID'];
   name: Scalars['String'];
   records?: Maybe<Array<Maybe<LeagueRecords>>>;
+  seasons?: Maybe<Array<Maybe<Season>>>;
   startYear?: Maybe<Scalars['Int']>;
   teamstrength?: Maybe<Array<Maybe<TeamStrength>>>;
 };
@@ -231,6 +232,12 @@ export type LeagueDraftArgs = {
 export type LeagueRecordsArgs = {
   number?: Scalars['Int'];
   positivity?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type LeagueSeasonsArgs = {
+  year?: Maybe<Scalars['Int']>;
+  finished?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -337,6 +344,7 @@ export type PlayerSeason = {
   position: Scalars['String'];
   positionRank: Scalars['Int'];
   positionRankPpg: Scalars['Int'];
+  primaryPosition: Scalars['String'];
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
   year: Scalars['Int'];
 };
@@ -371,10 +379,15 @@ export type PlayerTransaction = {
 
 export type Season = {
   __typename?: 'Season';
+  draftImported?: Maybe<Scalars['Boolean']>;
   finished?: Maybe<Scalars['Boolean']>;
+  keepersSet?: Maybe<Scalars['Boolean']>;
+  lastTransactionSyncDate?: Maybe<Scalars['DateTime']>;
+  matchupSyncWeek?: Maybe<Scalars['Int']>;
   positionComparison?: Maybe<Array<Maybe<PlayerSeason>>>;
   teams?: Maybe<Array<Maybe<Team>>>;
   yahooGameId?: Maybe<Scalars['Int']>;
+  yahooLeagueId?: Maybe<Scalars['Int']>;
   year: Scalars['Int'];
 };
 
@@ -392,6 +405,7 @@ export type Team = {
   standing: Scalars['Int'];
   ties: Scalars['Int'];
   wins: Scalars['Int'];
+  yahooTeamId?: Maybe<Scalars['Int']>;
   year: Scalars['Int'];
 };
 

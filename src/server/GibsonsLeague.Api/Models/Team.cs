@@ -1,11 +1,12 @@
-﻿using GibsonsLeague.Data;
+﻿using GibsonsLeague.Core.Models;
+using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class Team : ObjectGraphType<GibsonsLeague.Data.Team>
+    public class Team : ObjectGraphType<GibsonsLeague.Core.Models.Team>
     {
         public Team(MatchRepository matchRepository)
         {
@@ -14,6 +15,7 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.FranchiseId);
             Field(x => x.Franchise.MainName).Name("FranchiseName");
             Field("Owner", x => x.Owner.Name);
+            Field(x => x.YahooTeamId, nullable: true, type: typeof(IntGraphType));
             Field(x => x.Wins);
             Field(x => x.Loses);
             Field(x => x.Ties);

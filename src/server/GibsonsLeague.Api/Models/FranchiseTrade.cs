@@ -6,7 +6,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class FranchiseTrade : ObjectGraphType<GibsonsLeague.Data.Models.FranchiseTrade>
+    public class FranchiseTrade : ObjectGraphType<GibsonsLeague.Core.Models.FranchiseTrade>
     {
 
         public FranchiseTrade()

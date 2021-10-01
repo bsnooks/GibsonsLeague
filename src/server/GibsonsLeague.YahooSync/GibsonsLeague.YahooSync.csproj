@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+	  <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\GibsonsLeague.Core\GibsonsLeague.Core.csproj" />
+		<ProjectReference Include="..\GibsonsLeague.Data\GibsonsLeague.Data.csproj" />
+	</ItemGroup>
+
+</Project>

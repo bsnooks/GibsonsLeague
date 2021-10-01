@@ -29,11 +29,13 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
         WR: 0
     };
 
+    let max = 0;
+
     if (props.comparisonSeasons) {
         const comparisonSeasonsPosition = groupBy(props.comparisonSeasons, "positionRank");
         for (const [rank, positionSeasons] of Object.entries(comparisonSeasonsPosition)) {
 
-            const comparisonSeasonsRanks = groupBy(positionSeasons, "position");
+            const comparisonSeasonsRanks = groupBy(positionSeasons, "primaryPosition");
             
             const seasonPointsCompareData: { x: string | undefined; y: number | undefined; name: string | undefined }[] = [];
             for (const [position, seasons] of Object.entries(comparisonSeasonsRanks)) {
@@ -70,6 +72,9 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
 
                     if (season?.points && leaders[position as keyof ILeaders] < season?.points) {
                         leaders[position as keyof ILeaders] = season?.points;
+                        if (season?.points > max) {
+                            max = season?.points;
+                        }
                     }
                 });
             }
@@ -149,7 +154,7 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                     data={swarmData}
                     groups={[ 'QB', 'RB', 'WR', 'TE' ]}
                     value="points"
-                    valueScale={{ type: 'linear', min: 0, max: 500, reverse: false }}
+                    valueScale={{ type: 'linear', min: 0, max: (max + 20), reverse: false }}
                     size={{ key: 'ppg', values: [ 4, 30 ], sizes: [ 5, 40 ] }}
                     forceStrength={4}
                     simulationIterations={100}

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using GibsonsLeague.Core.Models;
 using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
@@ -6,7 +7,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class Player : ObjectGraphType<GibsonsLeague.Data.Player>
+    public class Player : ObjectGraphType<GibsonsLeague.Core.Models.Player>
     {
         public Player(PlayerRepository playerRepository, TransactionRepository transactionRepository)
         {

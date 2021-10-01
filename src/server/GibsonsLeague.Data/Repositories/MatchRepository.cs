@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GibsonsLeague.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GibsonsLeague.Data.Repositories
@@ -35,6 +36,30 @@ namespace GibsonsLeague.Data.Repositories
                     .Take(limit)
                     .ToListAsync();
             }
+        }
+
+        public async Task<Guid> CreateMatch(Match newMatch, IList<TeamScore> teamScores)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.AddAsync(newMatch);
+                await dbContext.AddRangeAsync(teamScores);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newMatch.MatchId;
+        }
+
+        public async Task<int> CreateMatches(IEnumerable<Match> newMatches, IList<TeamScore> teamScores)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.AddRangeAsync(newMatches);
+                await dbContext.AddRangeAsync(teamScores);
+                await dbContext.SaveChangesAsync();
+            }
+
+            return newMatches.Count();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace GibsonsLeague.Api.Models
 {
-    public class Legend : ObjectGraphType<GibsonsLeague.Data.Models.Legend>
+    public class Legend : ObjectGraphType<GibsonsLeague.Core.Models.Legend>
     {
         public Legend()
         {

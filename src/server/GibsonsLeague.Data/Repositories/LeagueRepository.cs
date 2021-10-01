@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GibsonsLeague.Core.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GibsonsLeague.Data.Repositories

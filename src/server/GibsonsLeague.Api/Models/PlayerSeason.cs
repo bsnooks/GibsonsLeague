@@ -1,16 +1,18 @@
-﻿using GibsonsLeague.Data;
+﻿using GibsonsLeague.Core.Models;
+using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class PlayerSeason : ObjectGraphType<GibsonsLeague.Data.PlayerSeason>
+    public class PlayerSeason : ObjectGraphType<GibsonsLeague.Core.Models.PlayerSeason>
     {
         public PlayerSeason(TransactionRepository transactionRepository)
         {
             Field(l => l.Player.Name);
             Field(l => l.Player.Position);
+            Field(l => l.Player.PrimaryPosition);
             Field(l => l.PlayerId);
             Field(l => l.Year);
             Field(l => l.PositionRank);

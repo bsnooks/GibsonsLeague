@@ -10,7 +10,7 @@ interface DraftGraphProps {
 
 const DraftGraph: React.FC<DraftGraphProps> = ({ ...props }) => {
     const data: Serie[] = [];
-    const positions = groupBy(props.picks, "playerPosition");
+    const positions = groupBy(props.picks, "playerPrimaryPosition");
     const keeperCounts = [];
     
     for (const [position, positionValue] of Object.entries(positions)) {

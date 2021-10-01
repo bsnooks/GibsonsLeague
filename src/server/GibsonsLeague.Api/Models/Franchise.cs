@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using GibsonsLeague.Core.Models;
 using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
@@ -6,7 +7,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class Franchise : ObjectGraphType<GibsonsLeague.Data.Franchise>
+    public class Franchise : ObjectGraphType<GibsonsLeague.Core.Models.Franchise>
     {
         public Franchise(TeamRepository teamRepository,
             DraftPickRepository draftPickRepository,
@@ -86,7 +87,7 @@ namespace GibsonsLeague.Api.Models
 
                     var group = seasons.GroupBy(s => new { s.PlayerId, s.Player }).OrderByDescending(x => x.Sum(y => y.Points)).Take(15);
 
-                    return group.Select(g => new GibsonsLeague.Data.Models.Legend(){
+                    return group.Select(g => new GibsonsLeague.Core.Models.Legend(){
                         Years = g.Select(x => x.Year).ToList(),
                         Player = g.Key.Player,
                         Points = g.Sum(x => x.Points),

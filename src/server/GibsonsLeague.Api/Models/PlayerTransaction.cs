@@ -6,7 +6,7 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class PlayerTransaction : ObjectGraphType<GibsonsLeague.Data.Transaction>
+    public class PlayerTransaction : ObjectGraphType<GibsonsLeague.Core.Models.Transaction>
     {
         public PlayerTransaction(TransactionRepository transactionRepository)
         {

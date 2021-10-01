@@ -5,7 +5,7 @@ import { GibsonsLeagueQuery } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
 import PlayerSearch from './controls/PlayerSearch';
 import logo from '../assets/images/logo_white.png';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 export const GET_FRANCHISES = gql`
   query GibsonsLeagueQuery {

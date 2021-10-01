@@ -4,9 +4,13 @@ using GraphQL.Types;
 
 namespace GibsonsLeague.Api.Models
 {
-    public class League : ObjectGraphType<GibsonsLeague.Data.League>
+    public class League : ObjectGraphType<GibsonsLeague.Core.Models.League>
     {
-        public League(DraftRepository draftRepository, FranchiseRepository franchiseRepository, RecordRepository recordRepository, AnalysisRepository analysisRepository)
+        public League(DraftRepository draftRepository,
+            SeasonRepository seasonRepository,
+            FranchiseRepository franchiseRepository,
+            RecordRepository recordRepository,
+            AnalysisRepository analysisRepository)
         {
             Field(l => l.LeagueId);
             Field(l => l.Name);
@@ -27,6 +31,17 @@ namespace GibsonsLeague.Api.Models
                     return recordRepository.GetLeagueRecords(context.Source.LeagueId,
                         context.GetArgument<int>("number"),
                         recordPositivity: context.GetArgument<bool?>("positivity"));
+                });
+
+            Field<ListGraphType<Season>>("seasons",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "year" },
+                    new QueryArgument<BooleanGraphType> { Name = "finished" }),
+                resolve: context =>
+                {
+                    return seasonRepository.GetSeasons(
+                        year: context.GetArgument<int?>("year"),
+                        finished: context.GetArgument<bool?>("finished"));
                 });
 
             Field<ListGraphType<TeamStrength>>("teamstrength",

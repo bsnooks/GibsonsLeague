@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GibsonsLeague.Core\GibsonsLeague.Core.csproj" />
     <ProjectReference Include="..\GibsonsLeague.Data\GibsonsLeague.Data.csproj" />
+    <ProjectReference Include="..\GibsonsLeague.YahooSync\GibsonsLeague.YahooSync.csproj" />
   </ItemGroup>
 
 
