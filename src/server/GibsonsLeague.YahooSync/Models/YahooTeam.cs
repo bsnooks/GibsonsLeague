@@ -73,7 +73,8 @@ namespace GibsonsLeague.YahooSync.Models
         public bool ClinchedPlayoffs { get; set; }
     }
 
-    [XmlRoot(ElementName = "team")]
+    [YahooLookup(Name="team")]
+    [XmlRoot(ElementName = "team", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
     public class YahooTeam : TeamBase
     {
 

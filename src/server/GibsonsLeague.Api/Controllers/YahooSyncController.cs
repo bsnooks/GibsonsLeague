@@ -91,6 +91,19 @@ namespace GibsonsLeague.Api.Controllers
 
             return new NoContentResult();
         }
+
+        [HttpPost("rosters")]
+        public async Task<IActionResult> SyncPlayerRoster([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        {
+            _ = yahooSyncService.SyncPlayerRoster(
+                YahooSyncContext.Create(
+                    Request.HttpContext,
+                    await leagueRepository.GetOne(request.LeagueId)),
+                await seasonRepository.GetSeason(request.Year),
+                cancellationToken);
+
+            return new NoContentResult();
+        }
     }
     
 }

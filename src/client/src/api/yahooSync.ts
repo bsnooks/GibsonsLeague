@@ -92,3 +92,21 @@ export function yahooSyncPlayerStats(leagueId: string, year: number, onSuccess: 
         return null;
     }
 }
+
+export function yahooSyncRosters(leagueId: string, year: number, onSuccess: (response: any) => any, onError: ((reason: any) => void)) {
+    try {
+        const url = `${yahooSyncUrl}/rosters`;
+        axios.post(url,
+            {
+                Year: year,
+                LeagueId: leagueId
+            })
+            .then(response => onSuccess(response.data))
+            .catch((err: Error | AxiosError) => {
+                onError(err);
+            })
+
+    } catch (err) {
+        return null;
+    }
+}

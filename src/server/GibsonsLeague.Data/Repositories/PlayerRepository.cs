@@ -149,14 +149,17 @@ namespace GibsonsLeague.Data.Repositories
             return newPlayer.PlayerId;
         }
 
-        public async Task UpdatePlayersSeasons(IEnumerable<PlayerSeason> playerSeasons, int year)
+        public async Task UpdatePlayersSeasons(IEnumerable<PlayerSeason> playerSeasons, int year, bool updatePositionRanks = true)
         {
             using (var dbContext = dbFunc())
             {
                 dbContext.PlayerSeasons.UpdateRange(playerSeasons);
                 await dbContext.SaveChangesAsync();
 
-                dbContext.Database.ExecuteSqlRaw("EXECUTE [dbo].[UpdatePositionRanks] {0}", year);
+                if (updatePositionRanks)
+                {
+                    dbContext.Database.ExecuteSqlRaw("EXECUTE [dbo].[UpdatePositionRanks] {0}", year);
+                }
             }
         }
     }

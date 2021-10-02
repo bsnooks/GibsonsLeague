@@ -12,5 +12,6 @@ namespace GibsonsLeague.YahooSync
         Task SyncMatchups(ISyncContext context, Season season, CancellationToken cancellationToken = default);
         Task SyncStandings(ISyncContext context, Season season, CancellationToken cancellationToken = default);
         Task SyncPlayerStats(ISyncContext context, Season season, CancellationToken cancellationToken = default);
+        Task SyncPlayerRoster(ISyncContext context, Season season, CancellationToken cancellationToken = default);
     }
 }

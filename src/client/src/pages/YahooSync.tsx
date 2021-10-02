@@ -9,7 +9,7 @@ import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, Season } from '../generated/graphql';
 import GlobalError from '../components/GlobalError';
 import { RootState } from '../store/rootReducer';
-import { yahooSyncDraft, yahooSyncMatchups, yahooSyncPlayerStats, yahooSyncStandings, yahooSyncTransactions } from '../api/yahooSync';
+import { yahooSyncDraft, yahooSyncMatchups, yahooSyncPlayerStats, yahooSyncRosters, yahooSyncStandings, yahooSyncTransactions } from '../api/yahooSync';
 import SyncButton from '../components/controls/SyncButton';
 import { useHistory } from 'react-router';
 
@@ -90,6 +90,14 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
             (err) => console.log(err));
     }
 
+    const syncRosters = (season: Season) => {
+        yahooSyncRosters(
+            leagueId,
+            season.year,
+            (response) => console.log(response),
+            (err) => console.log(err));
+    }
+
     return (
         <div className="page">
             <Container>
@@ -150,6 +158,13 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
                                                 <SyncButton onSyncClick={(_, season) => syncPlayerStats(season)} synced={season.finished} season={season} />
                                             </div>
                                             <div className="seasonsync-col data">Player Stats</div>
+                                            <div className="seasonsync-col date"></div>
+                                        </div>
+                                        <div className="seasonsync">
+                                            <div className="seasonsync-col status">
+                                                <SyncButton onSyncClick={(_, season) => syncRosters(season)} synced={season.finished} season={season} />
+                                            </div>
+                                            <div className="seasonsync-col data">Rosters</div>
                                             <div className="seasonsync-col date"></div>
                                         </div>
                                     </>) :null}

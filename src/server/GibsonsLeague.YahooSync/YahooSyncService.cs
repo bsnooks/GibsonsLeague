@@ -536,5 +536,59 @@ namespace GibsonsLeague.YahooSync
             }
         }
 
+        /// <summary>
+        /// Sync the player stats information for a season between Yahoo! and GLA.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="season"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task SyncPlayerRoster(ISyncContext context, Season season, CancellationToken cancellationToken = default)
+        {
+            using (var client = new YahooClient(context, configuration))
+            {
+                var playerSeasons = await playerRepository.GetPlayerSeasons(season.Year, new[] { "QB", "RB", "WR", "TE" });
+
+                // reset players teams.
+                foreach(var player in playerSeasons)
+                {
+                    player.EndTeamId = null;
+                }
+
+                IDictionary<int, PlayerSeason> playerCache = playerSeasons.ToDictionary(p => p.PlayerId, p => p);
+                IDictionary<int, Team> teamCache = season.Teams.ToDictionary(s => s.YahooTeamId.Value, s => s);
+
+                foreach (var team in season.Teams)
+                {
+                    YahooTeam result = null;
+                    try
+                    {
+                        result = await client.GetAsync<YahooTeam>(
+                            $"team/{season.YahooGameId}.l.{season.YahooLeagueId}.t.{team.YahooTeamId}/roster",
+                            cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+
+                    if (result != null && result != null)
+                    {
+                        foreach (var yahooPlayer in result.Roster.PlayerList.Players)
+                        {
+                            if (playerCache.ContainsKey(yahooPlayer.PlayerId))
+                            {
+                                var playerSeason = playerCache[yahooPlayer.PlayerId];
+                                Console.WriteLine($"Updating: {yahooPlayer.Name.Full} to be on {team.Franchise.MainName}");
+                                playerSeason.EndTeamId = team.TeamId;
+                            }
+                        }
+                    }
+                }
+
+                await playerRepository.UpdatePlayersSeasons(playerSeasons, season.Year, false);
+            }
+        }
+
     }
 }

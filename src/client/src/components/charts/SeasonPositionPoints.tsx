@@ -208,7 +208,7 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                         
                         return (
                             <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.color}`, borderWidth: "2px", padding: "5px"}}>
-                                {`${input.id}: ${data.name} ${input.data.points} (${input.data.gamesPlayed} games)`}<br/>
+                                {`${input.id}: ${data.name} ${Number(input.data.points).toLocaleString('en-US', { maximumFractionDigits: 2, minimumFractionDigits: 2 })} (${input.data.gamesPlayed} games)`}<br/>
                                 {`${input.data.team ?? "Unowned"}`}
                             </div>
                         )
