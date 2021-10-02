@@ -15,6 +15,8 @@ const Callback: React.FC<CallbackProps> = () => {
     const [busy, setBusy] = useState(true);
     const history = useHistory();
 
+    if (!code) return <GlobalError mode="page" errorMessage="Failed to load Yahoo! Auth Code. Please try again later." />;
+    
     useEffect(() => {
         setBusy(true);
         dispatch(
@@ -32,7 +34,6 @@ const Callback: React.FC<CallbackProps> = () => {
         );
     }, [code, dispatch, history]);
 
-    if (!code) return <GlobalError mode="page" errorMessage="Failed to load Yahoo! Auth Code. Please try again later." />;
     if (error) return <GlobalError mode="page" errorMessage="Failed to authenticate with Yahoo! Auth Code. Please try again later." />;
     if (busy) return <GlobalLoading mode="page" />
 
