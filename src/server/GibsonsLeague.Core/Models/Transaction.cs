@@ -16,6 +16,7 @@ namespace GibsonsLeague.Core.Models
         public string Description { get; set; }
         public Guid? DraftPickId { get; set; }
         public int Year { get; set; }
+        public int PlayerTransactionIndex { get; set; }
 
         public virtual DraftPick DraftPick { get; set; }
         public virtual Player Player { get; set; }

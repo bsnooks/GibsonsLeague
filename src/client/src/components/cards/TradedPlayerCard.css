@@ -1,0 +1,43 @@
+.tradedplayer {
+    display: block;
+    border: 1px solid #ccc;
+    box-sizing: border-box
+}
+.tradedplayer .toggle {
+    cursor: pointer;
+}
+.tradedplayer:first-of-type {
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+.tradedplayer:last-of-type {
+    border-bottom-left-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+.tradedplayer:not(:first-of-type) {
+    border-top: 0;
+}
+.tradedplayer .tradedplayer-header {
+    padding: 8px;
+    font-weight: bold;
+    background-color: #ddf0e0;
+}
+.tradedplayer .tradedplayer-body {
+    border-top: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+.tradedplayer .tradedplayer-body .transaction-col.date {
+    width:25%;
+}
+.tradedplayer .tradedplayer-body .transaction-col.details {
+    width:75%;
+}
+.tradedplayer .rank {
+    display: inline-block;
+    background-color: #72e683;
+    padding: 1px 4px;
+    margin-left: 10px;
+    border-radius: .25rem;
+    font-weight: normal;
+}

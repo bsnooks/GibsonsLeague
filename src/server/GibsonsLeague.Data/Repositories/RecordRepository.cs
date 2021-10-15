@@ -113,6 +113,46 @@ namespace GibsonsLeague.Data.Repositories
                                 true,
                                 RecordType.Season,
                                 TeamRecordValueType.Points));
+
+                        recordCollection.Add(
+                            CreateTeamRecord("Least Points (when making playoffs)",
+                                await dbContext.Teams
+                                    .Where(x => x.LeagueId == leagueId &&
+                                    x.Standing <= 4 && 
+                                    x.Season.Finished.HasValue && 
+                                    x.Season.Finished.Value)
+                                    .OrderBy(x => x.Points)
+                                    .Include(x => x.Franchise)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                true,
+                                RecordType.Season,
+                                TeamRecordValueType.Points));
+
+                        recordCollection.Add(
+                            CreateTeamRecord("Best Record (without making playoffs)",
+                                await dbContext.Teams
+                                    .Where(x => x.LeagueId == leagueId && x.Standing > 4)
+                                    .OrderByDescending(x => x.Wins)
+                                    .ThenByDescending(x => x.Ties)
+                                    .ThenByDescending(x => x.Points)
+                                    .Include(x => x.Franchise)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                true,
+                                RecordType.Season));
+
+                        recordCollection.Add(
+                            CreateTeamRecord("Most Season Points (without making playoffs)",
+                                await dbContext.Teams
+                                    .Where(x => x.LeagueId == leagueId && x.Standing > 4)
+                                    .OrderByDescending(x => x.Points)
+                                    .Include(x => x.Franchise)
+                                    .Take(number)
+                                    .ToListAsync(),
+                                true,
+                                RecordType.Season,
+                                TeamRecordValueType.Points));
                     }
 
                     if (!recordType.HasValue || recordType == RecordType.Match)

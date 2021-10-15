@@ -89,7 +89,7 @@ const FranchiseKeepers: React.FC<FranchiseKeepersProps> = ({ ...props }) => {
                                 <Col><SectionInfoBox title="QB's Kept" info={positions["QB"].length} /></Col>
                                 <Col><SectionInfoBox title="RB's Kept" info={positions["RB"].length} /></Col>
                                 <Col><SectionInfoBox title="WR's Kept" info={positions["WR"].length} /></Col>
-                                <Col><SectionInfoBox title="TE's Kept" info={positions["TE"].length} /></Col>
+                                <Col><SectionInfoBox title="TE's Kept" info={"TE" in positions ? positions["TE"].length : 0} /></Col>
                             </Row>
                         </div>
                     </>) : null

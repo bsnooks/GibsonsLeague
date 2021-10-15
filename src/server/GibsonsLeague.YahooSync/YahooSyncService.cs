@@ -537,7 +537,7 @@ namespace GibsonsLeague.YahooSync
         }
 
         /// <summary>
-        /// Sync the player stats information for a season between Yahoo! and GLA.
+        /// Sync the player roster information for a season between Yahoo! and GLA.
         /// </summary>
         /// <param name="context"></param>
         /// <param name="season"></param>

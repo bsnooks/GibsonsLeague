@@ -54,7 +54,8 @@ namespace GibsonsLeague.Data.Repositories
                 var tradeGroup = await dbContext.TransactionGroups
                     .Where(x => x.TransactionGroupId == tradeId)
                     .Include(x => x.Transactions).ThenInclude(x => x.Team).ThenInclude(x => x.Franchise)
-                    .Include(x => x.Transactions).ThenInclude(x => x.Player)
+                    .Include(x => x.Transactions).ThenInclude(x => x.Player).ThenInclude(x => x.PlayerSeasons)
+                    .Include(x => x.Transactions).ThenInclude(x => x.Player).ThenInclude(x => x.Transactions)
                     .OrderByDescending(x => x.Date)
                     .SingleOrDefaultAsync();
 

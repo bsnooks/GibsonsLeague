@@ -1,10 +1,10 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
+import { Container, Col, Row } from 'react-bootstrap';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from '../components/GlobalLoading';
 import GlobalError from '../components/GlobalError';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryTradeArgs } from '../generated/graphql';
-import TradeCard from '../components/cards/TradeCard';
+import TradeTreeCard from '../components/cards/TradeTreeCard';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Guid) {
@@ -17,15 +17,43 @@ export const GET_FRANCHISE = gql`
       tradedWithFranchiseName
       tradedfor
       {
+        year
         playerId
+        primaryPosition
+        positionRank
         name
-        position
+        tree
+        {
+          type
+          transactionId
+          transactionGroupId
+          playerId
+          year
+          date
+          description
+          primaryPosition
+          positionRank
+        }
       }
       tradedaway
       {
+        year
         playerId
+        primaryPosition
+        positionRank
         name
-        position
+        tree
+        {
+          type
+          transactionId
+          transactionGroupId
+          playerId
+          year
+          date
+          description
+          primaryPosition
+          positionRank
+        }
       }
     }
   }
@@ -54,15 +82,17 @@ const Trade: React.FC<TradeProps> = ({ ...props }) => {
 
   if (loading) return <GlobalLoading mode="page" />;
   if (error || !data || !data.trade) return <GlobalError mode="page" apolloError={error} />;
-  
+
   const trade = data.trade;
 
   return (
     <Container>
       <section>
-        <div className="d-flex flex-wrap justify-content-center">
-          <TradeCard trade={trade} key={trade.tradeId} includeTradeTree={false} />
-        </div>
+        <Row>
+          <Col>
+            <TradeTreeCard trade={trade} />
+          </Col>
+        </Row>
       </section>
 
     </Container>

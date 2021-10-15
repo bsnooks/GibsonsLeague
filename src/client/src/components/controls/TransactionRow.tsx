@@ -7,6 +7,7 @@ import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
 interface TransactionRowProps {
     transaction: PlayerTransaction;
     year: number;
+    hideTeam?: boolean
 }
 
 const TransactionRow: React.FC<TransactionRowProps> = ({ ...props }) => {
@@ -36,12 +37,15 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ ...props }) => {
 
     return (
         <div className="transaction">
-            <div className="transaction-col team">
-                <Image roundedCircle src={avatar} style={{ width: '1.5rem' }} />
-                <Link to={`/franchise/${props.transaction.franchiseId}`} style={{paddingLeft:"10px"}}>
-                    {props.transaction.franchiseName}
-                </Link>
-            </div>
+            {
+                props.hideTeam ? null :
+                <div className="transaction-col team">
+                    <Image roundedCircle src={avatar} style={{ width: '1.5rem' }} />
+                    <Link to={`/franchise/${props.transaction.franchiseId}`} style={{paddingLeft:"10px"}}>
+                        {props.transaction.franchiseName}
+                    </Link>
+                </div>
+            }
             <div className="transaction-col date">
                 {(new Date(props.transaction.date).toLocaleDateString())}
             </div>

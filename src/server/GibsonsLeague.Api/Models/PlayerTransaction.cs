@@ -16,6 +16,7 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Player.Name);
             Field(x => x.Player.Position);
             Field(x => x.Player.PrimaryPosition);
+            Field(x => x.PlayerTransactionIndex);
             Field(x => x.Description);
             Field(x => x.Date);
             Field(x => x.Date.Year);
@@ -38,6 +39,9 @@ namespace GibsonsLeague.Api.Models
 
             Field<ListGraphType<PlayerTransaction>>("related",
                 resolve: context => transactionRepository.GetRelatedTransactions(context.Source.TransactionId, context.Source.TransactionGroupId));
+
+            Field<ListGraphType<PlayerTransaction>>("tree",
+                resolve: context => transactionRepository.GetSubsequentTransactions(context.Source));
         }
     }
 }

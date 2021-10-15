@@ -45,6 +45,7 @@ export const GET_TEAMS = gql`
         name
         gamesPlayed
         endfranchise
+        endfranchisecolor
       }
     }	
   }

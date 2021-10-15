@@ -110,8 +110,8 @@ export type FranchiseTrade = {
   franchiseName: Scalars['String'];
   tradedaway?: Maybe<Array<Maybe<PlayerTransaction>>>;
   tradedfor?: Maybe<Array<Maybe<PlayerTransaction>>>;
-  tradedWithFranchiseId: Scalars['ID'];
-  tradedWithFranchiseName: Scalars['String'];
+  tradedWithFranchiseId?: Maybe<Scalars['Guid']>;
+  tradedWithFranchiseName?: Maybe<Scalars['String']>;
   tradeId: Scalars['ID'];
 };
 
@@ -336,7 +336,7 @@ export type PlayerTransactionsArgs = {
 export type PlayerSeason = {
   __typename?: 'PlayerSeason';
   endfranchise?: Maybe<Scalars['String']>;
-  franchiseName: Scalars['String'];
+  endfranchisecolor?: Maybe<Scalars['String']>;
   gamesPlayed: Scalars['Int'];
   name: Scalars['String'];
   playerId: Scalars['Int'];
@@ -364,6 +364,7 @@ export type PlayerTransaction = {
   franchiseName: Scalars['String'];
   name: Scalars['String'];
   playerId: Scalars['Int'];
+  playerTransactionIndex: Scalars['Int'];
   position: Scalars['String'];
   positionRank?: Maybe<Scalars['Float']>;
   positionRankPpg?: Maybe<Scalars['Float']>;
@@ -373,6 +374,7 @@ export type PlayerTransaction = {
   seasonPoints?: Maybe<Scalars['Float']>;
   transactionGroupId?: Maybe<Scalars['Guid']>;
   transactionId: Scalars['ID'];
+  tree?: Maybe<Array<Maybe<PlayerTransaction>>>;
   type?: Maybe<Scalars['String']>;
   year: Scalars['Int'];
 };

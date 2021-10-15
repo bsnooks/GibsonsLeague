@@ -56,6 +56,66 @@ namespace GibsonsLeague.Data.Repositories
             }
         }
 
+        public async Task<IEnumerable<Transaction>> GetSubsequentTransactions(Transaction transaction)
+        {
+            using (var dbContext = dbFunc())
+            {
+                IList<Transaction> related = new List<Transaction>();
+                var potential = await dbContext.Transactions
+                    .Where(x => x.TransactionId != transaction.TransactionId &&
+                        x.PlayerTransactionIndex > transaction.PlayerTransactionIndex &&
+                        x.PlayerId == transaction.PlayerId)
+                    .Include(x => x.Team.Franchise)
+                    .Include(x => x.Player)
+                    .ThenInclude(x => x.PlayerSeasons)
+                    .OrderBy(x => x.PlayerTransactionIndex)
+                    .ThenBy(x => x.Date)
+                    .ToListAsync();
+
+                var i = transaction.PlayerTransactionIndex;
+                foreach (var p in potential)
+                {
+                    if (p.PlayerTransactionIndex != (i+1))
+                    {
+                        break;
+                    }
+
+                    bool lastTransaction = false;
+                    switch(p.TransactionType)
+                    {
+                        case TransactionType.Kept:
+                            related.Add(p);
+                            i = p.PlayerTransactionIndex;
+                            break;
+                        case TransactionType.Dropped:
+                        case TransactionType.Traded:
+                            related.Add(p);
+                            lastTransaction = true;
+                            break;
+                        case TransactionType.Added:
+                        case TransactionType.DraftPicked:
+                            lastTransaction = true;
+                            break;
+                        case TransactionType.VetoedTrade:
+                            i = p.PlayerTransactionIndex;
+                            break;
+                    }
+
+                    if (lastTransaction)
+                    {
+                        break;
+                    }
+
+                    if (p.Team.FranchiseId != transaction.Team.FranchiseId)
+                    {
+                        break;
+                    }
+                }
+
+                return related;
+            }
+        }
+
         public async Task<Guid> CreateTransaction(Transaction newTransaction)
         {
             using (var dbContext = dbFunc())

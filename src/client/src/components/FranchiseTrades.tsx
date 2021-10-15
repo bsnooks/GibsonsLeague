@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Col, Row } from 'react-bootstrap';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryTradesArgs } from '../generated/graphql';
 import { gql, useQuery } from '@apollo/client';
 import GlobalLoading from './GlobalLoading';
@@ -41,8 +41,7 @@ const FranchiseTrades: React.FC<FranchiseTradesProps> = ({ ...props }) => {
     const {
         data,
         loading,
-        error,
-        fetchMore
+        error
     } = useQuery<GibsonsLeagueQuery, GibsonsLeagueQueryTradesArgs>(GET_TRADES,
         {
             variables: {
@@ -51,29 +50,21 @@ const FranchiseTrades: React.FC<FranchiseTradesProps> = ({ ...props }) => {
             }
         });
 
-    const handleClick = () => {
-        fetchMore({
-            variables: {
-                franchiseId: props.franciseId,
-                year: props.year
-            }
-        })
-    };
-
     if (loading) return <GlobalLoading mode="component" />;
     if (error || !data) return <GlobalError mode="component" apolloError={error} />;
 
     return (
 
         <section>
-            <div className="d-flex flex-wrap justify-content-center">
+            <Row>
                 {
                     data?.trades?.map((trade: any) => (
-                        <TradeCard trade={trade} key={trade.tradeId} />
+                        <Col sm key={trade.tradeId}>
+                            <TradeCard trade={trade} />
+                        </Col>
                     ))
                 }
-            </div>
-            <Button onClick={handleClick}>Load More</Button>
+            </Row>
         </section>
     );
 }

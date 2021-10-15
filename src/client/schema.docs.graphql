@@ -151,13 +151,15 @@ type FranchiseTrade {
   franchiseName: String!
   tradedaway: [PlayerTransaction]
   tradedfor: [PlayerTransaction]
-  tradedWithFranchiseId: ID!
-  tradedWithFranchiseName: String!
+  tradedWithFranchiseId: Guid
+  tradedWithFranchiseName: String
   tradeId: ID!
 }
 
 # The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
 scalar DateTime
+
+scalar Guid
 
 type PlayerTransaction {
   date: DateTime!
@@ -166,6 +168,7 @@ type PlayerTransaction {
   franchiseName: String!
   name: String!
   playerId: Int!
+  playerTransactionIndex: Int!
   position: String!
   positionRank: Float
   positionRankPpg: Float
@@ -175,11 +178,10 @@ type PlayerTransaction {
   seasonPoints: Float
   transactionGroupId: Guid
   transactionId: ID!
+  tree: [PlayerTransaction]
   type: String
   year: Int!
 }
-
-scalar Guid
 
 type Legend {
   player: Player
@@ -211,7 +213,7 @@ type Player {
 
 type PlayerSeason {
   endfranchise: String
-  franchiseName: String!
+  endfranchisecolor: String
   gamesPlayed: Int!
   name: String!
   playerId: Int!

@@ -14,7 +14,8 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
     const data: Serie[] = [];
     const swarmData: any[] = [];
     const [maxPoints, setMaxPoints] = useState(0);
-
+    const [filterFranchise] = useState<string[]>([]);
+    const [focusFranchise, setFocusFranchise] = useState<string>();
 
     interface ILeaders {
         QB: number,
@@ -55,17 +56,22 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                             "name": season?.name,
                         });
                         
-                        if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
-                            swarmData.push({
-                                "id": `${position}-${season.positionRank}`,
-                                "group": position,
-                                "points": season?.points,
-                                "gamesMissed": 17 - season?.gamesPlayed,
-                                "gamesPlayed": season?.gamesPlayed,
-                                "ppg": season?.gamesPlayed > 0 ? season?.points / season?.gamesPlayed : 0,
-                                "name": season?.name,
-                                "team": season?.endfranchise,
-                            });
+                        if (filterFranchise.length === 0 ||
+                            (season?.endfranchise &&
+                            filterFranchise.includes(season.endfranchise))) {
+                            if (season?.points && season?.gamesPlayed && season?.gamesPlayed > 0) {
+                                swarmData.push({
+                                    "id": `${position}-${season.positionRank}`,
+                                    "group": position,
+                                    "points": season?.points,
+                                    "gamesMissed": 17 - season?.gamesPlayed,
+                                    "gamesPlayed": season?.gamesPlayed,
+                                    "ppg": season?.gamesPlayed > 0 ? season?.points / season?.gamesPlayed : 0,
+                                    "name": season?.name,
+                                    "team": season?.endfranchise,
+                                    "color": season?.endfranchisecolor,
+                                });
+                            }
                         }
                     }
 
@@ -92,10 +98,20 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
     const palette : string[] = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', '#000075', '#808080', '#ffffff', '#000000']
     const team : string[] = [];
     const getColor = (data: any) => {
+        if (focusFranchise && data.data.team !== focusFranchise) {
+            return "#DDD";
+        }
+        if (data.data.color) {
+            return data.data.color;
+        }
         if (!team.includes(data.data.team)) {
             team.push(data.data.team);
         }
-        return palette[team.indexOf(data.data.team) ?? 11];
+        if (!team.indexOf(data.data.team))
+        {
+            return "#CCC";
+        }
+        return palette[team.indexOf(data.data.team)];
     }
 
     const lineGraph = 
@@ -212,6 +228,13 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                                 {`${input.data.team ?? "Unowned"}`}
                             </div>
                         )
+                    }}
+                    onClick={(node, _) => {
+                        if (focusFranchise === node.data.team) {
+                            setFocusFranchise("");
+                        } else {
+                            setFocusFranchise(node.data.team);
+                        }
                     }}
                 />
             

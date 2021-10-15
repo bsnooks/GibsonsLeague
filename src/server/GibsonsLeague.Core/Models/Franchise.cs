@@ -16,6 +16,7 @@ namespace GibsonsLeague.Core.Models
         public Guid FranchiseId { get; set; }
         public Guid LeagueId { get; set; }
         public string MainName { get; set; }
+        public string Color { get; set; }
 
         public virtual League League { get; set; }
         public virtual ICollection<Owner> Owners { get; set; }

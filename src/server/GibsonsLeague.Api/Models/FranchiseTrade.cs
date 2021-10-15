@@ -15,8 +15,8 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.Date);
             Field(x => x.Franchise.FranchiseId).Name("FranchiseId");
             Field(x => x.Franchise.MainName).Name("FranchiseName");
-            Field("TradedWithFranchiseId", x => x.TradedWith.FranchiseId);
-            Field(x => x.TradedWith.MainName).Name("TradedWithFranchiseName");
+            Field("TradedWithFranchiseId", x => x.TradedWith != null ? x.TradedWith.FranchiseId :(Guid?)null, nullable: true, type: typeof(GuidGraphType));
+            Field("TradedWithFranchiseName", x => x.TradedWith != null ? x.TradedWith.MainName : string.Empty, nullable: true, type: typeof(StringGraphType));
 
             Field<ListGraphType<PlayerTransaction>>("tradedfor",
                 resolve: context =>
