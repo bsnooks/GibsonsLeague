@@ -26,6 +26,81 @@ namespace GibsonsLeague.Data.Repositories
                 {
                     if (!recordType.HasValue || recordType == RecordType.Franchise)
                     {
+                        var matches = await dbContext.Matches
+                                    .Where(x => x.LeagueId == leagueId &&
+                                        !x.Tied &&
+                                        x.MatchTypeId == MatchType.Regular)
+                                    .Include(x => x.WinningTeam).ThenInclude(x => x.Franchise)
+                                    .OrderBy(x => x.Year)
+                                    .ThenBy(x => x.Week)
+                                    .ToListAsync();
+
+                        IList<Tuple<Franchise, int, Tuple<int, int>, Tuple<int, int>>> tuples = new List<Tuple<Franchise, int, Tuple<int, int>, Tuple<int, int>>>();
+                        var groups = matches.GroupBy(x => x.WinningTeam.Franchise);
+                        foreach (var group in groups)
+                        {
+                            int lastYear = 0;
+                            int lastWeek = 0;
+                            int startWeek = 0;
+                            int startYear = 0;
+                            int wins = 0;
+                            foreach(var match in group)
+                            {
+                                if ((match.Week == (lastWeek + 1) && match.Year == lastYear) ||
+                                    (lastWeek == 14 && match.Week == 1 && match.Year == (lastYear + 1)))
+                                {
+                                    wins++;
+                                }
+                                else
+                                {
+                                    if (wins > 5)
+                                    {
+                                        tuples.Add(
+                                            new Tuple<Franchise, int, Tuple<int, int>, Tuple<int, int>>(
+                                                group.Key,
+                                                wins,
+                                                new Tuple<int, int>(startYear, startWeek),
+                                                new Tuple<int, int>(match.Year, match.Week)));
+                                    }
+                                    wins = 1;
+                                    startWeek = match.Week;
+                                    startYear = match.Year;
+                                }
+
+                                lastWeek = match.Week;
+                                lastYear = match.Year;
+                            }
+
+                            if (wins > 5)
+                            {
+                                tuples.Add(
+                                    new Tuple<Franchise, int, Tuple<int, int>, Tuple<int, int>>(
+                                        group.Key,
+                                        wins,
+                                        new Tuple<int, int>(startYear, startWeek),
+                                        new Tuple<int, int>(lastYear, lastWeek)));
+                            }
+                        }
+
+                        LeagueRecords record = new LeagueRecords()
+                        {
+                            RecordTitle = "Longest Win Streak",
+                            PositiveRecord = true,
+                            RecordType = RecordType.Franchise,
+                            Records = new List<LeagueRecord>()
+                        };
+                        int rank = 1;
+                        foreach(var tuple in tuples.OrderByDescending(x => x.Item2).Take(number))
+                        {
+                            record.Records.Add(new LeagueRecord()
+                            {
+                                Rank = rank++,
+                                Franchise = tuple.Item1,
+                                RecordValue = $"{tuple.Item2} ({tuple.Item3.Item1} Week {tuple.Item3.Item2} - {tuple.Item4.Item1} Week {tuple.Item4.Item2})",
+                                RecordNumericValue = tuple.Item2
+                            });
+                        }
+
                         IList<FranchiseStats> franchiseStats = await dbContext.Franchises
                                     .Where(x => x.LeagueId == leagueId)
                                     .Include(x => x.Teams)
@@ -60,6 +135,8 @@ namespace GibsonsLeague.Data.Repositories
                             CreateFranchiseRecord("Most Franchise Points",
                                 franchiseStats.OrderByDescending(x => x.Points).ThenByDescending(x => x.Championships).Take(number).ToList(),
                                 recordValueType: FranchiseRecordValueType.Points));
+
+                        recordCollection.Add(record);
 
                         recordCollection.Add(
                             CreateFranchiseRecord("Most Times Player Kept",
