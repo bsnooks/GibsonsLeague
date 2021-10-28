@@ -21,7 +21,7 @@ jobs:
         files: 'src/server/GibsonsLeague.Api/appsettings.json'
       env:
         ConnectionStrings.GibsonsLeagueDb: ${{ secrets.GLA_DB_CONNECTIONSTRING }}
-        Yahoo.ClientSecret: ${{ env.GLA_YAHOOAPPSECRET }}
+        Yahoo.ClientSecret: ${{ secrets.GLA_YAHOOAPPSECRET }}
       
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
