@@ -1,9 +1,14 @@
+// @ts-nocheck
 import React, { useState } from 'react';
 import { Maybe, PlayerSeason } from '../../generated/graphql';
 import { ResponsiveLine, Serie } from '@nivo/line'
 import { ResponsiveSwarmPlot } from '@nivo/swarmplot'
 import { useBaseTheme } from './theme';
 import { groupBy } from 'lodash';
+import Switch from "react-switch";
+import { Modal, Button } from 'react-bootstrap';
+import { faCogs } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface SeasonPositionPointsProps {
     comparisonSeasons: Maybe<Array<Maybe<PlayerSeason>>> | undefined;
@@ -16,6 +21,15 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
     const [maxPoints, setMaxPoints] = useState(0);
     const [filterFranchise] = useState<string[]>([]);
     const [focusFranchise, setFocusFranchise] = useState<string>();
+    const [showLabels, setShowLabels] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
+
+    const handleClose = () => setShowSettings(false);
+    const handleShow = () => setShowSettings(true);
+
+    const handleChangeShowLabels = (checked: boolean) => {
+        setShowLabels(checked);
+      };
 
     interface ILeaders {
         QB: number,
@@ -160,9 +174,58 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
     }}
     theme={theme}
 />
+const labelLayer = ({ nodes }) => {
+    if (!showLabels) { return <></>}
+    return nodes.map(node => {
+        if (node && node.data && node.data.name)
+        {
+            const n = node.data.name.split(" ");
+            const name = n[n.length - 1];
+            return (
+                <text
+                    key={node.id}
+                    x={node.x}
+                    y={node.y}
+                    //fill= {node.color}
+                    stroke="white"
+                    strokeOpacity={0.5}
+                    strokeWidth={1}
+                    strokeLinejoin="bevel"
+                    fillOpacity={1}
+                    textAnchor="middle"
+                    dominantBaseline="central"
+                    style={{
+                        fontSize: Math.max(node.size / 2.5, 10),
+                        fontWeight: 600,
+                        fontFamily: "Consolas"
+                    }}>
+                    {name}
+                </text>);
+        }
 
+        return "";
+    });
+  };
     return (
-        <div>
+        <div style={{position: 'relative'}}>
+            <Modal show={showSettings} onHide={handleClose}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Chart Settings</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Show Player Names: <Switch onChange={handleChangeShowLabels} checked={showLabels} />
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+            <div className="text-right" style={{position: "absolute", top: 10, right:10, zIndex:100}}>
+                <Button variant="light" onClick={handleShow}>
+                    <FontAwesomeIcon icon={faCogs} />
+                </Button>
+            </div>
             <div style={{ width: '100%', height: 800 }}>
                 {showLine ? lineGraph : null}
                 <ResponsiveSwarmPlot
@@ -174,6 +237,7 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                     forceStrength={4}
                     simulationIterations={100}
                     colors={getColor}
+                    useMesh={true}
                     borderColor={{
                         from: 'color',
                         modifiers: [
@@ -219,6 +283,15 @@ const SeasonPositionPoints: React.FC<SeasonPositionPointsProps> = ({ ...props })
                         legendPosition: 'middle',
                         legendOffset: -76
                     }}
+                    layers={[
+                        "grid",
+                        "axes",
+                        "nodes",
+                        "mesh",
+                        'circles',
+                        labelLayer,
+                        "annotations"
+                      ]}
                     tooltip={(input) => {
                         const data : any = input.data;
                         
