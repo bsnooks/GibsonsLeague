@@ -217,6 +217,7 @@ namespace GibsonsLeague.YahooSync
 
                             if (!playerCache.ContainsKey(yahooPlayerId))
                             {
+                                Console.Write($"Need to add {yahooPlayerId}");
                                 playerCache.Add(yahooPlayerId, await SyncPlayer(client, season, yahooPlayerId, cancellationToken));
                             }
 
@@ -257,6 +258,7 @@ namespace GibsonsLeague.YahooSync
                                 traderPlayers.Add(player);
                             }
 
+                            Console.WriteLine($"{player.Name}: {description}");
                             var transaction = new Transaction()
                             {
                                 Date = transactionDate,
@@ -374,6 +376,7 @@ namespace GibsonsLeague.YahooSync
                         validWeek = week <= result.CurrentWeek;
                         if (!validWeek)
                         {
+                            week--;
                             continue;
                         }
                         IDictionary<int, Team> teamCache = season.Teams.ToDictionary(s => s.YahooTeamId.Value, s => s);

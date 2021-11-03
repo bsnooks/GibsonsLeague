@@ -142,8 +142,15 @@ namespace GibsonsLeague.Data.Repositories
         {
             using (var dbContext = dbFunc())
             {
-                await dbContext .AddAsync(newPlayer);
-                await dbContext.SaveChangesAsync();
+                try
+                {
+                    await dbContext.AddAsync(newPlayer);
+                    await dbContext.SaveChangesAsync();
+                }
+                catch(Exception ex)
+                {
+                    var d = ex;
+                }
             }
 
             return newPlayer.PlayerId;
