@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { AsyncTypeahead } from 'react-bootstrap-typeahead';
+import { AsyncTypeahead, TypeaheadResult } from 'react-bootstrap-typeahead';
 import { GibsonsLeagueQuery, GibsonsLeagueQueryPlayersArgs, Player } from '../../generated/graphql';
 import { gql, useLazyQuery } from '@apollo/client';
 
@@ -15,11 +15,11 @@ export const GET_PLAYERS = gql`
 `;
 
 interface PlayerSearchProps {
-    handleSelection: (selection:any) => void;
+    handleSelection: (selection: PlayerResult[]) => void;
     position?: string;
 }
 
-export type PlayerResult = Player | string;
+export type PlayerResult = Player;
 
 const PlayerSearch: React.FC<PlayerSearchProps> = ({ ...props }) => {
 
@@ -32,7 +32,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({ ...props }) => {
         setQuery(q);
     };
 
-    const handleSelection = (selection:any) => {
+    const handleSelection = (selection: PlayerResult[]) => {
 
         if (selection && selection.length > 0) {
             if (typeahead) {
@@ -85,7 +85,7 @@ const PlayerSearch: React.FC<PlayerSearchProps> = ({ ...props }) => {
             options={options}
             placeholder="Search for a player..."
             labelKey="name"
-            renderMenuItemChildren={(option:any) => (
+            renderMenuItemChildren={(option: TypeaheadResult<Player>) => (
                 <Fragment>
                     <span>{option.name} ({option.position})</span>
                 </Fragment>

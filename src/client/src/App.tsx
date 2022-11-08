@@ -1,16 +1,14 @@
-import Header from "./components/Header";
-import Footer from "./components/Footer";
 import RouterSwitch from "./RouterSwitch";
+import { AuthProvider } from "./components/auth/contexts/AuthContext";
+
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <Header />
-      <div className="content">
+      <AuthProvider>
         <RouterSwitch />
-      </div>
-      <Footer />
+      </AuthProvider>
     </div>
   );
 }

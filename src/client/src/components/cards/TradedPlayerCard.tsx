@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import { Row, Col } from 'react-bootstrap';
 import { PlayerTransaction } from '../../generated/graphql';
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './TradedPlayerCard.css';
 import { groupBy } from 'lodash';
 import TransactionRow from '../controls/TransactionRow';
+import LeagueLink from '../leagues/LeagueLink';
 
 
 interface TradedPlayerCardProps {
@@ -27,9 +27,9 @@ const TradedPlayerCard: React.FC<TradedPlayerCardProps> = ({ ...props }) => {
         return (
             <div className="tradedplayer">
                 <div className="tradedplayer-header">
-                    <Link to={`/player/${tradedPlayer.playerId}`} className="m-1">
+                    <LeagueLink to={`/p/${tradedPlayer.playerId}`} className="m-1">
                         {tradedPlayer.name}
-                    </Link>
+                    </LeagueLink>
                     <span className="rank">{`${tradedPlayer?.primaryPosition}-${tradedPlayer?.positionRank}`}</span>
                 </div>
             </div>
@@ -62,9 +62,9 @@ const TradedPlayerCard: React.FC<TradedPlayerCardProps> = ({ ...props }) => {
             <div className="tradedplayer-header">
                 <Row>
                     <Col>
-                        <Link to={`/player/${tradedPlayer.playerId}`} className="m-1">
+                        <LeagueLink to={`/p/${tradedPlayer.playerId}`} className="m-1">
                             {tradedPlayer.name}
-                        </Link>
+                        </LeagueLink>
                         <span className="rank">{`${tradedPlayer?.primaryPosition}-${tradedPlayer?.positionRank}`}</span>
                     </Col>
                     <Col md="auto">

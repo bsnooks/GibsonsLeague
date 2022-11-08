@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { Match, Maybe } from '../../generated/graphql';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface FranchiseSeasonMatchCardProps {
     franchiseId: any,
@@ -49,9 +49,9 @@ const FranchiseSeasonMatchCard: React.FC<FranchiseSeasonMatchCardProps> = ({ ...
                                     <tr key={match?.week} className="text-left" >
                                         <td>{match?.week}</td>
                                         <td className="text-nowrap text-truncate">
-                                            <Link to={`/franchise/${summary.opponentFranchiseId}`}>
+                                            <LeagueLink to={`/f/${summary.opponentFranchiseId}`}>
                                                 {summary?.opponentName}
-                                            </Link>
+                                            </LeagueLink>
                                         </td>
                                         <td className="text-nowrap text-truncate">
                                             {`${summary?.matchResult}`}

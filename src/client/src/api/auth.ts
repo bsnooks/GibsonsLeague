@@ -16,3 +16,12 @@ export function yahooAuth(code: string, onSuccess: { (response: any): void; (arg
         return null;
     }
 }
+
+interface YahooAuthResponse {
+    access_token: string
+}
+
+export async function yahooAuthAsync(code: string) {
+    const url = `${yahooAuthUrl}?code=${code}&redirectUri=${process.env.REACT_APP_CALLBACK_URL}`;
+    return axios.get<YahooAuthResponse>(url);
+}

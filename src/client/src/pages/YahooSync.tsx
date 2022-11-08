@@ -1,6 +1,5 @@
 import React from 'react';
 import { Container } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { gql, useQuery } from '@apollo/client';
 import { faExternalLinkAlt } from "@fortawesome/free-solid-svg-icons";
 import { faYahoo } from '@fortawesome/free-brands-svg-icons';
@@ -8,10 +7,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, Season } from '../generated/graphql';
 import GlobalError from '../components/GlobalError';
-import { RootState } from '../store/rootReducer';
 import { yahooSyncDraft, yahooSyncMatchups, yahooSyncPlayerStats, yahooSyncRosters, yahooSyncStandings, yahooSyncTransactions } from '../api/yahooSync';
 import SyncButton from '../components/controls/SyncButton';
 import { useHistory } from 'react-router';
+import { useAuthContext } from '../components/auth/hooks/useAuthContext';
 
 export const GET_SEASONS = gql`
   query GibsonsLeagueQuery {
@@ -34,7 +33,7 @@ export const GET_SEASONS = gql`
 interface YahooSyncProps { }
 
 const YahooSync: React.FC<YahooSyncProps> = () => {
-    const token = useSelector((state: RootState) => state.auth.token);
+    const { token } = useAuthContext();
     const history = useHistory();
 
     const {

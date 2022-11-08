@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image, Row, Col, ProgressBar } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { LeagueRecords, LeagueRecord } from '../../generated/graphql';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface RecordCardProps {
     leagueRecord: LeagueRecords,
@@ -33,14 +33,14 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                             record.franchiseId ? (<>
                             <div><Image src={avatar} roundedCircle fluid style={{ width: '8rem', height: '8rem' }} /></div>
                             <h5>
-                                <Link to={`/franchise/${record.franchiseId}`}>
+                                <LeagueLink to={`/f/${record.franchiseId}`}>
                                     {record.franchiseName}
-                                </Link>
+                                </LeagueLink>
                             </h5></>) : (
                                 <h5>
-                                    <Link to={`/player/${record.playerId}`}>
+                                    <LeagueLink to={`/p/${record.playerId}`}>
                                         {record.playerName} ({record.playerPosition})
-                                    </Link>
+                                    </LeagueLink>
                                 </h5>
                             )
                         }
@@ -56,25 +56,25 @@ const RecordCard: React.FC<RecordCardProps> = ({ ...props }) => {
                                         <ProgressBar now={progress} label={leagueRecord.recordValue} variant="success" />
                                         <div>
                                             {leagueRecord.rank}.&nbsp;
-                                            <Link to={`/franchise/${leagueRecord.franchiseId}`}>
+                                            <LeagueLink to={`/f/${leagueRecord.franchiseId}`}>
                                                 {leagueRecord.franchiseName}
-                                            </Link>
+                                            </LeagueLink>
                                             {
                                                 leagueRecord.otherFranchiseId ? " vs. " : null
                                             }
                                             {
                                                 leagueRecord.otherFranchiseId ?
-                                                    <Link to={`/franchise/${leagueRecord.otherFranchiseId}`}>
+                                                    <LeagueLink to={`/f/${leagueRecord.otherFranchiseId}`}>
                                                         {leagueRecord.otherFranchiseName}
-                                                    </Link> : null
+                                                    </LeagueLink> : null
                                             }
                                             &nbsp;
                                             {getRecordContext(leagueRecord)}
                                             {
                                                 leagueRecord.playerId ? (
-                                                <Link to={`/player/${leagueRecord.playerId}`}>
+                                                <LeagueLink to={`/p/${leagueRecord.playerId}`}>
                                                     {leagueRecord.playerName} ({leagueRecord.playerPosition})
-                                                </Link>) : null
+                                                </LeagueLink>) : null
                                             }
                                         </div>
                                     </div>

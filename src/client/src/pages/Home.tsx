@@ -1,35 +1,56 @@
-import React from 'react';
-import { Carousel } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+
+import { useAuthContext } from '../components/auth/hooks/useAuthContext';
+
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import Login from '../components/auth/Login';
+import LeaguePicker from '../components/leagues/LeaguePicker';
+import { Button, Col, Container, Row } from 'react-bootstrap';
+import MyLeagues from '../components/leagues/MyLeagues';
 
 interface HomeProps { }
 
 const Home: React.FC<HomeProps> = () => {
 
-    return (
-        <Carousel fade>
-            <Carousel.Item>
-                <div style={{ height: "400px", backgroundColor: "#ff0" }} />
-                <Carousel.Caption>
-                    <h3>First slide label</h3>
-                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <div style={{ height: "400px", backgroundColor: "#0ff" }} />
-                <Carousel.Caption>
-                    <h3>Second slide label</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <div style={{ height: "400px", backgroundColor: "#f0f" }} />
-                <Carousel.Caption>
-                    <h3>Third slide label</h3>
-                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                </Carousel.Caption>
-            </Carousel.Item>
-        </Carousel>
-    );
+  const { token } = useAuthContext();
+
+  useEffect(() => {
+    if (!token) return;
+  }, [token]);
+
+  return (
+    <>
+      <Header />
+      <div className="content">
+        <Container>
+          <Row>
+            <Col sm>
+              <div className="section-title">
+                <span>My Leagues</span>
+              </div>
+              <div className="section-body p-3">
+                { !token && <Login /> }
+                { token && <MyLeagues /> }
+                { token && <Button size="sm" variant="success" disabled>Sync New League</Button> }
+              </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm>
+              <div className="section-title">
+                <span>Public Leagues</span>
+              </div>
+              <div className="section-body p-3">
+                <LeaguePicker />
+              </div>
+            </Col>
+          </Row>
+        </Container>
+      </div>
+      <Footer />
+    </>
+  );
 }
 
 export default Home;

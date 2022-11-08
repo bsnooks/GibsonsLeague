@@ -2,8 +2,8 @@ import { faTrophy, faForward } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import { Card, Col, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { Match, Maybe } from '../../generated/graphql';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface SeasonMatchCardProps {
     matches: Maybe<Array<Maybe<Match>>>,
@@ -21,9 +21,9 @@ const SeasonMatchCard: React.FC<SeasonMatchCardProps> = ({ ...props }) => {
                                 <Row>
                                     <Col xs={6}>
                                         <b>
-                                            <Link to={`/franchise/${match?.winningFranchiseId}`}>
+                                            <LeagueLink to={`/f/${match?.winningFranchiseId}`}>
                                                 {match?.winningFranchise}
-                                            </Link>
+                                            </LeagueLink>
                                             {match?.type?.toLowerCase() === "championship" ? <FontAwesomeIcon icon={faTrophy} className="gold ml-2" /> : null}
                                             {match?.type?.toLowerCase() === "playoff" ? <FontAwesomeIcon icon={faForward} className="ml-2" /> : null}
                                         </b>
@@ -37,9 +37,9 @@ const SeasonMatchCard: React.FC<SeasonMatchCardProps> = ({ ...props }) => {
                                 </Row>
                                 <Row>
                                     <Col xs={6}>
-                                        <Link to={`/franchise/${match?.losingFranchiseId}`}>
+                                        <LeagueLink to={`/f/${match?.losingFranchiseId}`}>
                                             {match?.losingFranchise}
-                                        </Link>
+                                        </LeagueLink>
                                         {match?.type?.toLowerCase() === "championship" ? <FontAwesomeIcon icon={faTrophy} className="silver ml-2" /> : null}
                                     </Col>
                                     <Col xs={3}>

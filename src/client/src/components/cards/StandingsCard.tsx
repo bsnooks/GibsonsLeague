@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { Maybe, Team } from '../../generated/graphql';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface StandingsCardProps {
     franchises: Maybe<Team>[]
@@ -24,9 +24,9 @@ const StandingsCard: React.FC<StandingsCardProps> = ({ ...props }) => {
                         <tr key={index}>
                             <td>{index+1}.</td>
                             <td className="text-left">
-                                <Link to={`/franchise/${team?.franchiseId}`}>
+                                <LeagueLink to={`/f/${team?.franchiseId}`}>
                                     {team?.franchiseName}
-                                </Link>
+                                </LeagueLink>
                             </td>
                             <td>{`${team?.wins}-${team?.loses}-${team?.ties}`}</td>
                             <td>{Number(team?.points ?? 0).toLocaleString('en-US', {minimumFractionDigits: 2})}</td>

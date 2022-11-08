@@ -1,8 +1,12 @@
+// @ts-nocheck
 import React from 'react';
 import { DraftPick, Maybe } from '../../generated/graphql';
 import { ResponsiveLine } from '@nivo/line'
+import { ResponsiveScatterPlot } from '@nivo/scatterplot'
 import { groupBy } from 'lodash';
 import { useBaseTheme } from './theme';
+import * as d3 from 'd3-shape'
+import { Defs } from '@nivo/core';
 
 interface DraftPositionGraphProps {
     picks?: Maybe<Maybe<DraftPick>>[],
@@ -18,7 +22,7 @@ const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => 
             if (pick?.positionPick && pick?.playerPositionRank) {
                 posData.push({
                     "x": pick?.positionPick,
-                    "y": (pick?.playerPositionRank - pick?.positionPick) ?? 0,
+                    "y": (pick?.playerPositionRank) ?? pick?.positionPick,
                     "name": pick.playerName,
                     "round": pick.round,
                     "pick": pick.pick,
@@ -47,14 +51,52 @@ const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => 
 
     const theme = useBaseTheme();
 
+    const AreaLayer = ({ points, xScale, yScale, innerHeight }) => {
+
+        console.log("points", points);
+        const areaGenerator =
+            d3.line()
+                .x(d => xScale(d.x))
+                .y(d => yScale(d.y))
+                .curve(d3.curveMonotoneX);
+
+
+        return (
+            <>
+                <Defs
+                    defs={[
+                        {
+                            id: 'pattern',
+                            type: 'patternLines',
+                            background: 'transparent',
+                            color: '#3daff7',
+                            lineWidth: 1,
+                            spacing: 6,
+                            rotation: -45,
+                        },
+                    ]}
+                />
+                <path
+                    d={areaGenerator(points)}
+                    fill="url(#pattern)"
+                    fillOpacity={0.6}
+                    stroke="#3daff7"
+                    strokeWidth={2}
+                />
+            </>
+        )
+    }
+
     return (
         <div style={{ width: '100%', height: 400 }}>
-            <ResponsiveLine
+            <ResponsiveScatterPlot
                 data={data}
                 margin={{ top: 25, right: 20, bottom: 60, left: 55 }}
                 colors={{ scheme: 'category10' }}
-                xScale={{ type: 'linear' }}
-                yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
+                xScale={{ type: 'linear', min: 1, max: 'auto', stacked: false, reverse: false }}
+                xFormat=">-.2f"
+                yScale={{ type: 'linear', min: 1, max: 'auto', stacked: false, reverse: false }}
+                yFormat=">-.2f"
                 //curve="stepAfter"
                 axisTop={null}
                 axisRight={null}
@@ -74,19 +116,20 @@ const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => 
                     legendOffset: -40,
                     legendPosition: 'middle'
                 }}
-                markers={[
-                    {
-                        axis: 'y',
-                        value: 0,
-                        lineStyle: { strokeDasharray: '6, 6', stroke: '#b0413e', strokeWidth: 2 },
-                    }
-                ]}
-                pointSize={5}
-                pointColor={{ theme: 'background' }}
-                pointBorderWidth={1}
-                pointBorderColor={{ from: 'serieColor' }}
-                pointLabelYOffset={-12}
+                // markers={[
+                //     {
+                //         axis: 'y',
+                //         value: 0,
+                //         lineStyle: { strokeDasharray: '6, 6', stroke: '#b0413e', strokeWidth: 2 },
+                //     }
+                // ]}
+                // nodeSize={5}
+                // pointColor={{ theme: 'background' }}
+                // pointBorderWidth={1}
+                // pointBorderColor={{ from: 'serieColor' }}
+                // pointLabelYOffset={-12}
                 useMesh={true}
+                blendMode="multiply"
                 legends={[
                     {
                         anchor: 'top',
@@ -102,15 +145,15 @@ const DraftPositionGraph: React.FC<DraftPositionGraphProps> = ({ ...props }) => 
                         toggleSerie: true,
                     }
                 ]}
-                tooltip={(input) => {
-                    const data : any = input.point.data;
-                    const text = `${input.point.serieId}${input.point.data.x}: ${data.name} (Round ${data.round} Pick ${data.pick} by ${data.franchise}) = ${input.point.data.y}`;
-                    return (
-                        <div style={{backgroundColor: "#FFF", borderStyle: "solid", borderColor: `${input.point.serieColor}`, borderWidth: "2px", padding: "5px"}}>
-                            {text}
-                        </div>
-                    )
-                }}
+                layers={[
+                    'grid',
+                    'axes',
+                    AreaLayer,
+                    'nodes',
+                    'markers',
+                    'mesh',
+                    'legends'
+                  ]}
                 theme={theme}
             />
         </div>

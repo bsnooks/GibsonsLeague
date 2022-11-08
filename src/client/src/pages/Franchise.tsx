@@ -13,6 +13,7 @@ import SectionInfoBox from '../components/controls/SectionInfoBox';
 import { Link } from 'react-router-dom';
 import { faTrophy } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import LeagueLink from '../components/leagues/LeagueLink';
 
 export const GET_FRANCHISE = gql`
   query GibsonsLeagueQuery($id: Guid) {
@@ -167,16 +168,16 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                             <div key={int} className="legend">
                               <div className="legend-col name">
                                 {`#${(int + 1)}. `}
-                                <Link to={`/player/${legend?.player?.playerId}`} title={`${points} points`}>
+                                <LeagueLink to={`/p/${legend?.player?.playerId}`} title={`${points} points`}>
                                     {legend?.player?.name}
-                                </Link>
+                                </LeagueLink>
                                 <span>{` (${legend?.player?.position})`}</span><br/>
                                 <span className="pointstext">{`${points} points`}</span>
                               </div>
                               <div className="legend-col years">
                                 {getRange([...legend.years].sort()).join(", ")}
                               </div>
-                              <div className="legend-col points">
+                              <div className="legend-col points">RECAPTCHASECRET
                                 {points}
                               </div>
                             </div>
@@ -203,9 +204,9 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                         franchise.teams?.filter(t => t?.standing !== 0).map((team: any) => (
                           <div key={team.year} className="season">
                               <div className="season-col year">
-                                  <Link to={`/season/${team.year}?t=standings&f=${team.franchiseId}`}>
+                                  <LeagueLink to={`/s/${team.year}?t=standings&f=${team.franchiseId}`}>
                                       {team?.year}
-                                  </Link>
+                                  </LeagueLink>
                               </div>
                               <div className="season-col record">
                                 {team.wins}-{team.loses}-{team.ties}

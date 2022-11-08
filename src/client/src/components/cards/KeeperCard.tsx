@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Maybe, PlayerTransaction } from '../../generated/graphql';
 import { orderBy } from 'lodash';
 import { DraftPickGrader } from '../../utilities/DraftPickGrader';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface KeeperCardProps {
     grouping: any,
@@ -32,9 +32,9 @@ const KeeperCard: React.FC<KeeperCardProps> = ({ ...props }) => {
                 orderBy(props.keepers, ["primaryPosition"]).map((transaction: Maybe<PlayerTransaction>) => (
                     <div key={transaction?.transactionId} className={`keeper player-${transaction?.primaryPosition}`}>
                         <div className="keeper-col player">
-                            <Link to={`/player/${transaction?.playerId}`}>
+                            <LeagueLink to={`/p/${transaction?.playerId}`}>
                                 {transaction?.name}
-                            </Link>
+                            </LeagueLink>
                         </div>
                         <div className="keeper-col position">
                             {transaction?.primaryPosition}

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { DraftPick, Maybe } from '../../generated/graphql';
 import { DraftPickGrader } from '../../utilities/DraftPickGrader';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface DraftCardProps {
     grouping: any,
@@ -23,9 +23,9 @@ const DraftCard: React.FC<DraftCardProps> = ({ ...props }) => {
                 <div className="group">
                     {
                         props.groupingLink ? (
-                            <Link to={props.groupingLink}>
+                            <LeagueLink to={props.groupingLink}>
                                 {props.groupingLabel}
-                            </Link>) :
+                            </LeagueLink>) :
                             (<>{props.groupingLabel}</>)
                     }
                 </div>
@@ -49,15 +49,15 @@ const DraftCard: React.FC<DraftCardProps> = ({ ...props }) => {
                                     props.includeFranchise ? (
                                         <div className="draft-col franchise">
                                             <Image roundedCircle src={avatarPicker.pickAvatarByFranchiseId(pick?.franchiseId)} style={{ width: '1.5rem', marginRight: "4px" }} />
-                                            <Link to={`/franchise/${pick?.franchiseId}?t=drafts`}>
+                                            <LeagueLink to={`/f/${pick?.franchiseId}?t=drafts`}>
                                                 {pick?.franchiseName}
-                                            </Link>
+                                            </LeagueLink>
                                         </div>) : null
                                 }
                                 <div className="draft-col player">
-                                    <Link to={`/player/${pick?.playerId}`}>
+                                    <LeagueLink to={`/p/${pick?.playerId}`}>
                                         {pick?.playerName}
-                                    </Link>
+                                    </LeagueLink>
                                 </div>
                                 <div className="draft-col posPick">
                                                     {`${pick?.playerPrimaryPosition}-${pick?.positionPick}`}

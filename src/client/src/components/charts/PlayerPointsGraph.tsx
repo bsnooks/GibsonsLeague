@@ -21,8 +21,8 @@ const PlayerPointsGraph: React.FC<PlayerPointsGraphProps> = ({ ...props }) => {
     const seasonPointsData: { x: number | undefined; y: number | undefined; }[] = [];
     const [maxY,setMaxY] = useState(0);
 
-    const max = Math.max.apply(Math, props.comparisonSeasons.map((s) => s?.points)) + 10;
-    const maxPpg = Math.max.apply(Math, props.comparisonSeasons.map((s) => s?.points / s?.gamesPlayed)) + 1;
+    const max = Math.max(props.comparisonSeasons.map((s) => s?.points)) + 10;
+    const maxPpg = Math.max(props.comparisonSeasons.map((s) => s?.points / s?.gamesPlayed)) + 1;
 
     props.seasons?.forEach((season) => {
         if (season?.gamesPlayed === 0) {

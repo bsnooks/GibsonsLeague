@@ -8,8 +8,7 @@ import reportWebVitals from './reportWebVitals';
 import { ApolloClient, ApolloProvider, NormalizedCacheObject, gql } from '@apollo/client';
 import { cache } from './cache';
 import { Router } from 'react-router';
-import { Provider } from 'react-redux';
-import initStore from "./store/store";
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 export const typeDefs = gql`
   type GibsonsLeagueQuery {
@@ -23,7 +22,7 @@ export const typeDefs = gql`
 
 // Set up our apollo-client to point at the server we created
 // this can be local or a remote endpoint
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+const apolloClient: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache,
   uri: `${process.env.REACT_APP_DATA_SERVICE}/graphql`,
   headers: {
@@ -34,21 +33,21 @@ const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   resolvers: {},
 });
 
-const store = initStore();
+const queryClient = new QueryClient();
 
 const history = createBrowserHistory({
 });
 
 ReactDOM.render(
-  <Provider store={store}>
-    <React.StrictMode>
-      <ApolloProvider client={client}>
+  <React.StrictMode>
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={queryClient}>
         <Router history={history}>
           <App />
         </Router>
-      </ApolloProvider>
-    </React.StrictMode>
-  </Provider>,
+      </QueryClientProvider>
+    </ApolloProvider>
+  </React.StrictMode>,
   document.getElementById('root')
 );
 

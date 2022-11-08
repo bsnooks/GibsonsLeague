@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { Franchise } from '../../generated/graphql';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface FranchiseStatsRowProps {
     franchise: Franchise;
@@ -17,9 +17,9 @@ const FranchiseStatsRow: React.FC<FranchiseStatsRowProps> = ({ ...props }) => {
         <div className="franchise">
             <div className="franchise-col team">
                 <Image roundedCircle src={avatar} style={{ width: '1.5rem' }} />
-                <Link to={`/franchise/${props.franchise.franchiseId}`} style={{paddingLeft:"10px"}}>
+                <LeagueLink to={`/f/${props.franchise.franchiseId}`} style={{paddingLeft:"10px"}}>
                     {props.franchise.mainName}
-                </Link>
+                </LeagueLink>
             </div>
             <div className="franchise-col record">
                 {`${franchise?.wins}-${franchise?.loses}-${franchise?.ties}`}

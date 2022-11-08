@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { PlayerTransaction } from '../../generated/graphql';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface TransactionRowProps {
     transaction: PlayerTransaction;
@@ -17,16 +17,16 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ ...props }) => {
     const descriptionElement = transaction.type === "Traded" ?
         (
             <div key={transaction?.transactionId}>
-                <Link to={`/trade/${transaction?.transactionGroupId}`}>
+                <LeagueLink to={`/t/${transaction?.transactionGroupId}`}>
                     {transaction?.description}
-                </Link>
+                </LeagueLink>
             </div>
         ) : transaction.type === "DraftPicked" ?
         (
             <div key={transaction?.transactionId}>
-                <Link to={`/season/${props.year}?t=draft`}>
+                <LeagueLink to={`/s/${props.year}?t=draft`}>
                     {transaction?.description}
-                </Link>
+                </LeagueLink>
             </div>
         ) :
         (
@@ -41,9 +41,9 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ ...props }) => {
                 props.hideTeam ? null :
                 <div className="transaction-col team">
                     <Image roundedCircle src={avatar} style={{ width: '1.5rem' }} />
-                    <Link to={`/franchise/${props.transaction.franchiseId}`} style={{paddingLeft:"10px"}}>
+                    <LeagueLink to={`/f/${props.transaction.franchiseId}`} style={{paddingLeft:"10px"}}>
                         {props.transaction.franchiseName}
-                    </Link>
+                    </LeagueLink>
                 </div>
             }
             <div className="transaction-col date">

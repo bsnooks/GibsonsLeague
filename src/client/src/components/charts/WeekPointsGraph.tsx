@@ -43,13 +43,20 @@ const WeekPointsGraph: React.FC<WeekPointsGraphProps> = ({ ...props }) => {
 
 
     const theme = useBaseTheme();
+    const getColor = (data: any) => {
+        if (data.data.color) {
+            return data.data.color;
+        }
+        
+        return "#DDD";
+    }
 
     return (
         <div style={{ width: '100%', height: 400 }}>
             <ResponsiveLine
                 data={data}
                 margin={{ top: 25, right: 120, bottom: 60, left: 55 }}
-                colors={{ scheme: 'category10' }}
+                colors={getColor}
                 xScale={{ type: 'linear' }}
                 yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, reverse: false }}
                 //curve="stepAfter"

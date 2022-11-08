@@ -1,8 +1,8 @@
 import React from 'react';
 import { Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
 import { Franchise } from '../../generated/graphql';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
+import LeagueLink from '../leagues/LeagueLink';
 
 interface ChampionRowProps {
     year: number;
@@ -17,21 +17,21 @@ const ChampionRow: React.FC<ChampionRowProps> = ({ ...props }) => {
     return (
         <div className="champion">
             <div className="champion-col year">
-                <Link to={`/season/${props.year}`}>
+                <LeagueLink to={`/s/${props.year}`}>
                     {props.year}
-                </Link>
+                </LeagueLink>
             </div>
             <div className="champion-col team">
                 <Image roundedCircle src={winnerAvatar} style={{ width: '1.5rem' }} />
-                <Link to={`/franchise/${props.winner.franchiseId}`} style={{paddingLeft:"10px"}}>
+                <LeagueLink to={`/f/${props.winner.franchiseId}`} style={{paddingLeft:"10px"}}>
                     {props.winner.mainName}
-                </Link>
+                </LeagueLink>
             </div>
             <div className="champion-col second">
                 <Image roundedCircle src={secondAvatar} style={{ width: '1.5rem' }} />
-                <Link to={`/franchise/${props.second.franchiseId}`} style={{paddingLeft:"10px"}}>
+                <LeagueLink to={`/f/${props.second.franchiseId}`} style={{paddingLeft:"10px"}}>
                     {props.second.mainName}
-                </Link>
+                </LeagueLink>
             </div>
         </div>
     );

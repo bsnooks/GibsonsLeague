@@ -8,7 +8,6 @@ import { orderBy } from 'lodash';
 import { GibsonsLeagueQuery, GibsonsLeagueQuerySeasonArgs } from '../generated/graphql';
 import { faTrophy, faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Link } from 'react-router-dom';
 import StandingsCard from '../components/cards/StandingsCard';
 import FranchiseTrades from '../components/FranchiseTrades';
 import FranchiseKeepers from '../components/FranchiseKeepers';
@@ -16,6 +15,7 @@ import FranchiseDraftPicks from '../components/FranchiseDraftPicks';
 import FranchiseMatches from '../components/FranchiseMatches';
 import { LinkContainer } from 'react-router-bootstrap';
 import SeasonPositionPoints from '../components/charts/SeasonPositionPoints';
+import LeagueLink from '../components/leagues/LeagueLink';
 
 export const GET_TEAMS = gql`
   query GibsonsLeagueQuery($year: Int) {
@@ -112,9 +112,9 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                     <div>
                       <Image roundedCircle src={secondPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
                     </div>
-                    <Link to={`/franchise/${secondPlace?.franchiseId}`}>
+                    <LeagueLink to={`/f/${secondPlace?.franchiseId}`}>
                       {secondPlace?.franchiseName}
-                    </Link>
+                    </LeagueLink>
                     <div style={{ borderLeft: "1px solid black", borderTop: "1px solid black", padding: "20px", height: "100px", backgroundColor: "#f3f4f5" }}>
                       <FontAwesomeIcon icon={faTrophy} className="silver" size="3x" />
                     </div>
@@ -123,9 +123,9 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                     <div>
                       <Image roundedCircle src={championAvatar} style={{ width: '5rem', height: '5rem' }} />
                     </div>
-                    <Link to={`/franchise/${champion?.franchiseId}`}>
+                    <LeagueLink to={`/f/${champion?.franchiseId}`}>
                       {champion?.franchiseName}
-                    </Link>
+                    </LeagueLink>
                     <div style={{ borderLeft: "1px solid black", borderTop: "1px solid black", borderRight: "1px solid black", padding: "20px", height: "125px", backgroundColor: "#f3f4f5" }}>
                       <FontAwesomeIcon icon={faTrophy} className="gold" size="3x" />
                       <h1>{year}</h1>
@@ -135,9 +135,9 @@ const Season: React.FC<SeasonProps> = ({ ...props }) => {
                     <div>
                       <Image roundedCircle src={thirdPlaceAvatar} style={{ width: '5rem', height: '5rem' }} />
                     </div>
-                    <Link to={`/franchise/${thirdPlace?.franchiseId}`}>
+                    <LeagueLink to={`/f/${thirdPlace?.franchiseId}`}>
                       {thirdPlace?.franchiseName}
-                    </Link>
+                    </LeagueLink>
                     <div style={{ borderTop: "1px solid black", borderRight: "1px solid black", padding: "20px", height: "75px", backgroundColor: "#f3f4f5" }}>
                       <FontAwesomeIcon icon={faTrophy} className="bronze" size="3x" />
                     </div>

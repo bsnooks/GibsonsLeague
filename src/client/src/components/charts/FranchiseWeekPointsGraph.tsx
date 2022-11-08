@@ -51,6 +51,13 @@ const FranchiseWeekPointsGraph: React.FC<FranchiseWeekPointsGraphProps> = ({ ...
     }
 
     const theme = useBaseTheme();
+    const getColor = (data: any) => {
+        if (data.data.color) {
+            return data.data.color;
+        }
+        
+        return "#DDD";
+    }
 
     return (
         <div style={{ width: '100%', height: 400 }}>
@@ -119,7 +126,7 @@ const FranchiseWeekPointsGraph: React.FC<FranchiseWeekPointsGraphProps> = ({ ...
                 padding={0.3}
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}
-                colors={{ scheme: 'category10' }}
+                colors={getColor}
                 borderColor={{ from: 'color', modifiers: [['darker', 1.6]] }}
                 axisTop={null}
                 axisRight={null}

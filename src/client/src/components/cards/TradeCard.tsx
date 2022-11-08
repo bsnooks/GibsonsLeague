@@ -2,9 +2,9 @@ import React from 'react';
 import { Image, Row, Col, Button } from 'react-bootstrap';
 import { FranchiseTrade } from '../../generated/graphql';
 import { faCodeBranch } from "@fortawesome/free-solid-svg-icons";
-import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FranchiseUtilities } from '../../utilities/FranchiseAvatar';
+import LeagueLink from '../leagues/LeagueLink';
 
 
 interface TradeCardProps {
@@ -32,9 +32,9 @@ const TradeCard: React.FC<TradeCardProps> = ({ ...props }) => {
                         {
                             trade.tradedfor?.map((player: any) => (
                                 <div key={player.playerId}>
-                                    <Link to={`/player/${player.playerId}`} className="m-1">
+                                    <LeagueLink to={`/p/${player.playerId}`} className="m-1">
                                         {player.name} ({player.position})
-                                    </Link>
+                                    </LeagueLink>
                                 </div>
                             ))
                         }
@@ -42,11 +42,11 @@ const TradeCard: React.FC<TradeCardProps> = ({ ...props }) => {
                     {
                         props.includeTradeTree !== false ?
                             <Col md="auto">
-                                <Link to={`/trade/${trade?.tradeId}`}>
+                                <LeagueLink to={`/t/${trade?.tradeId}`}>
                                     <Button title="Trade Tree">
                                         <FontAwesomeIcon icon={faCodeBranch} />
                                     </Button>
-                                </Link>
+                                </LeagueLink>
                             </Col>
                             :
                             null
@@ -57,9 +57,9 @@ const TradeCard: React.FC<TradeCardProps> = ({ ...props }) => {
                         {
                             trade.tradedaway?.map((player: any) => (
                                 <div key={player.playerId}>
-                                    <Link to={`/player/${player.playerId}`} className="m-1">
+                                    <LeagueLink to={`/p/${player.playerId}`} className="m-1">
                                         {player.name} ({player.position})
-                                    </Link>
+                                    </LeagueLink>
                                 </div>
                             ))
                         }
