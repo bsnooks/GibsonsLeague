@@ -77,10 +77,7 @@ namespace GibsonsLeague.Api
 
             app.UseMiddleware<YahooAuthenticationMiddleware>();
 
-            if (env.IsDevelopment())
-            {
-                app.UseGraphQLPlayground(new GraphQL.Server.Ui.Playground.GraphQLPlaygroundOptions());
-            }
+            app.UseGraphQLPlayground(new GraphQL.Server.Ui.Playground.GraphQLPlaygroundOptions());
 
             app.UseEndpoints(endpoints =>
             {

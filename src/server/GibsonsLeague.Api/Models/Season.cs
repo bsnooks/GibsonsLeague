@@ -13,7 +13,10 @@ namespace GibsonsLeague.Api.Models
             Field(x => x.YahooLeagueId, nullable: true, type: typeof(IntGraphType));
             Field(x => x.KeepersSet, nullable: true, type: typeof(BooleanGraphType));
             Field(x => x.DraftImported, nullable: true, type: typeof(BooleanGraphType));
+            Field(x => x.CurrentWeek, nullable: true, type: typeof(IntGraphType));
             Field(x => x.MatchupSyncWeek, nullable: true, type: typeof(IntGraphType));
+            Field(x => x.WeeklyRosterSyncWeek, nullable: true, type: typeof(IntGraphType));
+            Field(x => x.WeekStatsSyncWeek, nullable: true, type: typeof(IntGraphType));
             Field(x => x.LastTransactionSyncDate, nullable: true, type: typeof(DateTimeGraphType));
 
             Field<ListGraphType<Team>>("teams",

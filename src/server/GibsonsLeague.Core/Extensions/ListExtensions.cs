@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace GibsonsLeague.Core
+namespace GibsonsLeague.Core.Extensions
 {
     public static class ListExtensions
     {

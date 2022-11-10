@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using GibsonsLeague.Core.Models;
-using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;

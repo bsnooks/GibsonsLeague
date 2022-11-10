@@ -1,4 +1,4 @@
-import { faCheck, faFileImport, faSync } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faFileImport, faSync, faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -8,7 +8,7 @@ interface SyncButtonProps {
     synced: boolean;
     onSyncClick: (target: any, season: Season) => void;
     season: Season;
-    import?: boolean;
+    type?: "import" | "add" | undefined;
 }
 
 const SyncButton: React.FC<SyncButtonProps> = ({ ...props }) => {
@@ -18,7 +18,7 @@ const SyncButton: React.FC<SyncButtonProps> = ({ ...props }) => {
         setSynced(true);
     }
 
-    const syncButton = <Button size="sm"><FontAwesomeIcon icon={props.import ? faFileImport : faSync} onClick={() => onSyncClick(this, props.season)} /></Button>;
+    const syncButton = <Button size="sm"><FontAwesomeIcon icon={props.type === "import" ? faFileImport : props.type === "add" ? faPlus : faSync} onClick={() => onSyncClick(this, props.season)} /></Button>;
     const successButton = <Button size="sm" variant="success" disabled={true}><FontAwesomeIcon icon={faCheck} /></Button>
     return synced ? successButton : syncButton;
 }

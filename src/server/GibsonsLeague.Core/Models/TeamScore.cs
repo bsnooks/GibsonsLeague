@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
-
 
 namespace GibsonsLeague.Core.Models
 {

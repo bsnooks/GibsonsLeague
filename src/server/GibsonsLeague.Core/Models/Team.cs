@@ -15,6 +15,7 @@ namespace GibsonsLeague.Core.Models
             TeamScores = new HashSet<TeamScore>();
             Transactions = new HashSet<Transaction>();
             PlayerSeasons = new HashSet<PlayerSeason>();
+            PlayerWeeks = new HashSet<PlayerWeek>();
         }
 
         public Guid TeamId { get; set; }
@@ -42,5 +43,6 @@ namespace GibsonsLeague.Core.Models
         public virtual ICollection<TeamScore> TeamScores { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
         public virtual ICollection<PlayerSeason> PlayerSeasons { get; set; }
+        public virtual ICollection<PlayerWeek> PlayerWeeks { get; set; }
     }
 }

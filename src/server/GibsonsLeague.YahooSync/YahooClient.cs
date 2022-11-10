@@ -1,4 +1,5 @@
 ﻿using GibsonsLeague.Core;
+using GibsonsLeague.Core.Extensions;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ namespace GibsonsLeague.YahooSync
             client = new HttpClient();
             client.BaseAddress = new Uri(configuration["Yahoo:YahooApi"]);
             client.DefaultRequestHeaders.Add("Authorization", $"Bearer {context.Token}");
+            Console.WriteLine($"Bearer {context.Token}");
         }
 
 
@@ -37,7 +39,12 @@ namespace GibsonsLeague.YahooSync
             var response = await client.GetAsync(request, cancellationToken);
             if (response.StatusCode != System.Net.HttpStatusCode.OK)
             {
-                Console.WriteLine($"Request failed Yahoo! request: {response.StatusCode}");
+                try
+                {
+                    var errorContext = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(errorContext);
+                }
+                catch { }
                 throw new Exception($"Request failed Yahoo! request: {response.StatusCode}");
             }
 

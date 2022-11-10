@@ -17,7 +17,20 @@ namespace GibsonsLeague.YahooSync.Models
     public class YahooStat
     {
         [XmlElement(ElementName = "stat_id", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public int StatId { get; set; }
+        public string StatIdStr { get; set; }
+        [XmlIgnore]
+        public int StatId
+        {
+            get
+            {
+                if (int.TryParse(StatIdStr, out var value))
+                {
+                    return value;
+                }
+
+                return 0;
+            }
+        }
         [XmlElement(ElementName = "name", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public string Name { get; set; }
         [XmlElement(ElementName = "display_name", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
@@ -25,7 +38,20 @@ namespace GibsonsLeague.YahooSync.Models
         [XmlElement(ElementName = "sort_order", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public SortOrder SortOrder { get; set; }
         [XmlElement(ElementName = "value", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public int Value { get; set; }
+        public string ValueStr { get; set; }
+        [XmlIgnore]
+        public int Value
+        {
+            get
+            {
+                if (int.TryParse(ValueStr, out var value))
+                {
+                    return value;
+                }
+
+                return 0;
+            }
+        }
     }
 
     [XmlRoot(ElementName = "stats", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]

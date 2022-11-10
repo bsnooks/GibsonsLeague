@@ -27,6 +27,19 @@ namespace GibsonsLeague.Api.Controllers
             this.seasonRepository = seasonRepository;
         }
 
+        [HttpPost("keepers")]
+        public async Task<IActionResult> SyncKeepers([FromBody] SyncDraftRequest request, CancellationToken cancellationToken = default)
+        {
+            _ = yahooSyncService.SyncKeepers(
+                YahooSyncContext.Create(
+                    Request.HttpContext,
+                    await leagueRepository.GetOne(request.LeagueId)),
+                await seasonRepository.GetSeason(request.Year),
+                cancellationToken);
+
+            return new NoContentResult();
+        }
+
         [HttpPost("draft")]
         public async Task<IActionResult> SyncDraft([FromBody]SyncDraftRequest request, CancellationToken cancellationToken = default)
         {
@@ -96,6 +109,32 @@ namespace GibsonsLeague.Api.Controllers
         public async Task<IActionResult> SyncPlayerRoster([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncPlayerRoster(
+                YahooSyncContext.Create(
+                    Request.HttpContext,
+                    await leagueRepository.GetOne(request.LeagueId)),
+                await seasonRepository.GetSeason(request.Year),
+                cancellationToken);
+
+            return new NoContentResult();
+        }
+
+        [HttpPost("rosters/week")]
+        public async Task<IActionResult> SyncWeeklyRoster([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        {
+            _ = yahooSyncService.SyncWeeklyRoster(
+                YahooSyncContext.Create(
+                    Request.HttpContext,
+                    await leagueRepository.GetOne(request.LeagueId)),
+                await seasonRepository.GetSeason(request.Year),
+                cancellationToken);
+
+            return new NoContentResult();
+        }
+
+        [HttpPost("playerstats/week")]
+        public async Task<IActionResult> SyncWeeklyPlayerStats([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        {
+            _ = yahooSyncService.SyncWeeklyPlayerStats(
                 YahooSyncContext.Create(
                     Request.HttpContext,
                     await leagueRepository.GetOne(request.LeagueId)),

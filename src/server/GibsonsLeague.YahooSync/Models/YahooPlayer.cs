@@ -87,20 +87,23 @@ namespace GibsonsLeague.YahooSync.Models
         public string HasPlayerNotes { get; set; }
         [XmlElement(ElementName = "transaction_data")]
         public TransactionData TransactionData { get; set; }
-        //[XmlElement(ElementName = "selected_position")]
-        //public SelectedPosition SelectedPosition { get; set; }
+        [XmlElement(ElementName = "selected_position")]
+        public SelectedPosition SelectedPosition { get; set; }
         [XmlElement(ElementName = "player_stats", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public PlayerStats PlayerStats { get; set; }
 
     }
 
+    [XmlRoot(ElementName = "selected_position", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+    public class SelectedPosition
+    {
+        [XmlElement(ElementName = "position", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        public string Position { get; set; }
+    }
+
     [XmlRoot(ElementName = "player_stats", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
     public class PlayerStats
     {
-        [XmlElement(ElementName = "coverage_type", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string CoverageType { get; set; }
-        [XmlElement(ElementName = "season", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        public string Season { get; set; }
         [XmlElement(ElementName = "stats", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public YahooStats Stats { get; set; }
     }

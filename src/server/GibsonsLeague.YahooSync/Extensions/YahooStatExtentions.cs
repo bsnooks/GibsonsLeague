@@ -1,7 +1,7 @@
 ﻿using GibsonsLeague.YahooSync.Models;
 using System.Linq;
 
-namespace GibsonsLeague.YahooSync
+namespace GibsonsLeague.YahooSync.Extensions
 {
     /// <summary>
     /// Extention method for yahoo stats.
@@ -27,7 +27,7 @@ namespace GibsonsLeague.YahooSync
             var receivingYards = yahooStats.GetStatValue(YahooStatType.ReceivingYards);
             var receivingTouchdowns = yahooStats.GetStatValue(YahooStatType.ReceivingTouchdowns);
 
-            return (passingYards / 25.0) + (passingTouchdowns * 4) + (rushingYards / 10.0) + (rushingTouchdowns * 6) + (receivingYards / 10.0) + (receivingTouchdowns * 6);
+            return passingYards / 25.0 + passingTouchdowns * 4 + rushingYards / 10.0 + rushingTouchdowns * 6 + receivingYards / 10.0 + receivingTouchdowns * 6;
         }
     }
 }

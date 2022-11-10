@@ -60,8 +60,8 @@ namespace GibsonsLeague.YahooSync.Models
         [XmlElement(ElementName = "season", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         public string Season { get; set; }
 
-        //[XmlElement(ElementName = "players", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
-        //public PlayerList PlayerList { get; set; }
+        [XmlElement(ElementName = "players", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
+        public YahooPlayerList PlayerList { get; set; }
 
         //[XmlElement(ElementName = "teams", Namespace = "http://fantasysports.yahooapis.com/fantasy/v2/base.rng")]
         //public TeamList TeamList { get; set; }

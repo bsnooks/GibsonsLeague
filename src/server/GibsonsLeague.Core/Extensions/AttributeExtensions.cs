@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace GibsonsLeague.Core
+namespace GibsonsLeague.Core.Extensions
 {
     public static class AttributeExtensions
     {
@@ -17,7 +17,7 @@ namespace GibsonsLeague.Core
             {
                 return valueSelector(att);
             }
-            return default(TValue);
+            return default;
         }
     }
 }

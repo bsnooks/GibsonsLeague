@@ -44,7 +44,7 @@ namespace GibsonsLeague.Data.Repositories
                             int startWeek = 0;
                             int startYear = 0;
                             int wins = 0;
-                            foreach(var match in group)
+                            foreach (var match in group)
                             {
                                 if ((match.Week == (lastWeek + 1) && match.Year == lastYear) ||
                                     (lastWeek == 14 && match.Week == 1 && match.Year == (lastYear + 1)))
@@ -90,7 +90,7 @@ namespace GibsonsLeague.Data.Repositories
                             Records = new List<LeagueRecord>()
                         };
                         int rank = 1;
-                        foreach(var tuple in tuples.OrderByDescending(x => x.Item2).Take(number))
+                        foreach (var tuple in tuples.OrderByDescending(x => x.Item2).Take(number))
                         {
                             record.Records.Add(new LeagueRecord()
                             {
@@ -147,12 +147,13 @@ namespace GibsonsLeague.Data.Repositories
                                     // this makes me sad.
                                     .ToList()
                                     .GroupBy(x => new { x.PlayerId, x.Player.Name, x.Team.Franchise })
-                                    .Select(x => new {
+                                    .Select(x => new
+                                    {
                                         Franchise = x.Key.Franchise,
                                         Name = x.Key.Name,
                                         Count = x.Count()
                                     })
-                                    .OrderByDescending(x=> x.Count)
+                                    .OrderByDescending(x => x.Count)
                                     .Take(number)
                                     .Select(x => new FranchiseStats()
                                     {
@@ -195,8 +196,8 @@ namespace GibsonsLeague.Data.Repositories
                             CreateTeamRecord("Least Points (when making playoffs)",
                                 await dbContext.Teams
                                     .Where(x => x.LeagueId == leagueId &&
-                                    x.Standing <= 4 && 
-                                    x.Season.Finished.HasValue && 
+                                    x.Standing <= 4 &&
+                                    x.Season.Finished.HasValue &&
                                     x.Season.Finished.Value)
                                     .OrderBy(x => x.Points)
                                     .Include(x => x.Franchise)
@@ -395,7 +396,7 @@ namespace GibsonsLeague.Data.Repositories
                     {
                         string[] keyPositions = new[] { "QB", "RB", "WR", "TE" };
 
-                        foreach(var position in keyPositions)
+                        foreach (var position in keyPositions)
                         {
                             recordCollection.Add(
                                 CreatePlayerRecord($"Most Kept {position}",
@@ -475,6 +476,29 @@ namespace GibsonsLeague.Data.Repositories
                                 .OrderByDescending(x => x.Transactions.Count())
                                 .Take(number)
                                 .ToListAsync()));
+                    }
+                    if (!recordType.HasValue || recordType == RecordType.PlayerStats)
+                    {
+                        string[] keyPositions = new[] { "QB", "RB", "WR", "TE" };
+
+                        foreach (var position in keyPositions)
+                        {
+                            try
+                            {
+                                recordCollection.Add(
+                                    CreatePlayerWeekStatRecord($"Best Week {position}",
+                                        await dbContext.PlayerWeeks
+                                            .Where(x => x.Player.PrimaryPosition == position)
+                                            .Include(x => x.Player)
+                                            .OrderByDescending(x => x.PassYards / 25.0 + x.PassTDs * 4 + x.RushYards / 10.0 + x.RushTDs * 6 + x.RecYards / 10.0 + x.RecTDs * 6)
+                                            .Take(number)
+                                            .ToListAsync()));
+                            }
+                            catch (Exception ex)
+                            {
+                                var d = ex;
+                            }
+                        }
                     }
                 }
 
@@ -789,6 +813,31 @@ namespace GibsonsLeague.Data.Repositories
             }
             return record;
         }
+        private LeagueRecords CreatePlayerWeekStatRecord(string title, ICollection<PlayerWeek> weeks,
+            bool positiveRecord = true,
+            RecordType recordType = RecordType.PlayerStats)
+        {
+            LeagueRecords record = new LeagueRecords()
+            {
+                RecordTitle = title,
+                PositiveRecord = positiveRecord,
+                RecordType = recordType,
+                Records = new List<LeagueRecord>()
+            };
+            var count = 1;
+            foreach (var week in weeks)
+            {
+                record.Records.Add(new LeagueRecord()
+                {
+                    Rank = count++,
+                    Player = week.Player,
+                    RecordValue = $"{week.Points.ToString("#.##")} ({week.Year} - Week {week.Week})",
+                    RecordNumericValue = week.Points
+                });
+            }
+
+            return record;
+        }
 
         private enum FranchiseRecordValueType
         {
@@ -828,7 +877,8 @@ namespace GibsonsLeague.Data.Repositories
         private enum PlayerRecordType
         {
             Transactions,
-            DraftPicks
+            DraftPicks,
+            Stats
         }
     }
 }

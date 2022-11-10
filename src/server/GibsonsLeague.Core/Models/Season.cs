@@ -24,6 +24,9 @@ namespace GibsonsLeague.Core.Models
         public bool? DraftImported { get; set; }
         public int? MatchupSyncWeek { get; set; }
         public DateTime? LastTransactionSyncDate { get; set; }
+        public int? WeeklyRosterSyncWeek { get; set; }
+        public int? WeekStatsSyncWeek { get; set; }
+        public int CurrentWeek { get; set; }
 
         public virtual League League { get; set; }
         public virtual ICollection<Draft> Drafts { get; set; }

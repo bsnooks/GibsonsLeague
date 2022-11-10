@@ -11,10 +11,12 @@ namespace GibsonsLeague.Core.Models
         {
             DraftPicks = new HashSet<DraftPick>();
             PlayerSeasons = new HashSet<PlayerSeason>();
+            PlayerWeeks = new HashSet<PlayerWeek>();
             Transactions = new HashSet<Transaction>();
         }
 
         public int PlayerId { get; set; }
+        public int BirthYear { get; set; }
         public string Name { get; set; }
         public string Position { get; set; }
         public int? YahooPlayerId { get; set; }
@@ -23,6 +25,7 @@ namespace GibsonsLeague.Core.Models
 
         public virtual ICollection<DraftPick> DraftPicks { get; set; }
         public virtual ICollection<PlayerSeason> PlayerSeasons { get; set; }
+        public virtual ICollection<PlayerWeek> PlayerWeeks { get; set; }
         public virtual ICollection<Transaction> Transactions { get; set; }
     }
 }

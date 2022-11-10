@@ -26,6 +26,7 @@ namespace GibsonsLeague.Data
         public virtual DbSet<Owner> Owners { get; set; }
         public virtual DbSet<Player> Players { get; set; }
         public virtual DbSet<PlayerSeason> PlayerSeasons { get; set; }
+        public virtual DbSet<PlayerWeek> PlayerWeeks{ get; set; }
         public virtual DbSet<Season> Seasons { get; set; }
         public virtual DbSet<Team> Teams { get; set; }
         public virtual DbSet<TeamScore> TeamScores { get; set; }
@@ -238,6 +239,25 @@ namespace GibsonsLeague.Data
                     .HasForeignKey(d => d.EndTeamId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_PlayerSeason_Team");
+            });
+
+            modelBuilder.Entity<PlayerWeek>(entity =>
+            {
+                entity.HasKey(e => new { e.PlayerId, e.Year, e.Week });
+
+                entity.ToTable("PlayerWeek");
+
+                entity.HasOne(d => d.Player)
+                    .WithMany(p => p.PlayerWeeks)
+                    .HasForeignKey(d => d.PlayerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PlayerWeek_Player");
+
+                entity.HasOne(d => d.Team)
+                    .WithMany(p => p.PlayerWeeks)
+                    .HasForeignKey(d => d.TeamId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PlayerWeek_Team");
             });
 
             modelBuilder.Entity<Season>(entity =>

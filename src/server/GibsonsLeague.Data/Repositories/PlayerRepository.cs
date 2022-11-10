@@ -113,6 +113,21 @@ namespace GibsonsLeague.Data.Repositories
             }
         }
 
+        public async Task<IEnumerable<PlayerWeek>> GetPlayerWeeks(int year, string[] positions = null)
+        {
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.PlayerWeeks
+                    .Where(ps => ps.Year == year &&
+                        (positions == null || positions.Contains(ps.Player.PrimaryPosition)))
+                    .Include(ps => ps.Player)
+                    .OrderBy(ps => ps.PlayerId)
+                    .ThenBy(ps => ps.Year)
+                    .ThenBy(ps => ps.Week)
+                    .ToListAsync();
+            }
+        }
+
         public async Task<IEnumerable<PlayerSeason>> GetPlayerSeasons(Franchise franchise)
         {
             using (var dbContext = dbFunc())
@@ -156,6 +171,15 @@ namespace GibsonsLeague.Data.Repositories
             return newPlayer.PlayerId;
         }
 
+        public async Task UpdatePlayerSeasons(PlayerSeason playerSeason)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.PlayerSeasons.AddAsync(playerSeason);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
         public async Task UpdatePlayersSeasons(IEnumerable<PlayerSeason> playerSeasons, int year, bool updatePositionRanks = true)
         {
             using (var dbContext = dbFunc())
@@ -167,6 +191,24 @@ namespace GibsonsLeague.Data.Repositories
                 {
                     dbContext.Database.ExecuteSqlRaw("EXECUTE [dbo].[UpdatePositionRanks] {0}", year);
                 }
+            }
+        }
+
+        public async Task CreatePlayersWeeks(IEnumerable<PlayerWeek> playerWeeks)
+        {
+            using (var dbContext = dbFunc())
+            {
+                await dbContext.PlayerWeeks.AddRangeAsync(playerWeeks);
+                await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task UpdatePlayersWeeks(IEnumerable<PlayerWeek> playerWeeks)
+        {
+            using (var dbContext = dbFunc())
+            {
+                dbContext.PlayerWeeks.UpdateRange(playerWeeks);
+                await dbContext.SaveChangesAsync();
             }
         }
     }

@@ -9,6 +9,7 @@ namespace GibsonsLeague.Core.Models
         Franchise,
         Season,
         Match,
-        Player
+        Player,
+        PlayerStats
     }
 }

@@ -1,6 +1,8 @@
 ﻿using GibsonsLeague.Core;
+using GibsonsLeague.Core.Extensions;
 using GibsonsLeague.Core.Models;
 using GibsonsLeague.Data.Repositories;
+using GibsonsLeague.YahooSync.Extensions;
 using GibsonsLeague.YahooSync.Models;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -41,6 +43,68 @@ namespace GibsonsLeague.YahooSync
             this.draftRepository = draftRepository;
             this.transactionRepository = transactionRepository;
             this.matchRepository = matchRepository;
+        }
+
+        /// <summary>
+        /// Sync the keepers information for a season between Yahoo! and GLA.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="season"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public async Task SyncKeepers(ISyncContext context, Season season, CancellationToken cancellationToken = default)
+        {
+            using (var client = new YahooClient(context, configuration))
+            {
+                var result = await client.GetAsync<YahooLeague>(
+                    $"league/{season.YahooGameId}.l.{season.YahooLeagueId}/draftresults",
+                    cancellationToken);
+
+                if (result != null && result.DraftResults != null)
+                {
+                    int keeperCount = 50;
+                    DateTime draftDate = DateTime.Parse(result.StartDate);
+
+                    var keeperTransactions = new List<Transaction>();
+
+                    var players = await playerRepository.GetPlayersBySeason(season.Year, season.Year - 1, season.Year - 2);
+
+                    IDictionary<int, Team> teamCache = season.Teams.ToDictionary(s => s.YahooTeamId.Value, s => s);
+                    IDictionary<int, Player> playerCache = players.ToDictionary(p => p.YahooPlayerId.Value, p => p);
+
+                    foreach (var yahooPick in result.DraftResults.DraftResult.OrderBy(p => p.Pick))
+                    {
+                        int yahooPlayerId = int.Parse(yahooPick.PlayerKey.Replace($"{season.YahooGameId}.p.", ""));
+                        int yahooTeamId = int.Parse(yahooPick.TeamKey.Replace($"{season.YahooGameId}.l.{season.YahooLeagueId}.t.", ""));
+
+                        if (!playerCache.ContainsKey(yahooPlayerId))
+                        {
+                            playerCache.Add(yahooPlayerId, await SyncPlayer(client, season, yahooPlayerId, cancellationToken));
+                        }
+
+                        var player = playerCache[yahooPlayerId];
+                        var team = teamCache[yahooTeamId];
+
+                        if (yahooPick.Pick <= keeperCount)
+                        {
+                            keeperTransactions.Add(new Transaction()
+                            {
+                                TeamId = team.TeamId,
+                                TransactionType = TransactionType.Kept,
+                                PlayerId = player.PlayerId,
+                                Description = $"Kept by {team.Franchise.MainName}",
+                                Year = season.Year,
+                                Date = draftDate
+                            });
+
+                        }
+                    }
+                    await transactionRepository.CreateTransactions(keeperTransactions);
+
+                    season.KeepersSet = true;
+                    await seasonRepository.UpdateSeason(season);
+                }
+            }
         }
 
         /// <summary>
@@ -322,20 +386,39 @@ namespace GibsonsLeague.YahooSync
 
         protected async Task<Player> SyncPlayer(YahooClient client, Season season, int yahooPlayerId, CancellationToken cancellationToken)
         {
-            var yahooPlayer = await client.GetAsync<YahooPlayer>(
-                $"player/{season.YahooGameId}.p.{yahooPlayerId}",
-                cancellationToken);
-            var newPlayer = new Player()
+            var existingPlayer = await playerRepository.GetOne(yahooPlayerId);
+            if (existingPlayer != null)
             {
-                PlayerId = yahooPlayerId,
-                YahooPlayerId = yahooPlayerId,
-                Name = yahooPlayer.Name.Full,
-                PrimaryPosition = yahooPlayer.DisplayPosition.Length > 2 ? yahooPlayer.DisplayPosition.Substring(0, 2) : yahooPlayer.DisplayPosition,
-                Position = yahooPlayer.DisplayPosition,
-                PlayerSeasons = new List<PlayerSeason>()
+                Console.WriteLine($"Added {existingPlayer.Name} ({existingPlayer.PrimaryPosition}): to {season.Year}");
+                await playerRepository.UpdatePlayerSeasons(
+                                    new PlayerSeason()
+                                    {
+                                        PlayerId = yahooPlayerId,
+                                        Year = season.Year,
+                                        Points = 0,
+                                        PositionRank = 0,
+                                        PositionRankPpg = 0,
+                                        GamesPlayed = 0,
+                                    });
+                return existingPlayer;
+            }
+            else
+            {
+                var yahooPlayer = await client.GetAsync<YahooPlayer>(
+                    $"player/{season.YahooGameId}.p.{yahooPlayerId}",
+                    cancellationToken);
+                var newPlayer = new Player()
+                {
+                    PlayerId = yahooPlayerId,
+                    YahooPlayerId = yahooPlayerId,
+                    Name = yahooPlayer.Name.Full,
+                    PrimaryPosition = yahooPlayer.DisplayPosition.Length > 2 ? yahooPlayer.DisplayPosition.Substring(0, 2) : yahooPlayer.DisplayPosition,
+                    Position = yahooPlayer.DisplayPosition,
+                    PlayerSeasons = new List<PlayerSeason>()
                                 {
                                     new PlayerSeason()
                                     {
+                                        PlayerId = yahooPlayerId,
                                          Year = season.Year,
                                          Points = 0,
                                          PositionRank = 0,
@@ -343,13 +426,13 @@ namespace GibsonsLeague.YahooSync
                                          GamesPlayed = 0,
                                     }
                                 }
-            };
+                };
 
-            await playerRepository.CreatePlayer(newPlayer);
+                await playerRepository.CreatePlayer(newPlayer);
 
-            Console.WriteLine($"Added {newPlayer.Name} ({newPlayer.PrimaryPosition}): {yahooPlayerId}");
-
-            return newPlayer;
+                Console.WriteLine($"Added {newPlayer.Name} ({newPlayer.PrimaryPosition}): {yahooPlayerId}");
+                return newPlayer;
+            }
         }
 
         /// <summary>
@@ -367,13 +450,15 @@ namespace GibsonsLeague.YahooSync
                 bool validWeek = true;
                 while (validWeek)
                 {
+                    Console.WriteLine($"Updating Matchups: {season.Year} - Week {week}");
+
                     var result = await client.GetAsync<YahooLeague>(
                         $"league/{season.YahooGameId}.l.{season.YahooLeagueId}/scoreboard;week={week}",
                         cancellationToken);
 
                     if (result != null && result != null)
                     {
-                        validWeek = week <= result.CurrentWeek;
+                        validWeek = week <= result.CurrentWeek && result.Scoreboard.Matchups.Matchups.FirstOrDefault().Status == "postevent";
                         if (!validWeek)
                         {
                             week--;
@@ -530,6 +615,12 @@ namespace GibsonsLeague.YahooSync
                                 Console.WriteLine($"Updating: {yahooPlayer.Name.Full}");
                                 playerSeason.GamesPlayed = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.GamesPlayed);
                                 playerSeason.Points = yahooPlayer.PlayerStats.Stats.CalculatePoints();
+                                playerSeason.PassYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingYards);
+                                playerSeason.PassTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingTouchdowns);
+                                playerSeason.RushYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingYards);
+                                playerSeason.RushTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingTouchdowns);
+                                playerSeason.RecYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingYards);
+                                playerSeason.RecTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingTouchdowns);
                             }
                         }
                     }
@@ -592,6 +683,125 @@ namespace GibsonsLeague.YahooSync
                 await playerRepository.UpdatePlayersSeasons(playerSeasons, season.Year, false);
             }
         }
+        public async Task SyncWeeklyRoster(ISyncContext context, Season season, CancellationToken cancellationToken = default)
+        {
+            using (var client = new YahooClient(context, configuration))
+            {
+                var playerWeeks = await playerRepository.GetPlayerWeeks(season.Year, new[] { "QB", "RB", "WR", "TE" });
 
+                IDictionary<string, PlayerWeek> playerCache = playerWeeks.ToDictionary(p => $"{p.PlayerId}:{p.Week}", p => p);
+                IDictionary<int, Team> teamCache = season.Teams.ToDictionary(s => s.YahooTeamId.Value, s => s);
+
+                for (int week = season.WeeklyRosterSyncWeek ?? 1; week <= season.CurrentWeek; week++)
+                {
+                    foreach (var team in season.Teams)
+                    {
+                        YahooTeam result = null;
+                        try
+                        {
+                            result = await client.GetAsync<YahooTeam>(
+                                $"team/{season.YahooGameId}.l.{season.YahooLeagueId}.t.{team.YahooTeamId}/roster?type=week&week={week}",
+                                cancellationToken);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+
+                        if (result != null && result != null)
+                        {
+                            foreach (var yahooPlayer in result.Roster.PlayerList.Players)
+                            {
+                                if (playerCache.ContainsKey($"{yahooPlayer.PlayerId}:{week}"))
+                                {
+                                    var playerWeek = playerCache[$"{yahooPlayer.PlayerId}:{week}"];
+                                    Console.WriteLine($"Updating: {yahooPlayer.Name.Full} to be on {team.Franchise.MainName} in week {week}");
+                                    playerWeek.TeamId = team.TeamId;
+                                    playerWeek.Started = yahooPlayer.SelectedPosition.Position != "BN";
+                                }
+                            }
+                        }
+                    }
+
+                    season.WeeklyRosterSyncWeek = week;
+                    await seasonRepository.UpdateSeason(season);
+                }
+
+                await playerRepository.UpdatePlayersWeeks(playerWeeks.Where(p => p.TeamId.HasValue));
+            }
+        }
+
+
+        public async Task SyncWeeklyPlayerStats(ISyncContext context, Season season, CancellationToken cancellationToken = default)
+        {
+            using (var client = new YahooClient(context, configuration))
+            {
+
+                var players = await playerRepository.GetPlayerSeasons(season.Year, new[] { "QB", "RB", "WR", "TE" });
+                //players = players.Where(p => p.PlayerId >= 8407);
+                IDictionary<int, PlayerSeason> playerCache = players
+                    .ToDictionary(p => p.PlayerId, p => p);
+
+                var batches = players.ToList().SplitList(25);
+
+                foreach (var batch in batches)
+                {
+                    var keys = string.Join(",", batch.Select(p => $"{season.YahooGameId}.p.{p.PlayerId}"));
+                    Console.WriteLine($"Starting batch {keys}");
+
+                    YahooPlayerList result = null;
+
+                    for (int week = season.WeekStatsSyncWeek ?? 1; week <= season.CurrentWeek; week++)
+                    {
+                        try
+                        {
+                            result = await client.GetAsync<YahooPlayerList>(
+                                $"players;player_keys={keys}/stats?type=week&week={week}",
+                                cancellationToken);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            return;
+                        }
+
+                        var playerWeeks = new List<PlayerWeek>();
+
+                        if (result != null)
+                        {
+                            foreach (var yahooPlayer in result.Players)
+                            {
+                                var playerWeek = new PlayerWeek()
+                                {
+                                    PlayerId = yahooPlayer.PlayerId,
+                                    Year = season.Year,
+                                    Week = week
+                                };
+                                if (yahooPlayer != null)
+                                {
+                                    Console.WriteLine($"Updating: {yahooPlayer.Name.Full} Week {week}");
+                                    playerWeek.PassYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingYards);
+                                    playerWeek.PassTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingTouchdowns);
+                                    playerWeek.RushYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingYards);
+                                    playerWeek.RushTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingTouchdowns);
+                                    playerWeek.RecYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingYards);
+                                    playerWeek.RecTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingTouchdowns);
+                                    playerWeek.Interceptions = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.Interceptions);
+                                    playerWeek.FumblesLost = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.FumblesLost);
+                                    playerWeek.TwoPointConvert = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.TwoPointConversions);
+
+                                    playerWeeks.Add(playerWeek);
+                                }
+                            }
+
+                            await playerRepository.CreatePlayersWeeks(playerWeeks);
+                        }
+
+                        season.WeekStatsSyncWeek = week;
+                        await seasonRepository.UpdateSeason(season);
+                    }
+                }
+            }
+        }
     }
 }

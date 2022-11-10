@@ -44,6 +44,11 @@ type GibsonsLeagueQuery {
     year: Int
     franchiseId: Guid
   ): [PlayerTransaction]
+  user: User
+}
+
+type User {
+  userName: String!
 }
 
 type League {
@@ -274,6 +279,7 @@ type LeagueRecord {
 }
 
 type Season {
+  currentWeek: Int
   draftImported: Boolean
   finished: Boolean
   keepersSet: Boolean
@@ -281,6 +287,8 @@ type Season {
   matchupSyncWeek: Int
   positionComparison: [PlayerSeason]
   teams: [Team]
+  weeklyRosterSyncWeek: Int
+  weekStatsSyncWeek: Int
   yahooGameId: Int
   yahooLeagueId: Int
   year: Int!

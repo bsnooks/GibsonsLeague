@@ -1,6 +1,5 @@
 ﻿using System;
 using GibsonsLeague.Core.Models;
-using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;
@@ -20,6 +19,13 @@ namespace GibsonsLeague.Api.Models
             SeasonRepository seasonRepository,
             MatchRepository matchRepository)
         {
+            Field<User>("user",
+                resolve: context =>
+                {
+                    return null;
+                }
+            );
+
             Field<ListGraphType<League>>(
                 "leagues",
                 resolve: context => leagueRepository.GetAll()

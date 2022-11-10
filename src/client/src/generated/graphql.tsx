@@ -130,6 +130,7 @@ export type GibsonsLeagueQuery = {
   trade?: Maybe<FranchiseTrade>;
   trades?: Maybe<Array<Maybe<FranchiseTrade>>>;
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
+  user?: Maybe<User>;
 };
 
 
@@ -381,6 +382,7 @@ export type PlayerTransaction = {
 
 export type Season = {
   __typename?: 'Season';
+  currentWeek?: Maybe<Scalars['Int']>;
   draftImported?: Maybe<Scalars['Boolean']>;
   finished?: Maybe<Scalars['Boolean']>;
   keepersSet?: Maybe<Scalars['Boolean']>;
@@ -388,6 +390,8 @@ export type Season = {
   matchupSyncWeek?: Maybe<Scalars['Int']>;
   positionComparison?: Maybe<Array<Maybe<PlayerSeason>>>;
   teams?: Maybe<Array<Maybe<Team>>>;
+  weeklyRosterSyncWeek?: Maybe<Scalars['Int']>;
+  weekStatsSyncWeek?: Maybe<Scalars['Int']>;
   yahooGameId?: Maybe<Scalars['Int']>;
   yahooLeagueId?: Maybe<Scalars['Int']>;
   year: Scalars['Int'];
@@ -434,3 +438,8 @@ export enum TransactionType {
   Traded = 'TRADED',
   VetoedTrade = 'VETOED_TRADE'
 }
+
+export type User = {
+  __typename?: 'User';
+  userName: Scalars['String'];
+};

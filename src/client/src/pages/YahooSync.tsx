@@ -9,7 +9,7 @@ import GlobalLoading from '../components/GlobalLoading';
 import { GibsonsLeagueQuery, Season } from '../generated/graphql';
 import GlobalError from '../components/GlobalError';
 import { RootState } from '../store/rootReducer';
-import { yahooSyncDraft, yahooSyncMatchups, yahooSyncPlayerStats, yahooSyncRosters, yahooSyncStandings, yahooSyncTransactions } from '../api/yahooSync';
+import { yahooSyncDraft, yahooSyncKeepers, yahooSyncMatchups, yahooSyncPlayerStats, yahooSyncPlayerWeeklyStats, yahooSyncRosters, yahooSyncStandings, yahooSyncTransactions, yahooSyncWeeklyRosters, yahooSyncCurrentWeek } from '../api/yahooSync';
 import SyncButton from '../components/controls/SyncButton';
 import { useHistory } from 'react-router';
 
@@ -25,7 +25,10 @@ export const GET_SEASONS = gql`
         finished
         draftImported
         keepersSet
+        currentWeek
         matchupSyncWeek
+        weekStatsSyncWeek
+        weeklyRosterSyncWeek
         lastTransactionSyncDate
       }
     }
@@ -49,6 +52,22 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
     if (loading) return <GlobalLoading mode="page" />;
     if (error || !data) return <GlobalError mode="page" apolloError={error} />;
     const leagueId = data.league?.leagueId ?? "";
+    
+    const syncCurrentWeek = (season: Season) => {
+        yahooSyncCurrentWeek(
+            leagueId,
+            season.year,
+            (response) => console.log(response),
+            (err) => console.log(err));
+    }
+
+    const syncKeepers = (season: Season) => {
+        yahooSyncKeepers(
+            leagueId,
+            season.year,
+            (response) => console.log(response),
+            (err) => console.log(err));
+    }
 
     const syncDraft = (season: Season) => {
         yahooSyncDraft(
@@ -90,8 +109,24 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
             (err) => console.log(err));
     }
 
+    const syncPlayerWeeklyStats = (season: Season) => {
+        yahooSyncPlayerWeeklyStats(
+            leagueId,
+            season.year,
+            (response) => console.log(response),
+            (err) => console.log(err));
+    }
+
     const syncRosters = (season: Season) => {
         yahooSyncRosters(
+            leagueId,
+            season.year,
+            (response) => console.log(response),
+            (err) => console.log(err));
+    }
+
+    const syncWeeklyRosters = (season: Season) => {
+        yahooSyncWeeklyRosters(
             leagueId,
             season.year,
             (response) => console.log(response),
@@ -119,14 +154,21 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
                                     </div>
                                     <div className="seasonsync">
                                         <div className="seasonsync-col status">
-                                            <SyncButton onSyncClick={() => {}} synced={season.keepersSet} season={season} />
+                                            <SyncButton onSyncClick={(_, season) => syncCurrentWeek(season)} synced={season.finished} season={season} type="add" />
+                                        </div>
+                                        <div className="seasonsync-col data">Current Week</div>
+                                        <div className="seasonsync-col date">{`Week ${season.currentWeek}`}</div>
+                                    </div>
+                                    <div className="seasonsync">
+                                        <div className="seasonsync-col status">
+                                            <SyncButton onSyncClick={(_, season) => syncKeepers(season)} synced={season.keepersSet} season={season} type="import" />
                                         </div>
                                         <div className="seasonsync-col data">Keepers</div>
                                         <div className="seasonsync-col date">{season.keepersSet ? "" : "Never"}</div>
                                     </div>
                                     <div className="seasonsync">
                                         <div className="seasonsync-col status">
-                                            <SyncButton onSyncClick={(_, season) => syncDraft(season)} synced={season.draftImported} season={season} import={true} />
+                                            <SyncButton onSyncClick={(_, season) => syncDraft(season)} synced={season.draftImported} season={season} type="import" />
                                         </div>
                                         <div className="seasonsync-col data">Draft</div>
                                         <div className="seasonsync-col date">{season.draftImported ? "" : "Never"}</div>
@@ -140,34 +182,46 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
                                     </div>
                                     <div className="seasonsync">
                                         <div className="seasonsync-col status">
-                                            <SyncButton onSyncClick={(_, season) => syncMatchups(season)} synced={season.finished} season={season} />
+                                            <SyncButton onSyncClick={(_, season) => syncStandings(season)} synced={season.finished} season={season} />
+                                        </div>
+                                        <div className="seasonsync-col data">Standings</div>
+                                        <div className="seasonsync-col date"></div>
+                                    </div>
+                                    <div className="seasonsync">
+                                        <div className="seasonsync-col status">
+                                            <SyncButton onSyncClick={(_, season) => syncPlayerStats(season)} synced={season.finished} season={season} />
+                                        </div>
+                                        <div className="seasonsync-col data">Player Season Stats</div>
+                                        <div className="seasonsync-col date"></div>
+                                    </div>
+                                    <div className="seasonsync">
+                                        <div className="seasonsync-col status">
+                                            <SyncButton onSyncClick={(_, season) => syncRosters(season)} synced={season.finished} season={season} />
+                                        </div>
+                                        <div className="seasonsync-col data">Rosters</div>
+                                        <div className="seasonsync-col date"></div>
+                                    </div>
+                                    <div className="seasonsync">
+                                        <div className="seasonsync-col status">
+                                            <SyncButton onSyncClick={(_, season) => syncMatchups(season)} synced={season.matchupSyncWeek === season.currentWeek} season={season} />
                                         </div>
                                         <div className="seasonsync-col data">Matchups</div>
                                         <div className="seasonsync-col date">{season.matchupSyncWeek ? `Week ${season.matchupSyncWeek}` : "Never"}</div>
                                     </div>
-                                    { !season.finished ? (<>
-                                        <div className="seasonsync">
-                                            <div className="seasonsync-col status">
-                                                <SyncButton onSyncClick={(_, season) => syncStandings(season)} synced={season.finished} season={season} />
-                                            </div>
-                                            <div className="seasonsync-col data">Standings</div>
-                                            <div className="seasonsync-col date"></div>
+                                    <div className="seasonsync">
+                                        <div className="seasonsync-col status">
+                                            <SyncButton onSyncClick={(_, season) => syncPlayerWeeklyStats(season)} synced={season.weekStatsSyncWeek === season.currentWeek} season={season} />
                                         </div>
-                                        <div className="seasonsync">
-                                            <div className="seasonsync-col status">
-                                                <SyncButton onSyncClick={(_, season) => syncPlayerStats(season)} synced={season.finished} season={season} />
-                                            </div>
-                                            <div className="seasonsync-col data">Player Stats</div>
-                                            <div className="seasonsync-col date"></div>
+                                        <div className="seasonsync-col data">Player Weekly Stats</div>
+                                        <div className="seasonsync-col date">{season.weekStatsSyncWeek ? `Week ${season.weekStatsSyncWeek}` : "Never"}</div>
+                                    </div>
+                                    <div className="seasonsync">
+                                        <div className="seasonsync-col status">
+                                            <SyncButton onSyncClick={(_, season) => syncWeeklyRosters(season)} synced={season.weeklyRosterSyncWeek === season.currentWeek} season={season} />
                                         </div>
-                                        <div className="seasonsync">
-                                            <div className="seasonsync-col status">
-                                                <SyncButton onSyncClick={(_, season) => syncRosters(season)} synced={season.finished} season={season} />
-                                            </div>
-                                            <div className="seasonsync-col data">Rosters</div>
-                                            <div className="seasonsync-col date"></div>
-                                        </div>
-                                    </>) :null}
+                                        <div className="seasonsync-col data">Weekly Rosters</div>
+                                        <div className="seasonsync-col date">{season.weeklyRosterSyncWeek ? `Week ${season.weeklyRosterSyncWeek}` : "Never"}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
