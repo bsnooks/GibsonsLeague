@@ -21,7 +21,7 @@ const KeepersGraph: React.FC<KeepersGraphProps> = ({ ...props }) => {
         }
         keepers.forEach((keeper, i) => {
             if (keeper) {
-                franchiseData[`${i+1}`] = keeper.seasonPoints;
+                franchiseData[`${i+1}`] = keeper.seasonPoints?.toFixed(2);
                 franchiseData[`${i+1}-name`] = keeper.name;
                 franchiseData[`${i+1}-data`] = keeper;
             }

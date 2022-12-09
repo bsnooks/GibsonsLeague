@@ -18,6 +18,8 @@ namespace GibsonsLeague.Api.Models
 
             Field<IntGraphType>("SeasonsCount", resolve: context => context.Source.PlayerSeasons.Count());
             Field<IntGraphType>("GamesPlayed", resolve: context => context.Source.PlayerSeasons.Sum(x => x.GamesPlayed));
+            Field<IntGraphType>("GamesStarted", resolve: context => context.Source.PlayerWeeks.Count(x => x.Started));
+            Field<IntGraphType>("GamesBenched", resolve: context => context.Source.PlayerWeeks.Count(x => !x.Started));
             Field<FloatGraphType>("AvgPositionRank", resolve: context => {
                 if (!context.Source.PlayerSeasons.Any(x => x.GamesPlayed > 0))
                 {

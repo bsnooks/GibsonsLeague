@@ -1,4 +1,5 @@
-﻿using GibsonsLeague.Core.Models;
+﻿using System.Linq;
+using GibsonsLeague.Core.Models;
 using GibsonsLeague.Data.Repositories;
 using GraphQL;
 using GraphQL.Types;
@@ -17,6 +18,13 @@ namespace GibsonsLeague.Api.Models
             Field(l => l.PositionRank);
             Field(l => l.PositionRankPpg);
             Field(l => l.GamesPlayed);
+            Field<IntGraphType>("GamesStarted", resolve: context => context.Source.Player.PlayerWeeks.Where(p => p.Started && p.Year == context.Source.Year).Count());
+            Field<IntGraphType>("GamesBenched", resolve: context => context.Source.Player.PlayerWeeks.Where(p => !p.Started && p.Year == context.Source.Year).Count());
+            Field<FloatGraphType>("endfranchisepoints", resolve: context => {
+                return context.Source.Player.PlayerWeeks
+                    .Where(p => p.Started && p.Year == context.Source.Year && p.TeamId == context.Source.EndTeamId)
+                    .Sum(p => p.Points);
+            });
             Field(l => l.Points);
             Field<StringGraphType>("endfranchisecolor",
                 resolve: context =>

@@ -23,6 +23,7 @@ namespace GibsonsLeague.Data.Repositories
             {
                 return await dbContext.Players
                 .Include(p => p.PlayerSeasons)
+                .Include(p => p.PlayerWeeks)
                 .SingleOrDefaultAsync(p => p.PlayerId == id);
             }
         }
@@ -43,6 +44,7 @@ namespace GibsonsLeague.Data.Repositories
                 return await dbContext.Players
                 .Where(p => p.PlayerSeasons.Any(s => years.Contains(s.Year)))
                 .Include(p => p.PlayerSeasons)
+                .Include(p => p.PlayerWeeks)
                 .OrderByDescending(p => p.PlayerId)
                 .ToListAsync();
             }

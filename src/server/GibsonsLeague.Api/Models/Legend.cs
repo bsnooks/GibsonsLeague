@@ -8,6 +8,7 @@ namespace GibsonsLeague.Api.Models
         {
             Field(x => x.Years);
             Field(x => x.Points);
+            Field(x => x.GamesPlayed);
 
             Field<Player>("player",
                 resolve: context =>

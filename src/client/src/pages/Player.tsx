@@ -21,6 +21,8 @@ export const GET_FRANCHISE = gql`
       pointsPerSeason
       seasonsCount
       gamesPlayed
+      gamesStarted
+      gamesBenched
       avgPositionRank
       avgPositionRankPpg
       seasons
@@ -28,6 +30,8 @@ export const GET_FRANCHISE = gql`
         year
         position
         gamesPlayed
+        gamesStarted
+        gamesBenched
         points
         positionRank
         positionRankPpg
@@ -171,6 +175,10 @@ const Player: React.FC<PlayerProps> = ({ ...props }) => {
               <Row>
                 <Col><SectionInfoBox title="Seasons" info={player?.seasonsCount} /></Col>
                 <Col><SectionInfoBox title="Games Played" info={player?.gamesPlayed} /></Col>
+              </Row>
+              <Row>
+                <Col><SectionInfoBox title="Games Started" info={player?.gamesStarted} /></Col>
+                <Col><SectionInfoBox title="Games Benched" info={player?.gamesBenched} /></Col>
               </Row>
               <Row>
                 <Col><SectionInfoBox title="Average Position Rank" info={Number(player?.avgPositionRank ?? 0).toLocaleString('en-US', { maximumFractionDigits: 1 })} /></Col>

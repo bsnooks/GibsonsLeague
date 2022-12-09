@@ -31,7 +31,11 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/ui/playground",
       "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "environmentVariables": {
+        "ConnectionStrings__GibsonsLeagueDb": "Server=tcp:gibsonsleague.database.windows.net,1433;Initial Catalog=GLA;Persist Security Info=False;User ID=snooks;Password=Welcome1;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
+        "Yahoo__ClientSecret": "378143651b40892f5a1415dcbd289ad4e1a9c825"
+      }
     }
   }
 }
