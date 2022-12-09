@@ -751,7 +751,7 @@ namespace GibsonsLeague.YahooSync
 
                     YahooPlayerList result = null;
 
-                    for (int week = season.WeekStatsSyncWeek ?? 1; week <= season.CurrentWeek; week++)
+                    for (int week = (season.WeekStatsSyncWeek + 1) ?? 1; week <= season.CurrentWeek; week++)
                     {
                         try
                         {

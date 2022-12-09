@@ -40,6 +40,7 @@ export const GET_FRANCHISE = gql`
       legends
       {
         points
+        gamesPlayed
         years
         player
         {
@@ -171,7 +172,7 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                                     {legend?.player?.name}
                                 </Link>
                                 <span>{` (${legend?.player?.position})`}</span><br/>
-                                <span className="pointstext">{`${points} points`}</span>
+                                <span className="pointstext">{`${points} points (${legend?.gamesPlayed} games)`}</span>
                               </div>
                               <div className="legend-col years">
                                 {getRange([...legend.years].sort()).join(", ")}

@@ -275,6 +275,7 @@ export type LeagueRecords = {
 
 export type Legend = {
   __typename?: 'Legend';
+  gamesPlayed: Scalars['Int'];
   player?: Maybe<Player>;
   points: Scalars['Float'];
   years: Array<Scalars['Int']>;
@@ -308,7 +309,9 @@ export type Player = {
   avgPositionRank?: Maybe<Scalars['Float']>;
   avgPositionRankPpg?: Maybe<Scalars['Float']>;
   comparisonSeasons?: Maybe<Array<Maybe<PlayerSeason>>>;
+  gamesBenched?: Maybe<Scalars['Int']>;
   gamesPlayed?: Maybe<Scalars['Int']>;
+  gamesStarted?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
   playerId: Scalars['Int'];
   points?: Maybe<Scalars['Float']>;
@@ -338,7 +341,10 @@ export type PlayerSeason = {
   __typename?: 'PlayerSeason';
   endfranchise?: Maybe<Scalars['String']>;
   endfranchisecolor?: Maybe<Scalars['String']>;
+  endfranchisepoints?: Maybe<Scalars['Float']>;
+  gamesBenched?: Maybe<Scalars['Int']>;
   gamesPlayed: Scalars['Int'];
+  gamesStarted?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
   playerId: Scalars['Int'];
   points: Scalars['Float'];

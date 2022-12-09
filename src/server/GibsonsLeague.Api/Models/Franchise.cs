@@ -8,7 +8,9 @@ namespace GibsonsLeague.Api.Models
 {
     public class Franchise : ObjectGraphType<GibsonsLeague.Core.Models.Franchise>
     {
-        public Franchise(TeamRepository teamRepository,
+        public Franchise(
+            FranchiseRepository franchiseRepository,
+            TeamRepository teamRepository,
             DraftPickRepository draftPickRepository,
             TransactionRepository transactionRepository,
             MatchRepository matchRepository,
@@ -80,18 +82,7 @@ namespace GibsonsLeague.Api.Models
                     week: context.GetArgument<int?>("week")));
 
             Field<ListGraphType<Legend>>("legends",
-                resolve: context => {
-
-                    var seasons = context.Source.Teams.SelectMany(x => x.PlayerSeasons.Where(ps => ps.EndTeamId == x.TeamId));
-
-                    var group = seasons.GroupBy(s => new { s.PlayerId, s.Player }).OrderByDescending(x => x.Sum(y => y.Points)).Take(15);
-
-                    return group.Select(g => new GibsonsLeague.Core.Models.Legend(){
-                        Years = g.Select(x => x.Year).ToList(),
-                        Player = g.Key.Player,
-                        Points = g.Sum(x => x.Points),
-                    });
-                });
+                resolve: context => franchiseRepository.GetTeamLegends(context.Source));
 
         }
     }

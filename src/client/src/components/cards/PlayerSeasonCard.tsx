@@ -11,9 +11,11 @@ const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) => {
 
     if (!season) { return null; }
 
+    const percentStarted = season.gamesPlayed > 0 ? ((season.gamesStarted ?? 0) / season.gamesPlayed * 100) : 0;
+
     return (
         <div className="transactions-list">
-            <div className="year">{season?.year}</div>
+            <div className="year">{`${season?.year} (${season.gamesPlayed} GP - ${percentStarted.toFixed(0)}% started)`}</div>
             <div className="transactions-headings">
                 <div className="transaction-col team">Team</div>
                 <div className="transaction-col date">Date</div>
@@ -21,7 +23,6 @@ const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) => {
             </div>
             {
                 season?.transactions?.map((transaction) =>
-                    //transactionRow(transaction)
                     transaction ? <TransactionRow key={transaction.transactionId} transaction={transaction} year={season.year} /> : null
                 )
             }
