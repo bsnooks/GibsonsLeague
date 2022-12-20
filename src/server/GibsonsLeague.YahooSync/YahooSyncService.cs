@@ -450,8 +450,6 @@ namespace GibsonsLeague.YahooSync
                 bool validWeek = true;
                 while (validWeek)
                 {
-                    Console.WriteLine($"Updating Matchups: {season.Year} - Week {week}");
-
                     var result = await client.GetAsync<YahooLeague>(
                         $"league/{season.YahooGameId}.l.{season.YahooLeagueId}/scoreboard;week={week}",
                         cancellationToken);
@@ -464,6 +462,7 @@ namespace GibsonsLeague.YahooSync
                             week--;
                             continue;
                         }
+                        Console.WriteLine($"Updating Matchups: {season.Year} - Week {week}");
                         IDictionary<int, Team> teamCache = season.Teams.ToDictionary(s => s.YahooTeamId.Value, s => s);
 
                         IList<Match> matches = new List<Match>();
@@ -564,6 +563,8 @@ namespace GibsonsLeague.YahooSync
                         team.Wins = yahooStanding.TeamStandings.OutcomeTotals.Wins;
                         team.Loses = yahooStanding.TeamStandings.OutcomeTotals.Losses;
                         team.Ties = yahooStanding.TeamStandings.OutcomeTotals.Ties;
+
+                        Console.WriteLine($"{yahooStanding.TeamKey} in {yahooStanding.TeamStandings.Rank} place");
                     }
 
                     await seasonRepository.UpdateSeason(season);
@@ -691,6 +692,7 @@ namespace GibsonsLeague.YahooSync
 
                 IDictionary<string, PlayerWeek> playerCache = playerWeeks.ToDictionary(p => $"{p.PlayerId}:{p.Week}", p => p);
                 IDictionary<int, Team> teamCache = season.Teams.ToDictionary(s => s.YahooTeamId.Value, s => s);
+                int? maxWeek = null;
 
                 for (int week = season.WeeklyRosterSyncWeek ?? 1; week <= season.CurrentWeek; week++)
                 {
@@ -717,15 +719,21 @@ namespace GibsonsLeague.YahooSync
                                     var playerWeek = playerCache[$"{yahooPlayer.PlayerId}:{week}"];
                                     Console.WriteLine($"Updating: {yahooPlayer.Name.Full} to be on {team.Franchise.MainName} in week {week}");
                                     playerWeek.TeamId = team.TeamId;
-                                    playerWeek.Started = yahooPlayer.SelectedPosition.Position != "BN";
+                                    playerWeek.Started = yahooPlayer.SelectedPosition.Position != "BN" && yahooPlayer.SelectedPosition.Position != "IR";
                                 }
                             }
                         }
                     }
 
-                    season.WeeklyRosterSyncWeek = week;
-                    await seasonRepository.UpdateSeason(season);
+                    if (maxWeek is null || week > maxWeek)
+                    {
+                        maxWeek = week;
+                    }
+
                 }
+
+                season.WeeklyRosterSyncWeek = maxWeek;
+                await seasonRepository.UpdateSeason(season);
 
                 await playerRepository.UpdatePlayersWeeks(playerWeeks.Where(p => p.TeamId.HasValue));
             }
@@ -738,11 +746,11 @@ namespace GibsonsLeague.YahooSync
             {
 
                 var players = await playerRepository.GetPlayerSeasons(season.Year, new[] { "QB", "RB", "WR", "TE" });
-                //players = players.Where(p => p.PlayerId >= 8407);
                 IDictionary<int, PlayerSeason> playerCache = players
                     .ToDictionary(p => p.PlayerId, p => p);
 
                 var batches = players.ToList().SplitList(25);
+                int? maxWeek = null;
 
                 foreach (var batch in batches)
                 {
@@ -795,12 +803,17 @@ namespace GibsonsLeague.YahooSync
                             }
 
                             await playerRepository.CreatePlayersWeeks(playerWeeks);
-                        }
 
-                        season.WeekStatsSyncWeek = week;
-                        await seasonRepository.UpdateSeason(season);
+                            if (maxWeek is null || week > maxWeek)
+                            {
+                                maxWeek = week;
+                            }
+                        }
                     }
                 }
+
+                season.WeekStatsSyncWeek = maxWeek;
+                await seasonRepository.UpdateSeason(season);
             }
         }
     }
