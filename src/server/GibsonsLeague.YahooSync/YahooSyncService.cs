@@ -473,8 +473,8 @@ namespace GibsonsLeague.YahooSync
                             {
                                 continue;
                             }
-                            var matchType = yahooMatchup.IsPlayoffs ? MatchType.Playoff : yahooMatchup.IsConsolation ? MatchType.Consolation : MatchType.Regular;
-                            if (matchType == MatchType.Playoff && week == (season.Year >= 2021 ? 16 : 15))
+                            var matchType = yahooMatchup.IsPlayoffs ? (yahooMatchup.IsConsolation ? MatchType.Consolation : MatchType.Playoff) : MatchType.Regular;
+                            if (matchType == MatchType.Playoff && week == (season.Year >= 2021 ? 17 : 16))
                             {
                                 matchType = MatchType.Championship;
                             }
@@ -616,12 +616,17 @@ namespace GibsonsLeague.YahooSync
                                 Console.WriteLine($"Updating: {yahooPlayer.Name.Full}");
                                 playerSeason.GamesPlayed = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.GamesPlayed);
                                 playerSeason.Points = yahooPlayer.PlayerStats.Stats.CalculatePoints();
+                                playerSeason.NflTeam = yahooPlayer.EditorialTeamAbbr;
+
                                 playerSeason.PassYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingYards);
                                 playerSeason.PassTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingTouchdowns);
                                 playerSeason.RushYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingYards);
                                 playerSeason.RushTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingTouchdowns);
                                 playerSeason.RecYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingYards);
                                 playerSeason.RecTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingTouchdowns);
+                                playerSeason.Interceptions = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.Interceptions);
+                                playerSeason.FumblesLost = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.FumblesLost);
+                                playerSeason.TwoPointConvert = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.TwoPointConversions);
                             }
                         }
                     }

@@ -309,10 +309,12 @@ export type Player = {
   avgPositionRank?: Maybe<Scalars['Float']>;
   avgPositionRankPpg?: Maybe<Scalars['Float']>;
   comparisonSeasons?: Maybe<Array<Maybe<PlayerSeason>>>;
+  games?: Maybe<Array<Maybe<PlayerWeek>>>;
   gamesBenched?: Maybe<Scalars['Int']>;
   gamesPlayed?: Maybe<Scalars['Int']>;
   gamesStarted?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
+  nflTeam?: Maybe<Scalars['String']>;
   playerId: Scalars['Int'];
   points?: Maybe<Scalars['Float']>;
   pointsPerGame?: Maybe<Scalars['Float']>;
@@ -323,6 +325,11 @@ export type Player = {
   seasonsCount?: Maybe<Scalars['Int']>;
   transactions?: Maybe<Array<Maybe<PlayerTransaction>>>;
   yahooPlayerId?: Maybe<Scalars['Int']>;
+};
+
+
+export type PlayerGamesArgs = {
+  year?: Maybe<Scalars['Int']>;
 };
 
 
@@ -346,6 +353,7 @@ export type PlayerSeason = {
   gamesPlayed: Scalars['Int'];
   gamesStarted?: Maybe<Scalars['Int']>;
   name: Scalars['String'];
+  nflTeam: Scalars['String'];
   playerId: Scalars['Int'];
   points: Scalars['Float'];
   position: Scalars['String'];
@@ -386,6 +394,26 @@ export type PlayerTransaction = {
   year: Scalars['Int'];
 };
 
+export type PlayerWeek = {
+  __typename?: 'PlayerWeek';
+  franchiseId?: Maybe<Scalars['String']>;
+  franchiseName?: Maybe<Scalars['String']>;
+  fumblesLost: Scalars['Int'];
+  interceptions: Scalars['Int'];
+  passTDs: Scalars['Int'];
+  passYards: Scalars['Int'];
+  playerId: Scalars['Int'];
+  points: Scalars['Float'];
+  recTDs: Scalars['Int'];
+  recYards: Scalars['Int'];
+  rushTDs: Scalars['Int'];
+  rushYards: Scalars['Int'];
+  started: Scalars['Boolean'];
+  twoPointConvert: Scalars['Int'];
+  week: Scalars['Int'];
+  year: Scalars['Int'];
+};
+
 export type Season = {
   __typename?: 'Season';
   currentWeek?: Maybe<Scalars['Int']>;
@@ -412,6 +440,7 @@ export type Team = {
   matches?: Maybe<Array<Maybe<Match>>>;
   name: Scalars['String'];
   owner: Scalars['String'];
+  players?: Maybe<Array<Maybe<TeamPlayer>>>;
   points: Scalars['Float'];
   secondPlace: Scalars['Boolean'];
   standing: Scalars['Int'];
@@ -425,6 +454,31 @@ export type Team = {
 export type TeamMatchesArgs = {
   type?: Maybe<MatchType>;
   week?: Maybe<Scalars['Int']>;
+};
+
+
+export type TeamPlayersArgs = {
+  started?: Maybe<Scalars['Boolean']>;
+  currentRoster?: Maybe<Scalars['Boolean']>;
+};
+
+export type TeamPlayer = {
+  __typename?: 'TeamPlayer';
+  fumblesLost: Scalars['Int'];
+  gamesBenched: Scalars['Int'];
+  gamesStarted: Scalars['Int'];
+  interceptions: Scalars['Int'];
+  passTDs: Scalars['Int'];
+  passYards: Scalars['Int'];
+  player?: Maybe<Player>;
+  playerId: Scalars['Int'];
+  recTDs: Scalars['Int'];
+  recYards: Scalars['Int'];
+  rushTDs: Scalars['Int'];
+  rushYards: Scalars['Int'];
+  seasonPoints: Scalars['Float'];
+  teamPoints: Scalars['Float'];
+  twoPointConvert: Scalars['Int'];
 };
 
 export type TeamStrength = {

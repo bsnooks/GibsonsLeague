@@ -1,35 +1,33 @@
-import React from 'react';
-import { Carousel } from 'react-bootstrap';
+import React, { useEffect } from "react";
+import { useLeagueContext } from "../components/league/hooks";
+import { useHistory } from "react-router";
+import { GlobalLoading, GlobalError } from "../components/ui";
 
-interface HomeProps { }
+interface HomeProps {}
 
 const Home: React.FC<HomeProps> = () => {
+  // hooks
+  const { league, season, franchise, loading, error } = useLeagueContext();
+  const history = useHistory();
 
-    return (
-        <Carousel fade>
-            <Carousel.Item>
-                <div style={{ height: "400px", backgroundColor: "#ff0" }} />
-                <Carousel.Caption>
-                    <h3>First slide label</h3>
-                    <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <div style={{ height: "400px", backgroundColor: "#0ff" }} />
-                <Carousel.Caption>
-                    <h3>Second slide label</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </Carousel.Caption>
-            </Carousel.Item>
-            <Carousel.Item>
-                <div style={{ height: "400px", backgroundColor: "#f0f" }} />
-                <Carousel.Caption>
-                    <h3>Third slide label</h3>
-                    <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-                </Carousel.Caption>
-            </Carousel.Item>
-        </Carousel>
-    );
-}
+  useEffect(() => {
+    if (!league || loading) {
+      return;
+    } else if (season && franchise) {
+      history.push(`/season/${season.year}/t/${franchise.franchiseId}`);
+    } else if (season) {
+      history.push(`/season/${season.year}`);
+    } else if (franchise) {
+      history.push(`/franchise/${franchise.franchiseId}`);
+    } else {
+      history.push("/league");
+    }
+  }, [franchise, history, league, loading, season]);
+
+  if (loading) return <GlobalLoading mode="page" />;
+  if (error) return <GlobalError mode="page" apolloError={error} />;
+
+  return <></>;
+};
 
 export default Home;
