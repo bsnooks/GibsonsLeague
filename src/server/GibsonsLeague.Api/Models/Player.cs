@@ -16,6 +16,7 @@ namespace GibsonsLeague.Api.Models
             Field(l => l.PrimaryPosition);
             Field(x => x.YahooPlayerId, nullable: true, type: typeof(IntGraphType));
 
+            Field<StringGraphType>("NflTeam", resolve: context => context.Source.PlayerSeasons.LastOrDefault()?.NflTeam ?? "");
             Field<IntGraphType>("SeasonsCount", resolve: context => context.Source.PlayerSeasons.Count());
             Field<IntGraphType>("GamesPlayed", resolve: context => context.Source.PlayerSeasons.Sum(x => x.GamesPlayed));
             Field<IntGraphType>("GamesStarted", resolve: context => context.Source.PlayerWeeks.Count(x => x.Started));
@@ -64,6 +65,16 @@ namespace GibsonsLeague.Api.Models
                 {
                     var year = context.GetArgument<int?>("year");
                     return context.Source.PlayerSeasons.Where(p => (!year.HasValue || p.Year == year)).OrderByDescending(p => p.Year);
+                });
+
+            Field<ListGraphType<PlayerWeek>>("games",
+                arguments: new QueryArguments(
+                    new QueryArgument<IntGraphType> { Name = "year" }
+                ),
+                resolve: context =>
+                {
+                    var year = context.GetArgument<int?>("year");
+                    return playerRepository.GetPlayersWeeks(context.Source.PlayerId, year);
                 });
 
             Field<ListGraphType<PlayerTransaction>>("transactions",

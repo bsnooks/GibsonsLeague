@@ -7,7 +7,7 @@ namespace GibsonsLeague.Api.Models
 {
     public class Team : ObjectGraphType<GibsonsLeague.Core.Models.Team>
     {
-        public Team(MatchRepository matchRepository)
+        public Team(MatchRepository matchRepository, PlayerRepository playerRepository)
         {
             Field(x => x.Year);
             Field(x => x.Name);
@@ -34,6 +34,15 @@ namespace GibsonsLeague.Api.Models
                     type: context.GetArgument<MatchType?>("type"),
                     year: context.Source.Year,
                     week: context.GetArgument<int?>("week")));
+
+            Field<ListGraphType<TeamPlayer>>("players",
+                arguments: new QueryArguments(
+                    new QueryArgument<BooleanGraphType> { Name = "started", DefaultValue = true },
+                    new QueryArgument<BooleanGraphType> { Name = "currentRoster", DefaultValue = true }),
+                resolve: context => playerRepository.GetPlayersByTeam(
+                    team: context.Source,
+                    currentRoster: context.GetArgument<bool?>("currentRoster"),
+                    started: context.GetArgument<bool?>("started")));
         }
     }
 }

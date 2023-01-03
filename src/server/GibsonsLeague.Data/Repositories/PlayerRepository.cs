@@ -115,17 +115,35 @@ namespace GibsonsLeague.Data.Repositories
             }
         }
 
-        public async Task<IEnumerable<PlayerWeek>> GetPlayerWeeks(int year, string[] positions = null)
+        public async Task<IEnumerable<PlayerWeek>> GetPlayerWeeks(int? year = null, string[] positions = null)
         {
             using (var dbContext = dbFunc())
             {
                 return await dbContext.PlayerWeeks
-                    .Where(ps => ps.Year == year &&
+                    .Where(ps => (year == null || ps.Year == year) &&
                         (positions == null || positions.Contains(ps.Player.PrimaryPosition)))
                     .Include(ps => ps.Player)
                     .OrderBy(ps => ps.PlayerId)
                     .ThenBy(ps => ps.Year)
                     .ThenBy(ps => ps.Week)
+                    .ToListAsync();
+            }
+        }
+
+        public async Task<IEnumerable<PlayerWeek>> GetPlayersWeeks(int playerId, int? year = null, string[] positions = null)
+        {
+            using (var dbContext = dbFunc())
+            {
+                return await dbContext.PlayerWeeks
+                    .Where(ps => ps.PlayerId == playerId &&
+                        (year == null || ps.Year == year) &&
+                        (positions == null || positions.Contains(ps.Player.PrimaryPosition)))
+                    .Include(pw => pw.Player)
+                    .Include(pw => pw.Team)
+                    .ThenInclude(t => t.Franchise)
+                    .OrderBy(pw => pw.PlayerId)
+                    .ThenBy(pw => pw.Year)
+                    .ThenBy(pw => pw.Week)
                     .ToListAsync();
             }
         }
@@ -164,7 +182,7 @@ namespace GibsonsLeague.Data.Repositories
                     await dbContext.AddAsync(newPlayer);
                     await dbContext.SaveChangesAsync();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     var d = ex;
                 }
@@ -211,6 +229,38 @@ namespace GibsonsLeague.Data.Repositories
             {
                 dbContext.PlayerWeeks.UpdateRange(playerWeeks);
                 await dbContext.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<TeamPlayer>> GetPlayersByTeam(Team team, bool? started = null, bool? currentRoster = null)
+        {
+            using (var dbContext = dbFunc())
+            {
+                var teamId = team.TeamId;
+                return await dbContext.Players
+                    .Where(p => p.PlayerWeeks.Any(pw =>pw.TeamId == teamId) &&
+                        (currentRoster != true || p.PlayerSeasons.Any(ps => ps.EndTeamId == teamId))
+                    )
+                    .Include(p => p.PlayerSeasons)
+                    .Select(p => new TeamPlayer()
+                    {
+                        PlayerId = p.PlayerId,
+                        Player = p,
+                        GamesStarted = p.PlayerWeeks.Count(x => x.TeamId == teamId && x.Started),
+                        GamesBenched = p.PlayerWeeks.Count(x => x.TeamId == teamId && !x.Started),
+                        PassYards = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.PassYards),
+                        PassTDs = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.PassTDs),
+                        RushYards = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.RushYards),
+                        RushTDs = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.RushTDs),
+                        RecYards = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.RecYards),
+                        RecTDs = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.RecTDs),
+                        Interceptions = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.Interceptions),
+                        FumblesLost = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.FumblesLost),
+                        TwoPointConvert = p.PlayerWeeks.Where(x => x.TeamId == teamId && (started == null || x.Started == started)).Sum(x => x.TwoPointConvert),
+                        SeasonPoints = p.PlayerWeeks.Where(x => x.Year == team.Year).Sum(x => x.PassYards / 25.0 + x.PassTDs * 4 + x.RushYards / 10.0 + x.RushTDs * 6 + x.RecYards / 10.0 + x.RecTDs * 6),
+                    })
+                    .OrderByDescending(x => x.PassYards / 25.0 + x.PassTDs * 4 + x.RushYards / 10.0 + x.RushTDs * 6 + x.RecYards / 10.0 + x.RecTDs * 6)
+                    .ToListAsync();
             }
         }
     }

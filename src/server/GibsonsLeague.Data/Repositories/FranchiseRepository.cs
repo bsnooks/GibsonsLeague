@@ -21,7 +21,6 @@ namespace GibsonsLeague.Data.Repositories
         {
             return await dbContext.Franchises
                 .Include(x => x.Teams)
-                .ThenInclude(x => x.Transactions)
                 .ToListAsync();
         }
 

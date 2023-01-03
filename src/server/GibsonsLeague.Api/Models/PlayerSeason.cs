@@ -18,6 +18,7 @@ namespace GibsonsLeague.Api.Models
             Field(l => l.PositionRank);
             Field(l => l.PositionRankPpg);
             Field(l => l.GamesPlayed);
+            Field(l => l.NflTeam);
             Field<IntGraphType>("GamesStarted", resolve: context => context.Source.Player.PlayerWeeks.Where(p => p.Started && p.Year == context.Source.Year).Count());
             Field<IntGraphType>("GamesBenched", resolve: context => context.Source.Player.PlayerWeeks.Where(p => !p.Started && p.Year == context.Source.Year).Count());
             Field<FloatGraphType>("endfranchisepoints", resolve: context => {

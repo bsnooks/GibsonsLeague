@@ -101,6 +101,7 @@ type Team {
   matches(type: MatchType, week: Int): [Match]
   name: String!
   owner: String!
+  players(started: Boolean = true, currentRoster: Boolean = true): [TeamPlayer]
   points: Float!
   secondPlace: Boolean!
   standing: Int!
@@ -132,6 +133,128 @@ enum MatchType {
   CHAMPIONSHIP
 }
 
+type TeamPlayer {
+  fumblesLost: Int!
+  gamesBenched: Int!
+  gamesStarted: Int!
+  interceptions: Int!
+  passTDs: Int!
+  passYards: Int!
+  player: Player
+  playerId: Int!
+  recTDs: Int!
+  recYards: Int!
+  rushTDs: Int!
+  rushYards: Int!
+  seasonPoints: Float!
+  teamPoints: Float!
+  twoPointConvert: Int!
+}
+
+type Player {
+  avgPositionRank: Float
+  avgPositionRankPpg: Float
+  comparisonSeasons: [PlayerSeason]
+  games(year: Int): [PlayerWeek]
+  gamesBenched: Int
+  gamesPlayed: Int
+  gamesStarted: Int
+  name: String!
+  nflTeam: String
+  playerId: Int!
+  points: Float
+  pointsPerGame: Float
+  pointsPerSeason: Float
+  position: String!
+  primaryPosition: String!
+  seasons(year: Int): [PlayerSeason]
+  seasonsCount: Int
+  transactions(
+    type: TransactionType
+    offset: Int
+    limit: Int
+  ): [PlayerTransaction]
+  yahooPlayerId: Int
+}
+
+type PlayerSeason {
+  endfranchise: String
+  endfranchisecolor: String
+  endfranchisepoints: Float
+  gamesBenched: Int
+  gamesPlayed: Int!
+  gamesStarted: Int
+  name: String!
+  nflTeam: String!
+  playerId: Int!
+  points: Float!
+  position: String!
+  positionRank: Int!
+  positionRankPpg: Int!
+  primaryPosition: String!
+  transactions(
+    type: TransactionType
+    offset: Int
+    limit: Int
+  ): [PlayerTransaction]
+  year: Int!
+}
+
+type PlayerTransaction {
+  date: DateTime!
+  description: String!
+  franchiseId: ID!
+  franchiseName: String!
+  name: String!
+  playerId: Int!
+  playerTransactionIndex: Int!
+  position: String!
+  positionRank: Float
+  positionRankPpg: Float
+  primaryPosition: String!
+  related: [PlayerTransaction]
+  seasonGamesPlayed: Float
+  seasonPoints: Float
+  transactionGroupId: Guid
+  transactionId: ID!
+  tree: [PlayerTransaction]
+  type: String
+  year: Int!
+}
+
+scalar Guid
+
+# The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
+scalar DateTime
+
+enum TransactionType {
+  DRAFT_PICKED
+  KEPT
+  ADDED
+  DROPPED
+  TRADED
+  VETOED_TRADE
+}
+
+type PlayerWeek {
+  franchiseId: String
+  franchiseName: String
+  fumblesLost: Int!
+  interceptions: Int!
+  passTDs: Int!
+  passYards: Int!
+  playerId: Int!
+  points: Float!
+  recTDs: Int!
+  recYards: Int!
+  rushTDs: Int!
+  rushYards: Int!
+  started: Boolean!
+  twoPointConvert: Int!
+  week: Int!
+  year: Int!
+}
+
 type DraftPick {
   draftId: ID!
   franchiseId: ID!
@@ -161,93 +284,11 @@ type FranchiseTrade {
   tradeId: ID!
 }
 
-# The `DateTime` scalar type represents a date and time. `DateTime` expects timestamps to be formatted in accordance with the [ISO-8601](https://en.wikipedia.org/wiki/ISO_8601) standard.
-scalar DateTime
-
-scalar Guid
-
-type PlayerTransaction {
-  date: DateTime!
-  description: String!
-  franchiseId: ID!
-  franchiseName: String!
-  name: String!
-  playerId: Int!
-  playerTransactionIndex: Int!
-  position: String!
-  positionRank: Float
-  positionRankPpg: Float
-  primaryPosition: String!
-  related: [PlayerTransaction]
-  seasonGamesPlayed: Float
-  seasonPoints: Float
-  transactionGroupId: Guid
-  transactionId: ID!
-  tree: [PlayerTransaction]
-  type: String
-  year: Int!
-}
-
 type Legend {
   gamesPlayed: Int!
   player: Player
   points: Float!
   years: [Int!]!
-}
-
-type Player {
-  avgPositionRank: Float
-  avgPositionRankPpg: Float
-  comparisonSeasons: [PlayerSeason]
-  gamesBenched: Int
-  gamesPlayed: Int
-  gamesStarted: Int
-  name: String!
-  playerId: Int!
-  points: Float
-  pointsPerGame: Float
-  pointsPerSeason: Float
-  position: String!
-  primaryPosition: String!
-  seasons(year: Int): [PlayerSeason]
-  seasonsCount: Int
-  transactions(
-    type: TransactionType
-    offset: Int
-    limit: Int
-  ): [PlayerTransaction]
-  yahooPlayerId: Int
-}
-
-type PlayerSeason {
-  endfranchise: String
-  endfranchisecolor: String
-  endfranchisepoints: Float
-  gamesBenched: Int
-  gamesPlayed: Int!
-  gamesStarted: Int
-  name: String!
-  playerId: Int!
-  points: Float!
-  position: String!
-  positionRank: Int!
-  positionRankPpg: Int!
-  primaryPosition: String!
-  transactions(
-    type: TransactionType
-    offset: Int
-    limit: Int
-  ): [PlayerTransaction]
-  year: Int!
-}
-
-enum TransactionType {
-  DRAFT_PICKED
-  KEPT
-  ADDED
-  DROPPED
-  TRADED
-  VETOED_TRADE
 }
 
 type Draft {

@@ -26,6 +26,7 @@ namespace GibsonsLeague.Core.Models
         public int Interceptions { get; set; }
         public int FumblesLost { get; set; }
         public int TwoPointConvert { get; set; }
+        public string NflTeam { get; set; }
 
         public override string ToString()
         {
