@@ -5,6 +5,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - gibsonsleague-api
 
 on:
   push:
+    paths:
+      - src/server/**
     branches:
       - main
   workflow_dispatch:
@@ -16,6 +18,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+          files: 'src/server/GibsonsLeague.Api/appsettings.json'
+        env:
+          ConnectionStrings.GibsonsLeagueDb: ${{ secrets.GLA_DB_CONNECTIONSTRING }}
+          Yahoo.ClientSecret: ${{ secrets.GLA_YAHOOAPPSECRET }}
+        
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -23,9 +33,11 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
+        working-directory: ./src/server
         run: dotnet build --configuration Release
 
       - name: dotnet publish
+        working-directory: ./src/server
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
