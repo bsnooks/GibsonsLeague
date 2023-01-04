@@ -5,7 +5,6 @@ import { PlayerWeek } from "../../../generated/graphql";
 import { faChair, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FranchiseUtilities } from "../../../utilities/FranchiseAvatar";
-import styled from "styled-components";
 import { FranchiseLink } from "../../franchise/controls";
 
 interface PlayerSeasonCardProps {
