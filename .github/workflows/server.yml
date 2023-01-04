@@ -5,6 +5,8 @@ name: Build and deploy ASP.Net Core app to Azure Web App - gibsonsleague-d1-api
 
 on:
   push:
+    paths:
+      - src/server/**
     branches:
       - main
   workflow_dispatch:
