@@ -1,7 +1,7 @@
 // @ts-nocheck
 import React, { useEffect, useState } from "react";
 import { Image, Table } from "react-bootstrap";
-import { Maybe, PlayerWeek } from "../../../generated/graphql";
+import { PlayerWeek } from "../../../generated/graphql";
 import { faChair, faPlay } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FranchiseUtilities } from "../../../utilities/FranchiseAvatar";
@@ -107,35 +107,3 @@ export const PlayerGameCard: React.FC<PlayerSeasonCardProps> = ({
     </section>
   );
 };
-
-const CellWeek = styled.div`
-  width: 8%;
-  padding: 2px 5px;
-`;
-const CellPoints = styled.div`
-  width: 8%;
-  padding: 2px 5px;
-  text-align: right;
-`;
-const CellStat = styled.div`
-  width: 8%;
-  padding: 2px 5px;
-  text-align: right;
-`;
-const CellTeamInfo = styled.div`
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  width: 6%;
-  padding: 2px 5px;
-`;
-const TableRowWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  text-align: left;
-  background-color: ${(props) => (props.header ? "#28a745" : "inherit")};
-  font-weight: ${(props) => (props.header ? "bold" : "inherit")};
-  ${CellPoints} {
-    font-weight: ${(props) => (props.header ? "inherit" : "bold")};
-  }
-`;

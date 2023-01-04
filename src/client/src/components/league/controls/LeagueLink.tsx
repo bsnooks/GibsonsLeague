@@ -1,5 +1,4 @@
 import { CSSProperties, ReactNode, useEffect, useState } from "react";
-import { NavLinkProps } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from "react-router-dom";
 import { useLeagueContext } from "../hooks";

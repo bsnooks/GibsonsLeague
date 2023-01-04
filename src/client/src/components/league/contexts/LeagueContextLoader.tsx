@@ -1,6 +1,5 @@
 import { ApolloError } from "@apollo/client";
 import { ReactNode, useEffect, useState } from "react";
-import { GlobalError, GlobalLoading } from "../../ui";
 import { useFranchiseLoader, useLeagueDispatch, useLeagueLoader, useSeasonLoader } from "../hooks";
 
 export interface LeagueContextLoaderProps {

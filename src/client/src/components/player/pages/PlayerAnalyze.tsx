@@ -15,8 +15,8 @@ interface PlayerAnalyzeProps {
 const PlayerAnalyze: React.FC<PlayerAnalyzeProps> = ({ ...props }) => {
   const [usePpg, setUsePpg] = useState(false);
   const [showGamesPlayed, setShowGamesPlayed] = useState(false);
-  const [compareWithId, setCompareWithId] = useState();
-  const [compareWith, setCompareWith] = useState<any | null>(null);
+  const [, setCompareWithId] = useState();
+  const [compareWith, ] = useState<any | null>(null);
 
   const handleChangeUsePpg = (checked: boolean) => {
     setUsePpg(checked);
