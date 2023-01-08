@@ -25,10 +25,10 @@ const Roster: React.FC<RosterProps> = ({ ...props }) => {
               <tr>
                 <th colSpan={2}></th>
                 <th colSpan={3}>Fantasy</th>
-                <th colSpan={2}>Passing</th>
-                <th colSpan={2}>Rushing</th>
-                <th colSpan={2}>Receiving</th>
-                <th colSpan={3}>Extra</th>
+                <th className="d-none d-md-table-cell" colSpan={2}>Passing</th>
+                <th className="d-none d-md-table-cell" colSpan={2}>Rushing</th>
+                <th className="d-none d-md-table-cell" colSpan={2}>Receiving</th>
+                <th className="d-none d-md-table-cell" colSpan={3}>Extra</th>
               </tr>
               <tr>
                 <th>Pos</th>
@@ -36,15 +36,15 @@ const Roster: React.FC<RosterProps> = ({ ...props }) => {
                 <th>Team Fan Pts</th>
                 <th>Season Fan Pts</th>
                 <th>Starts</th>
-                <th>Yds</th>
-                <th>TD</th>
-                <th>Yds</th>
-                <th>TD</th>
-                <th>Yds</th>
-                <th>TD</th>
-                <th>Int</th>
-                <th>FL</th>
-                <th>2Pt</th>
+                <th className="d-none d-md-table-cell">Yds</th>
+                <th className="d-none d-md-table-cell">TD</th>
+                <th className="d-none d-md-table-cell">Yds</th>
+                <th className="d-none d-md-table-cell">TD</th>
+                <th className="d-none d-md-table-cell">Yds</th>
+                <th className="d-none d-md-table-cell">TD</th>
+                <th className="d-none d-md-table-cell">Int</th>
+                <th className="d-none d-md-table-cell">FL</th>
+                <th className="d-none d-md-table-cell">2Pt</th>
               </tr>
             </thead>
             <tbody>
@@ -68,15 +68,15 @@ const Roster: React.FC<RosterProps> = ({ ...props }) => {
                         (player.gamesBenched + player.gamesStarted)) *
                       100
                     ).toFixed(0)}%`}</td> */}
-                    <td>{player.passYards}</td>
-                    <td>{player.passTDs}</td>
-                    <td>{player.rushYards}</td>
-                    <td>{player.rushTDs}</td>
-                    <td>{player.recYards}</td>
-                    <td>{player.recTDs}</td>
-                    <td>{player.interceptions}</td>
-                    <td>{player.fumblesLost}</td>
-                    <td>{player.twoPointConvert}</td>
+                    <td className="d-none d-md-table-cell">{player.passYards}</td>
+                    <td className="d-none d-md-table-cell">{player.passTDs}</td>
+                    <td className="d-none d-md-table-cell">{player.rushYards}</td>
+                    <td className="d-none d-md-table-cell">{player.rushTDs}</td>
+                    <td className="d-none d-md-table-cell">{player.recYards}</td>
+                    <td className="d-none d-md-table-cell">{player.recTDs}</td>
+                    <td className="d-none d-md-table-cell">{player.interceptions}</td>
+                    <td className="d-none d-md-table-cell">{player.fumblesLost}</td>
+                    <td className="d-none d-md-table-cell">{player.twoPointConvert}</td>
                   </tr>
                 );
               })}

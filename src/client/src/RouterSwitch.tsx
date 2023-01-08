@@ -10,6 +10,8 @@ const RouteComponents = {
   Player: React.lazy(() => import("./pages/Player")),
   Trade: React.lazy(() => import("./pages/Trade")),
   YahooSync: React.lazy(() => import("./pages/YahooSync")),
+  JoinDraft: React.lazy(() => import("./pages/JoinDraft")),
+  LiveDraft: React.lazy(() => import("./pages/LiveDraft")),
   Login: React.lazy(() => import("./pages/Login")),
   Callback: React.lazy(() => import("./pages/Callback")),
   NotFound: React.lazy(() => import("./pages/NotFound")),
@@ -31,6 +33,10 @@ const RouterSwitch: React.FC = () => {
         <Route path="/login" component={RouteComponents.Login} />
         <Route path="/callback" component={RouteComponents.Callback} />
         <Route path="/yahoosync" component={RouteComponents.YahooSync} />
+
+        
+        <Route path="/draft" component={RouteComponents.JoinDraft} />
+        <Route path="/draft/:id" component={RouteComponents.LiveDraft} />
 
         <Route component={RouteComponents.NotFound} />
       </Switch>

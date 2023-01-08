@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = () => {
           </Col>
         </Row>
       </Container>
-      <SelectNavbar expand="lg" sticky="top">
+      <SelectNavbar>
         <Container>
           <Navbar.Collapse>
             <Nav className="mr-auto">

@@ -7,6 +7,7 @@ namespace GibsonsLeague.YahooSync
 {
     public interface IYahooSyncService
     {
+        Task SyncCurrentWeek(ISyncContext context, Season season, CancellationToken cancellationToken = default);
         Task SyncKeepers(ISyncContext context, Season season, CancellationToken cancellationToken = default);
         Task SyncDraft(ISyncContext context, Season season, CancellationToken cancellationToken = default);
         Task SyncTransactions(ISyncContext context, Season season, CancellationToken cancellationToken = default);

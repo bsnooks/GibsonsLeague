@@ -52,15 +52,15 @@ export const PlayerGameCard: React.FC<PlayerSeasonCardProps> = ({
             {game.franchiseId && !game.started && <FontAwesomeIcon icon={faChair} title="Benched" />}
           </td>
           <td>{game.points.toFixed(2)}</td>
-          <td>{game.passYards}</td>
-          <td>{game.passTDs}</td>
-          <td>{game.rushYards}</td>
-          <td>{game.rushTDs}</td>
-          <td>{game.recYards}</td>
-          <td>{game.recTDs}</td>
-          <td>{game.interceptions}</td>
-          <td>{game.fumblesLost}</td>
-          <td>{game.twoPointConvert}</td>
+          <td className="d-none d-md-table-cell">{game.passYards}</td>
+          <td className="d-none d-md-table-cell">{game.passTDs}</td>
+          <td className="d-none d-md-table-cell">{game.rushYards}</td>
+          <td className="d-none d-md-table-cell">{game.rushTDs}</td>
+          <td className="d-none d-md-table-cell">{game.recYards}</td>
+          <td className="d-none d-md-table-cell">{game.recTDs}</td>
+          <td className="d-none d-md-table-cell">{game.interceptions}</td>
+          <td className="d-none d-md-table-cell">{game.fumblesLost}</td>
+          <td className="d-none d-md-table-cell">{game.twoPointConvert}</td>
         </tr>
       );
     });
@@ -79,25 +79,25 @@ export const PlayerGameCard: React.FC<PlayerSeasonCardProps> = ({
             <tr>
               <th colSpan={1}></th>
               <th colSpan={3}>Fantasy</th>
-              <th colSpan={2}>Passing</th>
-              <th colSpan={2}>Rushing</th>
-              <th colSpan={2}>Receiving</th>
-              <th colSpan={3}>Extra</th>
+              <th className="d-none d-md-table-cell" colSpan={2}>Passing</th>
+              <th className="d-none d-md-table-cell" colSpan={2}>Rushing</th>
+              <th className="d-none d-md-table-cell" colSpan={2}>Receiving</th>
+              <th className="d-none d-md-table-cell" colSpan={3}>Extra</th>
             </tr>
             <tr>
               <th>Week</th>
               <th>Team</th>
               <th>Status</th>
               <th>Fan Pts</th>
-              <th>Yds</th>
-              <th>TD</th>
-              <th>Yds</th>
-              <th>TD</th>
-              <th>Yds</th>
-              <th>TD</th>
-              <th>Int</th>
-              <th>FL</th>
-              <th>2Pt</th>
+              <th className="d-none d-md-table-cell">Yds</th>
+              <th className="d-none d-md-table-cell">TD</th>
+              <th className="d-none d-md-table-cell">Yds</th>
+              <th className="d-none d-md-table-cell">TD</th>
+              <th className="d-none d-md-table-cell">Yds</th>
+              <th className="d-none d-md-table-cell">TD</th>
+              <th className="d-none d-md-table-cell">Int</th>
+              <th className="d-none d-md-table-cell">FL</th>
+              <th className="d-none d-md-table-cell">2Pt</th>
             </tr>
           </thead>
           <tbody>{rows}</tbody>

@@ -1,6 +1,6 @@
 import produce from "immer";
 import React, { ReactNode, useReducer } from "react";
-import { IAuthContextState, UpdateTokenState } from "./AuthContextState";
+import { IAuthContextState, UpdateTokenState, UpdateUsernameState } from "./AuthContextState";
 
 export const initialAuthContextState: IAuthContextState = {
 };
@@ -16,7 +16,8 @@ export const AuthDispatchContext =
     });
 
 export type AuthUpdates =
-    UpdateTokenState;
+    UpdateTokenState
+    | UpdateUsernameState;
 
 function AuthReducer(
     state: IAuthContextState,

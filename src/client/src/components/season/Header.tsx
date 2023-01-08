@@ -14,7 +14,7 @@ export const Header: React.FC<HeaderProps> = () => {
 
   return (
     <Container fluid style={{ backgroundColor: "#FFF" }}>
-      <SelectNavbar expand="lg" sticky="top">
+      <SelectNavbar>
         <Container>
           <Navbar.Collapse>
             <Nav className="mr-auto">

@@ -46,7 +46,7 @@ const TransactionRow: React.FC<TransactionRowProps> = ({ ...props }) => {
                     </Link>
                 </div>
             }
-            <div className="transaction-col date">
+            <div className="transaction-col date d-none d-md-block">
                 {(new Date(props.transaction.date).toLocaleDateString())}
             </div>
             <div className="transaction-col details">

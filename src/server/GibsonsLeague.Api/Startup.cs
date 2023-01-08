@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GibsonsLeague.Api.Hubs;
 using GibsonsLeague.Api.Middleware;
 using GibsonsLeague.Api.Models;
 using GibsonsLeague.Data;
@@ -14,6 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.SignalR;
+using GibsonsLeague.YahooSync.Hubs;
+using GibsonsLeague.Auth;
 
 namespace GibsonsLeague.Api
 {
@@ -54,8 +58,11 @@ namespace GibsonsLeague.Api
             services.AddScoped<AnalysisRepository>();
 
             services.AddScoped<IYahooSyncService, YahooSyncService>();
+            services.AddScoped<IYahooAuthService, YahooAuthService>();
 
             services.AddScoped<GibsonsLeagueSchema>();
+
+            services.AddSignalR();
 
             services.AddGraphQL()
                 .AddSystemTextJson(o => o.PropertyNameCaseInsensitive = true)
@@ -70,7 +77,10 @@ namespace GibsonsLeague.Api
         {
             app.UseRouting();
             app.UseCors(builder =>
-                builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+                builder.WithOrigins("https://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials());
             app.UseWebSockets();
             app.UseGraphQLWebSockets<GibsonsLeagueSchema>("/graphql");
             app.UseGraphQL<GibsonsLeagueSchema>();
@@ -82,6 +92,7 @@ namespace GibsonsLeague.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<YahooSyncHub>("/yahoosync");
             });
         }
     }

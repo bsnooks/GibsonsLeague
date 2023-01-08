@@ -3,6 +3,8 @@ import { Container, Row, Col, Image } from "react-bootstrap";
 import { FranchiseStatsRow, ChampionsCard } from "../controls";
 import { useLeagueContext } from "../hooks";
 import { FranchiseUtilities } from "../../../utilities/FranchiseAvatar";
+import { faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 interface LeagueHistoryProps {}
 
@@ -40,7 +42,7 @@ const LeagueHistory: React.FC<LeagueHistoryProps> = () => {
                 <div className="franchise-col team">Team</div>
                 <div className="franchise-col record">Record</div>
                 <div className="franchise-col points">Points</div>
-                <div className="franchise-col championships">Championships</div>
+                <div className="franchise-col championships"><FontAwesomeIcon icon={faTrophy} className="gold" /></div>
               </div>
               {league?.franchises
                 ?.slice()

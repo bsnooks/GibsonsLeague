@@ -16,7 +16,8 @@ const Callback: React.FC<CallbackProps> = () => {
     onSuccess: (response) => {
       authDispatch({
         payload: {
-          token: response.data.access_token,
+          token: response.data.token,
+          username: response.data.username,
         },
       });
       history.push("/yahoosync");

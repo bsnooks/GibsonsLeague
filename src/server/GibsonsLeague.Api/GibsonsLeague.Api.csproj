@@ -20,8 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GibsonsLeague.Auth\GibsonsLeague.Auth.csproj" />
     <ProjectReference Include="..\GibsonsLeague.Core\GibsonsLeague.Core.csproj" />
     <ProjectReference Include="..\GibsonsLeague.Data\GibsonsLeague.Data.csproj" />
+    <ProjectReference Include="..\GibsonsLeague.Draft\GibsonsLeague.LiveDraft.csproj" />
     <ProjectReference Include="..\GibsonsLeague.YahooSync\GibsonsLeague.YahooSync.csproj" />
   </ItemGroup>
 

@@ -4,7 +4,8 @@ const dataServiceRoot = process.env.REACT_APP_DATA_SERVICE;
 const yahooAuthUrl = `${dataServiceRoot}/api/auth/yahoo`;
 
 interface YahooAuthResponse {
-    access_token: string
+    token: string
+    username: string
 }
 
 export async function yahooAuthAsync(code: string) {

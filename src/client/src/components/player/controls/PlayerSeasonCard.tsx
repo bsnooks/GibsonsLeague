@@ -18,7 +18,7 @@ export const PlayerSeasonCard: React.FC<PlayerSeasonCardProps> = ({ ...props }) 
             <div className="year">{`${season?.year} (${season.gamesPlayed} GP - ${percentStarted.toFixed(0)}% started)`}</div>
             <div className="transactions-headings">
                 <div className="transaction-col team">Team</div>
-                <div className="transaction-col date">Date</div>
+                <div className="transaction-col date d-none d-md-block">Date</div>
                 <div className="transaction-col details">Details</div>
             </div>
             {

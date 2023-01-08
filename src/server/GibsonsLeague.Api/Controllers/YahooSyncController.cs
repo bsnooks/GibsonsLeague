@@ -27,8 +27,21 @@ namespace GibsonsLeague.Api.Controllers
             this.seasonRepository = seasonRepository;
         }
 
+        [HttpPost("week")]
+        public async Task<IActionResult> SyncCurrentWeek([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
+        {
+            _ = yahooSyncService.SyncCurrentWeek(
+                YahooSyncContext.Create(
+                    Request.HttpContext,
+                    await leagueRepository.GetOne(request.LeagueId)),
+                await seasonRepository.GetSeason(request.Year),
+                cancellationToken);
+
+            return new NoContentResult();
+        }
+
         [HttpPost("keepers")]
-        public async Task<IActionResult> SyncKeepers([FromBody] SyncDraftRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncKeepers([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncKeepers(
                 YahooSyncContext.Create(
@@ -41,7 +54,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("draft")]
-        public async Task<IActionResult> SyncDraft([FromBody]SyncDraftRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncDraft([FromBody]SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncDraft(
                 YahooSyncContext.Create(
@@ -54,7 +67,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("transactions")]
-        public async Task<IActionResult> SyncTransactions([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncTransactions([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncTransactions(
                 YahooSyncContext.Create(
@@ -67,7 +80,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("matchups")]
-        public async Task<IActionResult> SyncMatchups([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncMatchups([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncMatchups(
                 YahooSyncContext.Create(
@@ -80,7 +93,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("standings")]
-        public async Task<IActionResult> SyncStandings([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncStandings([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncStandings(
                 YahooSyncContext.Create(
@@ -93,7 +106,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("playerstats")]
-        public async Task<IActionResult> SyncPlayerStats([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncPlayerStats([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncPlayerStats(
                 YahooSyncContext.Create(
@@ -106,7 +119,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("rosters")]
-        public async Task<IActionResult> SyncPlayerRoster([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncPlayerRoster([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncPlayerRoster(
                 YahooSyncContext.Create(
@@ -119,7 +132,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("rosters/week")]
-        public async Task<IActionResult> SyncWeeklyRoster([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncWeeklyRoster([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncWeeklyRoster(
                 YahooSyncContext.Create(
@@ -132,7 +145,7 @@ namespace GibsonsLeague.Api.Controllers
         }
 
         [HttpPost("playerstats/week")]
-        public async Task<IActionResult> SyncWeeklyPlayerStats([FromBody] SyncTransactionsRequest request, CancellationToken cancellationToken = default)
+        public async Task<IActionResult> SyncWeeklyPlayerStats([FromBody] SyncSeasonRequest request, CancellationToken cancellationToken = default)
         {
             _ = yahooSyncService.SyncWeeklyPlayerStats(
                 YahooSyncContext.Create(
