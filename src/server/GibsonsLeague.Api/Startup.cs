@@ -77,7 +77,11 @@ namespace GibsonsLeague.Api
         {
             app.UseRouting();
             app.UseCors(builder =>
-                builder.WithOrigins("https://localhost:3000")
+                builder.WithOrigins(
+                    "https://localhost:3000",
+                    "http://gibsonsleague.com/",
+                    "https://gibsonsleague.com/",
+                    "https://gibsonsleague-app.azurewebsites.net/")
                 .AllowAnyHeader()
                 .AllowAnyMethod()
                 .AllowCredentials());
