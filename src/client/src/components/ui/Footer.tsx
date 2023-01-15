@@ -1,7 +1,7 @@
 import React from "react";
 import { Container } from "react-bootstrap";
 import { faYahoo, faGithub } from "@fortawesome/free-brands-svg-icons";
-import { faPencilRuler } from "@fortawesome/free-solid-svg-icons";
+import { faFootball } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 
@@ -23,8 +23,8 @@ export const Footer: React.FC<FooterProps> = () => {
             <FontAwesomeIcon icon={faYahoo} /> Sync
           </Link>{" "}
           |{" "}
-          <Link to="/draft">
-            <FontAwesomeIcon icon={faPencilRuler} /> Live Drafts
+          <Link to="/playoffs">
+            <FontAwesomeIcon icon={faFootball} /> Playoff Pool
           </Link>
         </div>
       </Container>

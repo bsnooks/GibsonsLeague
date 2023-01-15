@@ -15,7 +15,7 @@ export const usePlayerLoader = () => {
   const history = useHistory();
 
   // dispatches
-  const leagueDispatch = usePlayerDispatch();
+  const playerDispatch = usePlayerDispatch();
 
   // queries
   const [fetchPlayer, { data, loading, error }] =
@@ -25,12 +25,12 @@ export const usePlayerLoader = () => {
   useEffect(() => {
     if (!data?.player) return;
 
-    leagueDispatch({
+    playerDispatch({
       payload: {
         player: data?.player,
       },
     });
-  }, [data, leagueDispatch]);
+  }, [data, playerDispatch]);
 
   useEffect(() => {
     fetchPlayer({

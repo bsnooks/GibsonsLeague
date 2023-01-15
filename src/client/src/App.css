@@ -1,7 +1,12 @@
 html {
   position: relative;
   min-height: 100%;
-  font-size: 13px;
+  font-size: 15px;
+}
+@media (max-width: 768px) {
+  html {
+    font-size: 13px;
+  }
 }
 body {
   background-color: #f3f4f5 !important;
