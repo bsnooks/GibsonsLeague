@@ -1,5 +1,4 @@
 import { Container, Image, Table } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import { FranchiseUtilities } from "../../../utilities/FranchiseAvatar";
 import { FranchiseLink } from "../../franchise/controls";
 import { GlobalLoading, GlobalError } from "../../ui";
