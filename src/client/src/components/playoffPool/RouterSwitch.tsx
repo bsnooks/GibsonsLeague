@@ -4,6 +4,8 @@ import { GlobalLoading } from "../ui";
 
 const RouteComponents = {
   PlayoffPool: React.lazy(() => import("./pages/PlayoffPool")),
+  PlayoffPoolDraft: React.lazy(() => import("./pages/PlayoffPoolDraft")),
+  PlayoffPoolStats: React.lazy(() => import("./pages/PlayoffPoolStats")),
 };
 
 export const RouterSwitch: React.FC = () => {
@@ -13,6 +15,8 @@ export const RouterSwitch: React.FC = () => {
     <React.Suspense fallback={<GlobalLoading mode="page" />}>
       <Switch>
         <Route exact path={path} component={RouteComponents.PlayoffPool} />
+        <Route exact path={`${path}/draft`} component={RouteComponents.PlayoffPoolDraft} />
+        <Route exact path={`${path}/stats`} component={RouteComponents.PlayoffPoolStats} />
       </Switch>
     </React.Suspense>
   );

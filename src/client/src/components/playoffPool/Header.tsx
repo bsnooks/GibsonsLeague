@@ -1,6 +1,6 @@
 import React from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import styled from "styled-components";
 
 interface HeaderProps {
@@ -15,12 +15,15 @@ export const Header: React.FC<HeaderProps> = () => {
         <Container>
           <Navbar.Collapse>
             <Nav className="mr-auto">
-              <Link to="/">
+              <LinkContainer to="/playoffs">
                 <Nav.Link>Standings</Nav.Link>
-              </Link>
-              <Link to="/draft">
+              </LinkContainer>
+              <LinkContainer to="/playoffs/draft">
                 <Nav.Link>Draft</Nav.Link>
-              </Link>
+              </LinkContainer>
+              <LinkContainer to="/playoffs/stats">
+                <Nav.Link>Stats</Nav.Link>
+              </LinkContainer>
             </Nav>
           </Navbar.Collapse>
         </Container>

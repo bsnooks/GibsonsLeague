@@ -1,6 +1,7 @@
 import { Container, Image, Table } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { FranchiseUtilities } from "../../../utilities/FranchiseAvatar";
+import { FranchiseLink } from "../../franchise/controls";
 import { GlobalLoading, GlobalError } from "../../ui";
 import { usePlayoffPoolContext } from "../hooks";
 
@@ -43,12 +44,12 @@ const PlayoffPool: React.FC<PlayoffPoolProps> = () => {
                         src={avatar}
                         style={{ width: "1.5rem", height: "1.5rem" }}
                       />
-                      <Link
-                        to={"test"}
+                      <FranchiseLink
+                        franchiseId={team.franchiseId}
                         style={{ paddingLeft: "10px" }}
                       >
-                        {team?.name}
-                      </Link>
+                        {team.name}
+                      </FranchiseLink>
                     </td>
                     <td>
                       {Number(team?.points ?? 0).toLocaleString("en-US", {

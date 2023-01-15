@@ -1,5 +1,6 @@
 export interface PlayoffPool {
   teams: PlayoffPoolTeam[];
+  players: PlayoffPoolPlayer[];
 }
 
 export interface PlayoffPoolTeam {
@@ -14,7 +15,12 @@ export interface PlayoffPoolTeam {
 export interface PlayoffPoolPlayer {
   playerId: number;
   name: string;
+  franchiseId: string;
   games: PlayoffPoolPlayerGame[];
+  points: number;
+  gamesPlayed: number;
+  eliminated: boolean;
+  pick: number;
 }
 
 export interface PlayoffPoolPlayerGame {

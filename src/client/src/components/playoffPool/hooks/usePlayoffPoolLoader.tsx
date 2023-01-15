@@ -19,7 +19,8 @@ export const usePlayoffPoolLoader = () => {
     if (!data) return;
 
     const pool = {
-      teams: data.teams.sort((a,b) => ((a?.points ?? 0) > (b?.points ?? 0)) ? -1 : 1)
+      teams: data.teams.sort((a,b) => ((a?.points ?? 0) > (b?.points ?? 0)) ? -1 : 1),
+      players: data.players.sort((a,b) => ((a?.pick ?? 0) < (b?.pick ?? 0)) ? -1 : 1)
     }
 
     playoffPoolDispatch({
