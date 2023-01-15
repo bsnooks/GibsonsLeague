@@ -4,10 +4,10 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.3.14",
-    "@fortawesome/fontawesome-svg-core": "^1.2.35",
-    "@fortawesome/free-brands-svg-icons": "^5.15.4",
-    "@fortawesome/free-solid-svg-icons": "^5.15.3",
-    "@fortawesome/react-fontawesome": "^0.1.14",
+    "@fortawesome/fontawesome-svg-core": "^6.2.0",
+    "@fortawesome/free-brands-svg-icons": "^6.2.0",
+    "@fortawesome/free-solid-svg-icons": "^6.2.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@microsoft/signalr": "^7.0.0",
     "@nivo/bar": "^0.73.1",
     "@nivo/core": "^0.73.0",
@@ -47,7 +47,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "codegen": "graphql-codegen --config codegen.yml",
-    "clobber": "rd /s /q node_modules && del package-lock.json"
+    "clobber": "rd /s /q node_modules && del package-lock.json && del yarn.lock"
   },
   "eslintConfig": {
     "extends": [
@@ -78,7 +78,6 @@
     "@types/react-bootstrap-typeahead": "^5.1.4",
     "@types/react-dom": "^17.0.3",
     "@types/react-router-bootstrap": "^0.24.5",
-    "@types/redux-state-sync": "^3.1.2",
     "@types/styled-components": "^5.1.26"
   },
   "browser": {
