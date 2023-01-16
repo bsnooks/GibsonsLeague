@@ -36,7 +36,7 @@ const PlayoffPool: React.FC<PlayoffPoolProps> = () => {
                 );
                 return (
                   <tr key={index}>
-                    <td>{team.rank}.</td>
+                    <td>{index + 1}.</td>
                     <td className="text-left">
                       <Image
                         roundedCircle
