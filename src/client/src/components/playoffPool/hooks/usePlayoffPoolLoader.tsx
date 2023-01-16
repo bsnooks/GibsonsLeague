@@ -3,7 +3,6 @@ import { useQuery } from "react-query";
 import { usePlayoffPoolDispatch } from ".";
 import { PlayoffPool } from "../models/PlayoffPool";
 import { ApolloError } from "@apollo/client";
-import { PlayoffPool2023 } from "../data/2023";
 import { getPlayoffPool } from "../../../api/playoffPool";
 
 
