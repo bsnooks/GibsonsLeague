@@ -1,23 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using GibsonsLeague.Api.Hubs;
 using GibsonsLeague.Api.Middleware;
 using GibsonsLeague.Api.Models;
+using GibsonsLeague.Auth;
 using GibsonsLeague.Data;
 using GibsonsLeague.Data.Repositories;
 using GibsonsLeague.YahooSync;
+using GibsonsLeague.YahooSync.Hubs;
 using GraphQL.Server;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.SignalR;
-using GibsonsLeague.YahooSync.Hubs;
-using GibsonsLeague.Auth;
 
 namespace GibsonsLeague.Api
 {
@@ -56,6 +51,7 @@ namespace GibsonsLeague.Api
             services.AddScoped<FranchiseTradeRepository>();
             services.AddScoped<SeasonRepository>();
             services.AddScoped<AnalysisRepository>();
+            services.AddScoped<PlayoffPoolRepository>();
 
             services.AddScoped<IYahooSyncService, YahooSyncService>();
             services.AddScoped<IYahooAuthService, YahooAuthService>();

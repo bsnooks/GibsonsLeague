@@ -64,7 +64,6 @@ const YahooSync: React.FC<YahooSyncProps> = () => {
   // Component mounting
   useEffect(() => {
     connection = new HubConnectionBuilder()
-      //hardcoded because mcdan only
       .withUrl(signalRAddress)
       .build();
 

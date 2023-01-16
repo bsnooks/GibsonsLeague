@@ -4,15 +4,32 @@ import { usePlayoffPoolDispatch } from ".";
 import { PlayoffPool } from "../models/PlayoffPool";
 import { ApolloError } from "@apollo/client";
 import { PlayoffPool2023 } from "../data/2023";
+import { getPlayoffPool } from "../../../api/playoffPool";
 
 
 export const usePlayoffPoolLoader = () => {
   // dispatches
   const playoffPoolDispatch = usePlayoffPoolDispatch();
 
-  const { data, isLoading, error } = useQuery<PlayoffPool, ApolloError>("getPlayoffPool", async () => {
-    return PlayoffPool2023;
+  const { data, isLoading, error, refetch } = useQuery<PlayoffPool, ApolloError>("getPlayoffPool", 
+  async () => {
+    const response = await getPlayoffPool();
+    if (response.status === 200) {
+      return response.data;
+    }
+    return {
+      teams: [],
+      players: []
+    };
+  },
+  {
+    enabled: false,
   });
+
+  useEffect(() => {
+    refetch();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Update the league when the apollo query successfully finishes
   useEffect(() => {

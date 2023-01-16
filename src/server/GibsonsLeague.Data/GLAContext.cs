@@ -32,6 +32,7 @@ namespace GibsonsLeague.Data
         public virtual DbSet<TeamScore> TeamScores { get; set; }
         public virtual DbSet<Transaction> Transactions { get; set; }
         public virtual DbSet<TransactionGroup> TransactionGroups { get; set; }
+        public virtual DbSet<PlayoffPoolPlayer> PlayoffPoolPlayers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -410,6 +411,14 @@ namespace GibsonsLeague.Data
                 entity.Property(e => e.Date)
                     .HasColumnType("datetime")
                     .HasDefaultValueSql("(getdate())");
+            });
+
+            modelBuilder.Entity<PlayoffPoolPlayer>(entity =>
+            {
+                entity.ToTable("PlayoffPoolPlayer");
+
+                entity.Property(e => e.PlayerId)
+                    .ValueGeneratedNever();
             });
 
             OnModelCreatingPartial(modelBuilder);
