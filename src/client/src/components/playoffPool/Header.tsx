@@ -18,6 +18,9 @@ export const Header: React.FC<HeaderProps> = () => {
               <LinkContainer to="/playoffs">
                 <Nav.Link>Standings</Nav.Link>
               </LinkContainer>
+              <LinkContainer to="/playoffs/teams">
+                <Nav.Link>Teams</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/playoffs/draft">
                 <Nav.Link>Draft</Nav.Link>
               </LinkContainer>
