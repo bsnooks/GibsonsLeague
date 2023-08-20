@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "styled-components";
 import { Col, Container, Row } from "react-bootstrap";
 import SectionInfoBox from "../../controls/SectionInfoBox";
 import { Link } from "react-router-dom";
@@ -55,7 +56,7 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
               </Row>
             </div>
             <div className="section-title">
-              <span>Legends</span>
+              <span>{`All ${franchise.mainName} Team`}</span>
             </div>
             <div className="section-body p-3">
               <div className="legends-list">
@@ -72,24 +73,26 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                     "en-US",
                     { minimumFractionDigits: 2 }
                   );
+                  const ppg = Number(
+                    legend?.points / legend?.gamesPlayed
+                  ).toLocaleString("en-US", { minimumFractionDigits: 2 });
                   return (
                     <div key={int} className="legend">
                       <div className="legend-col name">
-                        {`#${int + 1}. `}
+                        <AllFranchisePosition>{`${legend?.player?.position}`}</AllFranchisePosition>
                         <Link
                           to={`/player/${legend?.player?.playerId}`}
                           title={`${points} points`}
                         >
                           {legend?.player?.name}
                         </Link>
-                        <span>{` (${legend?.player?.position})`}</span>
+                        <span></span>
                         <br />
-                        <span className="pointstext">{`${points} points (${legend?.gamesPlayed} games)`}</span>
+                        <span className="pointstext">{`${points} points (${legend?.gamesPlayed} games) - ${ppg} ppg`}</span>
                       </div>
                       <div className="legend-col years">
                         {getRange([...legend.years].sort()).join(", ")}
                       </div>
-                      <div className="legend-col points">{points}</div>
                     </div>
                   );
                 })}
@@ -114,9 +117,7 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
                   .map((team: any) => (
                     <div key={team.year} className="season">
                       <div className="season-col year">
-                        <SeasonLink year={team.year}>
-                          {team?.year}
-                        </SeasonLink>
+                        <SeasonLink year={team.year}>{team?.year}</SeasonLink>
                       </div>
                       <div className="season-col record">
                         {team.wins}-{team.loses}-{team.ties}
@@ -150,3 +151,13 @@ const Franchise: React.FC<FranchiseProps> = ({ ...props }) => {
 };
 
 export default Franchise;
+
+const AllFranchisePosition = styled.div`
+  display: inline-block;
+  background-color: #28a745;
+  color: #fff;
+  border-radius: 5px;
+  margin-top: 1px;
+  margin-right: 5px;
+  padding: 0 5px;
+`;

@@ -82,7 +82,7 @@ namespace GibsonsLeague.Api.Models
                     week: context.GetArgument<int?>("week")));
 
             Field<ListGraphType<Legend>>("legends",
-                resolve: context => franchiseRepository.GetTeamLegends(context.Source));
+                resolve: context => franchiseRepository.GetAllFranchiseLegends(context.Source));
 
         }
     }

@@ -33,7 +33,7 @@ namespace GibsonsLeague.Data.Repositories
                 .Include(x => x.Teams)
                 .ThenInclude(x => x.PlayerSeasons)
                 .ThenInclude(x => x.Player)
-                .SingleOrDefaultAsync(x => x.FranchiseId== id);
+                .SingleOrDefaultAsync(x => x.FranchiseId == id);
         }
 
         public async Task<Franchise> GetOneByName(string name)
@@ -47,12 +47,12 @@ namespace GibsonsLeague.Data.Repositories
                 .SingleOrDefaultAsync(x => x.MainName == name);
         }
 
-        public async Task<IEnumerable<Legend>> GetTeamLegends(Franchise franchise, bool started = true, int limit = 15)
+        public async Task<IEnumerable<Legend>> GetTeamLegends(Franchise franchise, string? position = null, bool started = true, int limit = 15)
         {
             try
             {
                 var allWeeks = await dbContext.PlayerWeeks
-                    .Where(pw => pw.Started == started && pw.Team.FranchiseId == franchise.FranchiseId)
+                    .Where(pw => pw.Started == started && pw.Team.FranchiseId == franchise.FranchiseId && (position == null || pw.Player.PrimaryPosition == position))
                     .Include(x => x.Player)
                     .ToListAsync();
 
@@ -74,6 +74,26 @@ namespace GibsonsLeague.Data.Repositories
             }
 
             return Enumerable.Empty<Legend>();
+        }
+
+        public async Task<IEnumerable<Legend>> GetAllFranchiseLegends(Franchise franchise)
+        {
+            var QBs = await GetTeamLegends(franchise, "QB", limit: 2);
+            var RBs = await GetTeamLegends(franchise, "RB", limit: 2);
+            var WRs = await GetTeamLegends(franchise, "WR", limit: 3);
+            var TEs = await GetTeamLegends(franchise, "TE", limit: 1);
+
+            return new[]
+            {
+                QBs.ElementAt(0),
+                QBs.ElementAt(1),
+                RBs.ElementAt(0),
+                RBs.ElementAt(1),
+                WRs.ElementAt(0),
+                WRs.ElementAt(1),
+                WRs.ElementAt(2),
+                TEs.ElementAt(0)
+            };
         }
     }
 }
