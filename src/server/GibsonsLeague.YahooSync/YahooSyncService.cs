@@ -594,23 +594,32 @@ namespace GibsonsLeague.YahooSync
                         foreach (var yahooPlayer in result.Players)
                         {
                             var playerSeason = playerCache[yahooPlayer.PlayerId];
-                            if (playerSeason != null)
+                            if (playerSeason == null)
                             {
-                                Console.WriteLine($"Updating: {yahooPlayer.Name.Full}");
-                                playerSeason.GamesPlayed = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.GamesPlayed);
-                                playerSeason.Points = yahooPlayer.PlayerStats.Stats.CalculatePoints();
-                                playerSeason.NflTeam = yahooPlayer.EditorialTeamAbbr;
-
-                                playerSeason.PassYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingYards);
-                                playerSeason.PassTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingTouchdowns);
-                                playerSeason.RushYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingYards);
-                                playerSeason.RushTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingTouchdowns);
-                                playerSeason.RecYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingYards);
-                                playerSeason.RecTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingTouchdowns);
-                                playerSeason.Interceptions = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.Interceptions);
-                                playerSeason.FumblesLost = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.FumblesLost);
-                                playerSeason.TwoPointConvert = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.TwoPointConversions);
+                                playerSeason = new PlayerSeason()
+                                {
+                                    PlayerId = yahooPlayer.PlayerId,
+                                    Year = season.Year,
+                                    Points = 0,
+                                    PositionRank = 0,
+                                    PositionRankPpg = 0,
+                                    GamesPlayed = 0,
+                                };
                             }
+                            Console.WriteLine($"Updating: {yahooPlayer.Name.Full}");
+                            playerSeason.GamesPlayed = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.GamesPlayed);
+                            playerSeason.Points = yahooPlayer.PlayerStats.Stats.CalculatePoints();
+                            playerSeason.NflTeam = yahooPlayer.EditorialTeamAbbr;
+
+                            playerSeason.PassYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingYards);
+                            playerSeason.PassTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.PassingTouchdowns);
+                            playerSeason.RushYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingYards);
+                            playerSeason.RushTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.RushingTouchdowns);
+                            playerSeason.RecYards = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingYards);
+                            playerSeason.RecTDs = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.ReceivingTouchdowns);
+                            playerSeason.Interceptions = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.Interceptions);
+                            playerSeason.FumblesLost = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.FumblesLost);
+                            playerSeason.TwoPointConvert = yahooPlayer.PlayerStats.Stats.GetStatValue(YahooStatType.TwoPointConversions);
                         }
                     }
                 }
