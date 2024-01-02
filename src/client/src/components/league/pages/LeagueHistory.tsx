@@ -13,7 +13,7 @@ const LeagueHistory: React.FC<LeagueHistoryProps> = () => {
   const { league } = useLeagueContext();
 
   const currentChamp = league?.franchises?.filter(
-    (f) => f?.franchiseId === "bbe2d0ad-54cf-4c22-be82-b2a5f262a157"
+    (f) => f?.franchiseId === "66fb98f4-89a7-45f9-893a-b41d71e6249d"
   )[0];
   const avatar = new FranchiseUtilities().pickAvatarByFranchiseId(
     currentChamp?.franchiseId
